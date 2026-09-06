@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -158,6 +158,7 @@ const mockDb = [
   },
   {
     id: 'VS2026A00003',
+    id: 'VS2026A00003',
     passport: 'P1234569',
     birthDate: '1996-02-21',
     applicant: 'Noor Example',
@@ -183,17 +184,43 @@ export default function Status() {
   const [birthDate, setBirthDate] = useState('');
   const [result, setResult] = useState(null);
   const [searched, setSearched] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState(0);
+  const loadingRef = useRef(null);
+  const resultRef = useRef(null);
 
   const handleSearch = (event) => {
     if (event) event.preventDefault();
-    setSearched(true);
+    setLoading(true);
+    setSearched(false);
+    setResult(null);
+    setLoadingStep(0);
 
-    const found = mockDb.find((record) => (
-      record.id === normalize(applicationId)
-      && record.passport === normalize(passport)
-      && record.birthDate === birthDate
-    ));
-    setResult(found || null);
+    // Immediately scroll down so the applicant sees the loading animation in full view
+    setTimeout(() => {
+      loadingRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 40);
+
+    const stepTimer1 = setTimeout(() => setLoadingStep(1), 600);
+    const stepTimer2 = setTimeout(() => setLoadingStep(2), 1200);
+
+    setTimeout(() => {
+      clearTimeout(stepTimer1);
+      clearTimeout(stepTimer2);
+      const found = mockDb.find((record) => (
+        record.id === normalize(applicationId)
+        && record.passport === normalize(passport)
+        && record.birthDate === birthDate
+      ));
+      setResult(found || null);
+      setSearched(true);
+      setLoading(false);
+
+      // Smoothly focus / scroll directly to the resulting certificate
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 60);
+    }, 1750);
   };
 
   const fillDemoData = () => {
@@ -262,7 +289,8 @@ export default function Status() {
           <button 
             type="button" 
             onClick={fillDemoData} 
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#D4AF37]/40 bg-[#FAF7F0] text-[#C4762A] text-xs font-bold uppercase tracking-wider hover:bg-[#D4AF37] hover:text-[#1E2A4F] transition-all shadow-xs cursor-pointer"
+            disabled={loading}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-[#D4AF37]/40 bg-[#FAF7F0] text-[#C4762A] text-xs font-bold uppercase tracking-wider hover:bg-[#D4AF37] hover:text-[#1E2A4F] transition-all shadow-xs cursor-pointer disabled:opacity-50"
           >
             <span>Autofill</span>
           </button>
@@ -277,9 +305,10 @@ export default function Status() {
             type="text"
             value={applicationId}
             onChange={(e) => setApplicationId(e.target.value)}
-            placeholder="Enter your application reference"
+            placeholder="Enter your application reference (e.g. VS2026E00001)"
             autoComplete="off"
-            className="input-field mt-1.5 font-normal text-sm"
+            disabled={loading}
+            className="input-field mt-1.5 font-normal text-sm disabled:bg-gray-50"
             required
           />
         </label>
@@ -291,7 +320,8 @@ export default function Status() {
             onChange={(e) => setPassport(e.target.value)}
             placeholder="Enter your passport number"
             autoComplete="off"
-            className="input-field mt-1.5 font-normal text-sm"
+            disabled={loading}
+            className="input-field mt-1.5 font-normal text-sm disabled:bg-gray-50"
             required
           />
         </label>
@@ -301,13 +331,28 @@ export default function Status() {
             type="date"
             value={birthDate}
             onChange={(e) => setBirthDate(e.target.value)}
-            className="input-field mt-1.5 font-normal text-sm"
+            disabled={loading}
+            className="input-field mt-1.5 font-normal text-sm disabled:bg-gray-50"
             required
           />
         </label>
         <div className="md:col-span-2 flex items-center justify-between pt-2">
-          <button type="submit" className="btn-primary cursor-pointer">
-            Search Status Records
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="btn-primary cursor-pointer flex items-center gap-2 disabled:opacity-75"
+          >
+            {loading ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-1 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <span>Verifying Records...</span>
+              </>
+            ) : (
+              <span>Search Status Records</span>
+            )}
           </button>
           <span className="text-[11px] text-gray-500 italic">
             Exact match required across all 3 fields
@@ -315,14 +360,99 @@ export default function Status() {
         </div>
       </form>
 
-      {/* ── SCREEN VIEW: SEARCH RESULTS ── */}
-      {searched && (
-        <div className="status-screen-only border border-border p-6 sm:p-8 rounded-xl bg-white shadow-md animate-[fadeIn_0.4s_ease-out]">
+      {/* ── SCREEN VIEW: DIGNIFIED TRADITIONAL CONSULAR LOADING STATE ── */}
+      {loading && (
+        <div ref={loadingRef} className="status-screen-only border border-[#D4AF37]/50 p-8 sm:p-10 rounded-2xl bg-[#FAF7F0] shadow-sm text-center mb-8 relative overflow-hidden animate-[fadeIn_0.3s_ease-out]">
+          <StatusAshokaChakra />
+          
+          <div className="relative z-10 flex flex-col items-center justify-center max-w-md mx-auto">
+            {/* Consular Seal Medallion */}
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 mb-4 flex items-center justify-center">
+              {/* Outer Golden Fluted Orbit */}
+              <div className="absolute inset-0 rounded-full border border-[#D4AF37]/40 border-t-[#D4AF37] animate-[spin_8s_linear_infinite]" />
+              <div className="absolute inset-1.5 rounded-full border border-dashed border-[#1E2A4F]/20" />
+              
+              {/* Central Seal Disc */}
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white border border-[#D4AF37]/70 flex items-center justify-center shadow-xs">
+                <img src="/emblem.svg" alt="Emblem of India" className="h-9 sm:h-10 w-auto opacity-90 transition-opacity duration-300" />
+              </div>
+            </div>
+
+            <span className="text-[9.5px] font-sans font-bold uppercase tracking-[0.25em] text-[#8B1C1C] block mb-1">
+              Bureau of Immigration · Republic of India
+            </span>
+            <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#1E2A4F] mb-1.5">
+              Consular Verification in Progress
+            </h3>
+            <p className="text-xs text-text-secondary font-sans mb-5 h-4 transition-all duration-300">
+              {loadingStep === 0 
+                ? 'Querying central immigration registry & travel ledger...' 
+                : loadingStep === 1
+                  ? 'Attesting passport bio-data and authorization parameters...'
+                  : 'Generating verified consular status certificate...'}
+            </p>
+
+            {/* Tiranga (Indian Flag: Saffron, White with Ashoka Chakra, Green) Progress Bar */}
+            <div className="w-60 sm:w-80 max-w-full mx-auto">
+              <div className="w-full bg-[#E5E0D5] h-6 sm:h-7 rounded-lg border-2 border-[#D4AF37]/70 overflow-hidden shadow-inner relative p-0">
+                {/* Expanding Flag Strip */}
+                <div
+                  className="h-full relative overflow-hidden transition-all duration-500 ease-out flex flex-col justify-between shadow-xs"
+                  style={{ width: loadingStep === 0 ? '45%' : loadingStep === 1 ? '80%' : '100%' }}
+                >
+                  {/* Saffron (Kesari) Band */}
+                  <div className="w-full h-1/3 bg-[#FF9933]" />
+                  
+                  {/* White Band with spinning Navy Blue Ashoka Chakra */}
+                  <div className="w-full h-1/3 bg-white relative flex items-center justify-center overflow-hidden">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#000080] animate-[spin_3s_linear_infinite]"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <circle cx="12" cy="12" r="10" strokeWidth="1.5" />
+                      <circle cx="12" cy="12" r="2" fill="currentColor" />
+                      {Array.from({ length: 24 }, (_, i) => (
+                        <line
+                          key={i}
+                          x1="12"
+                          y1="12"
+                          x2="12"
+                          y2="3"
+                          stroke="currentColor"
+                          strokeWidth="0.8"
+                          transform={`rotate(${i * 15} 12 12)`}
+                        />
+                      ))}
+                    </svg>
+                  </div>
+                  
+                  {/* India Green Band */}
+                  <div className="w-full h-1/3 bg-[#138808]" />
+
+                  {/* Subtle Shimmer Sweep */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center text-[9px] font-sans font-bold uppercase tracking-wider text-gray-500 mt-1.5 px-1">
+                <span>Verification Progress</span>
+                <span className="font-mono text-[#1E2A4F]">{loadingStep === 0 ? '45%' : loadingStep === 1 ? '80%' : '100%'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── SCREEN VIEW: SEARCH RESULTS WITH CLEAR HIERARCHY ── */}
+      {!loading && searched && (
+        <div ref={resultRef} className="status-screen-only border border-border p-6 sm:p-8 rounded-xl bg-white shadow-md animate-[fadeIn_0.4s_ease-out]">
           {result ? (
             <div className="space-y-8">
               
-              {/* Official Status Banner Card */}
-              <div className="relative border-2 border-[#D4AF37]/50 rounded-xl p-6 sm:p-7 bg-[#FAF7F0] overflow-hidden shadow-sm">
+              {/* PRIMARY HERO DOSSIER: Official ETA Status Certificate */}
+              <div className="relative border-2 border-[#D4AF37]/70 rounded-xl p-6 sm:p-7 bg-[#FAF7F0] overflow-hidden shadow-sm">
                 <StatusAshokaChakra />
                 <StatusMandalaCorner className="absolute top-1 left-1 opacity-70" />
                 <StatusMandalaCorner className="absolute top-1 right-1 transform rotate-90 opacity-70" />
@@ -384,84 +514,12 @@ export default function Status() {
                 </div>
               </div>
 
-              {/* Status History Timeline */}
-              <div>
-                <h3 className="font-serif text-lg font-bold text-[#1E2A4F] mb-4 flex items-center gap-2">
-                  <span>Milestone Verification History</span>
-                  <span className="text-xs font-sans font-normal text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                    {result.events.length} Recorded Events
-                  </span>
-                </h3>
-                <div className="relative border-l-2 border-[#1E2A4F]/30 ml-3 space-y-5">
-                  {result.events.map((event, i) => (
-                    <div key={i} className="relative pl-6">
-                      <div className="absolute w-3.5 h-3.5 rounded-full bg-[#1E2A4F] -left-[7px] top-1 border-2 border-white shadow-xs" />
-                      <div className="flex items-center gap-2">
-                        <strong className="text-gray-900 text-xs font-bold">{event.label}</strong>
-                        {event.date && (
-                          <span className="text-[10px] font-mono text-[#C4762A] bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
-                            {event.date}
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-xs text-gray-600 mt-0.5">{event.detail}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Official Entry & Travel Directives (Static Guidance, Only When GRANTED) */}
-              {result.status === 'GRANTED' && (
-                <div className="bg-[#FAF7F0] border border-[#D4AF37]/50 rounded-xl p-5 sm:p-6 shadow-xs">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="w-2 h-2 rounded-full bg-[#176B45]" />
-                    <h3 className="font-serif font-bold text-base text-[#1E2A4F] uppercase tracking-wide">
-                      Official Travel Directives & Port of Entry Requirements
-                    </h3>
-                  </div>
-
-                  <p className="text-xs text-gray-600 mb-4">
-                    Your Electronic Travel Authorization is officially confirmed. Please note the following statutory immigration directives for entry into India:
-                  </p>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div className="bg-white p-3.5 rounded-lg border border-gray-200">
-                      <strong className="text-gray-900 block font-bold mb-1">1. Physical Printed Copy Mandatory</strong>
-                      <p className="text-gray-600 text-[11px] leading-relaxed">
-                        Carry a physical printed copy of this ETA certificate. Smartphone screenshots or soft copies are not accepted at immigration counters.
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3.5 rounded-lg border border-gray-200">
-                      <strong className="text-gray-900 block font-bold mb-1">2. Passport Validity & Blank Pages</strong>
-                      <p className="text-gray-600 text-[11px] leading-relaxed">
-                        Your original physical passport must have at least 6 months remaining validity from your arrival date and contain at least 2 blank pages.
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3.5 rounded-lg border border-gray-200">
-                      <strong className="text-gray-900 block font-bold mb-1">3. Designated Port of Entry</strong>
-                      <p className="text-gray-600 text-[11px] leading-relaxed">
-                        Valid for arrival at 28 designated international airports (e.g. Delhi, Mumbai, Bengaluru) and 5 designated seaports.
-                      </p>
-                    </div>
-
-                    <div className="bg-white p-3.5 rounded-lg border border-gray-200">
-                      <strong className="text-gray-900 block font-bold mb-1">4. Mandatory Biometric Enrolment</strong>
-                      <p className="text-gray-600 text-[11px] leading-relaxed">
-                        Biometric capture (facial photograph & fingerprints) will be conducted upon arrival by the immigration officer.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-gray-200">
+              {/* PRIMARY ACTION CONTROLS (Directly accessible above timeline & directives) */}
+              <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-xl bg-[#FAF7F0] border border-[#D4AF37]/50 shadow-xs">
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="bg-gradient-to-r from-[#D4AF37] to-[#C9933A] text-[#1E2A4F] px-6 py-2.5 font-bold text-xs uppercase tracking-wider rounded shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer"
+                  className="bg-gradient-to-r from-[#D4AF37] to-[#C9933A] text-[#1E2A4F] px-6 py-2.5 font-bold text-xs uppercase tracking-wider rounded shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer active:scale-[0.99]"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -485,6 +543,80 @@ export default function Status() {
                   )}
                 </div>
               </div>
+
+              {/* SECONDARY SECTION: Milestone Verification History Timeline */}
+              <div className="border-t border-gray-100 pt-6">
+                <h3 className="font-serif text-lg font-bold text-[#1E2A4F] mb-4 flex items-center gap-2">
+                  <span>Milestone Verification History</span>
+                  <span className="text-xs font-sans font-normal text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                    {result.events.length} Recorded Events
+                  </span>
+                </h3>
+                <div className="relative border-l-2 border-[#1E2A4F]/30 ml-3 space-y-4">
+                  {result.events.map((event, i) => (
+                    <div key={i} className="relative pl-6">
+                      <div className="absolute w-3.5 h-3.5 rounded-full bg-[#1E2A4F] -left-[7px] top-1 border-2 border-white shadow-xs" />
+                      <div className="flex items-center gap-2">
+                        <strong className="text-gray-900 text-xs font-bold">{event.label}</strong>
+                        {event.date && (
+                          <span className="text-[10px] font-mono text-[#C4762A] bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                            {event.date}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-600 mt-0.5">{event.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* TERTIARY ADVISORY SECTION: Statutory Port Entry Directives (Clearly Subordinate) */}
+              {result.status === 'GRANTED' && (
+                <div className="bg-slate-50 border-l-4 border-[#C4762A] border-y border-r border-slate-200/80 rounded-r-xl p-5 shadow-2xs">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#8A5A00] font-sans">
+                      Statutory Advisory & Port Directives
+                    </span>
+                  </div>
+                  <h4 className="font-serif font-bold text-sm text-[#1E2A4F] mb-3">
+                    Essential Immigration Requirements upon Arrival in India
+                  </h4>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                    <div className="bg-white p-3 rounded border border-slate-200/80 flex items-start gap-2.5">
+                      <span className="text-xs font-mono font-bold text-[#1E2A4F] bg-slate-100 w-5 h-5 rounded-full flex items-center justify-center shrink-0">1</span>
+                      <div>
+                        <strong className="text-gray-900 block text-xs font-semibold mb-0.5">Physical Printed Copy</strong>
+                        <p className="text-gray-600 text-[11px] leading-relaxed">Present a physical printed ETA copy. Soft copies on mobile devices are not accepted.</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-white p-3 rounded border border-slate-200/80 flex items-start gap-2.5">
+                      <span className="text-xs font-mono font-bold text-[#1E2A4F] bg-slate-100 w-5 h-5 rounded-full flex items-center justify-center shrink-0">2</span>
+                      <div>
+                        <strong className="text-gray-900 block text-xs font-semibold mb-0.5">6-Month Passport Validity</strong>
+                        <p className="text-gray-600 text-[11px] leading-relaxed">Original passport must have ≥6 months validity from arrival date and ≥2 blank pages.</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-white p-3 rounded border border-slate-200/80 flex items-start gap-2.5">
+                      <span className="text-xs font-mono font-bold text-[#1E2A4F] bg-slate-100 w-5 h-5 rounded-full flex items-center justify-center shrink-0">3</span>
+                      <div>
+                        <strong className="text-gray-900 block text-xs font-semibold mb-0.5">Designated Entry Port</strong>
+                        <p className="text-gray-600 text-[11px] leading-relaxed">Valid for arrival at 28 designated international airports and 5 major seaports.</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-white p-3 rounded border border-slate-200/80 flex items-start gap-2.5">
+                      <span className="text-xs font-mono font-bold text-[#1E2A4F] bg-slate-100 w-5 h-5 rounded-full flex items-center justify-center shrink-0">4</span>
+                      <div>
+                        <strong className="text-gray-900 block text-xs font-semibold mb-0.5">Biometric Capture</strong>
+                        <p className="text-gray-600 text-[11px] leading-relaxed">Facial photographs and fingerprints will be captured by immigration authorities at the port.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="text-center py-8">
@@ -539,7 +671,7 @@ export default function Status() {
                       भारत सरकार · GOVERNMENT OF INDIA
                     </span>
                     <span className="text-sm print:text-xs font-serif font-bold text-[#1E2A4F] tracking-wide">
-                      अखिल भारतीय ई-वीज़ा पोर्टल · BHARAT VISA SEVA
+                      अखिल भारतीय ई-वीज़ा पोर्टल · INDIA VISA SEVA
                     </span>
                     <span className="text-[9px] print:text-[8px] font-sans font-bold uppercase tracking-widest text-[#D4AF37] print:text-black">
                       IMMIGRATION BUREAU · STATUS VERIFICATION CERTIFICATE

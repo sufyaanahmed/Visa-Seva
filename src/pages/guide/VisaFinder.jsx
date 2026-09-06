@@ -11,7 +11,7 @@ const displayValue = (question, value) => question.options?.find((option) => opt
 export default function VisaFinder() {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
-  const { state, updateState, updateFinder } = useStore();
+  const { state, updateState, updateFinder, clearLocalDraft } = useStore();
   const finder = state.finder;
   const answers = finder.answers;
   const [countrySearch, setCountrySearch] = useState('');
@@ -26,6 +26,13 @@ export default function VisaFinder() {
   const result = showResult ? evaluateVisaRoute(answers) : null;
   const isCurrentAnswerValid = isValidFinderAnswer(currentQ, answers[currentQ.id]);
   const filteredNationalities = useMemo(() => searchNationalities(countrySearch), [countrySearch]);
+
+  const handleStartFresh = async () => {
+    await clearLocalDraft();
+    updateFinder({ answers: {}, step: 0, showResult: false });
+    setCountrySearch('');
+    setParams({ step: 'passport' }, { replace: true });
+  };
 
   useEffect(() => {
     if (finder.step !== safeStep || finder.showResult !== showResult) updateFinder({ step: safeStep, showResult });
@@ -63,7 +70,7 @@ export default function VisaFinder() {
   if (result) {
     const isVoa = result.applicationType === 'voa';
     return (
-      <div className="bg-surface px-4 py-10 sm:py-14">
+      <div className="min-h-screen bg-[#FAF7F0] px-4 py-10 sm:py-14">
         <div className="mx-auto max-w-2xl rounded-xl border border-border bg-white p-6 shadow-sm sm:p-10">
           <p className="mb-3 text-sm text-text-secondary"><span aria-hidden="true">{countryFlag(answers.passport)}</span> {answers.passport} · {answers.durationDays} days</p>
           <h1 ref={heading} tabIndex={-1} className="mb-3 font-serif text-3xl font-bold text-primary outline-none sm:text-4xl">{result.type}</h1>
@@ -75,9 +82,32 @@ export default function VisaFinder() {
             </dl>
           )}
           {result.cautions.length > 0 && <p className="mb-6 text-sm leading-relaxed text-text-secondary">{result.cautions[0]}</p>}
-          <div className="mb-6 flex flex-col gap-3 sm:flex-row">
-            <button type="button" onClick={startApplication} className="rounded-md bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-dark">{result.actionLabel} <span aria-hidden="true">→</span></button>
-            <button type="button" onClick={() => jumpToQuestion(0)} className="rounded-md px-4 py-3 text-sm font-medium text-primary hover:bg-surface">Edit answers</button>
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/70 pb-6">
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={startApplication}
+                className="rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-primary-dark hover:shadow active:scale-[0.99] flex items-center gap-2 cursor-pointer"
+              >
+                <span>{result.actionLabel}</span>
+                <span aria-hidden="true">→</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => jumpToQuestion(0)}
+                className="rounded-lg border border-border bg-white px-4 py-3 text-sm font-medium text-primary hover:bg-[#FAF7F0] transition-colors cursor-pointer"
+              >
+                Edit answers
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={handleStartFresh}
+              className="text-xs font-semibold text-text-secondary hover:text-red-700 underline decoration-dotted underline-offset-4 transition-colors py-1 cursor-pointer self-start sm:self-center"
+              title="Clear previous evaluation and start a new application"
+            >
+              Start new application
+            </button>
           </div>
           <Disclosure title="Why this route?">
             <ul className="list-disc space-y-2 pl-5">{result.rationale.map((reason) => <li key={reason}>{reason}</li>)}</ul>
@@ -89,8 +119,8 @@ export default function VisaFinder() {
   }
 
   return (
-    <div className="min-h-screen bg-surface py-12 px-4 flex flex-col items-center relative pattern-kalamkari">
-      <div className="absolute inset-0 bg-surface/90" />
+    <div className="min-h-screen bg-[#FAF7F0] py-12 px-4 flex flex-col items-center relative pattern-kalamkari">
+      <div className="absolute inset-0 bg-[#FAF7F0]/90" />
       <div className="max-w-3xl w-full bg-white border border-border-dark flex flex-col min-h-[560px] relative z-10 shadow-sm rounded-xl overflow-hidden">
         <div className="bg-primary px-6 sm:px-8 py-6 sm:py-8 text-white relative border-b border-border-dark pattern-jali">
           <div className="absolute inset-0 bg-primary/95" />
@@ -98,7 +128,19 @@ export default function VisaFinder() {
             <p className="text-[0.65rem] font-bold text-secondary-accent uppercase tracking-[0.2em] mb-2 font-sans">Visa finder</p>
             <div className="flex justify-between items-end gap-4 mb-4">
               <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white">Find the right visa route</h1>
-              <span className="text-xs font-sans uppercase tracking-widest text-primary-light whitespace-nowrap">Step {safeStep + 1} of {questions.length}</span>
+              <div className="flex items-center gap-3">
+                {Object.keys(answers).length > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleStartFresh}
+                    className="text-[11px] font-sans text-white/75 hover:text-white underline underline-offset-2 transition-colors cursor-pointer"
+                    title="Start over with a blank questionnaire"
+                  >
+                    Start over
+                  </button>
+                )}
+                <span className="text-xs font-sans uppercase tracking-widest text-primary-light whitespace-nowrap">Step {safeStep + 1} of {questions.length}</span>
+              </div>
             </div>
             
             {/* Live Context Summary Pills */}
@@ -246,12 +288,12 @@ export default function VisaFinder() {
 
         </div>
 
-        <div className="bg-surface px-6 sm:px-8 py-5 sm:py-6 border-t border-border-dark flex justify-between items-center gap-4">
+        <div className="bg-[#FAF7F0] px-6 sm:px-8 py-5 sm:py-6 border-t border-border-dark flex justify-between items-center gap-4">
           <button type="button" onClick={handleBack} disabled={safeStep === 0} className="text-sm font-medium text-text-secondary hover:text-primary transition-colors disabled:invisible">&larr; Back</button>
           <button
             onClick={handleNext}
             disabled={!isCurrentAnswerValid}
-            className={`px-6 sm:px-8 py-3 font-sans font-bold uppercase tracking-widest text-xs sm:text-sm transition-all duration-300 border cursor-pointer ${!isCurrentAnswerValid ? 'bg-surface border-border text-text-muted cursor-not-allowed' : 'bg-primary border-primary text-white hover:bg-white hover:text-primary'}`}
+            className={`px-6 sm:px-8 py-3 font-sans font-bold uppercase tracking-widest text-xs sm:text-sm transition-all duration-300 border cursor-pointer ${!isCurrentAnswerValid ? 'bg-[#FAF7F0] border-border text-text-muted cursor-not-allowed' : 'bg-primary border-primary text-white hover:bg-white hover:text-primary'}`}
           >
             {safeStep === questions.length - 1 ? 'See my route' : 'Continue'}
           </button>

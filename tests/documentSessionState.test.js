@@ -9,7 +9,7 @@ assert.notEqual(contextOffset, -1, 'Store pure-model boundary must remain discov
 
 const pureStoreSource = storeSource
   .slice(0, contextOffset)
-  .replace(/^import .*;\n/gm, '');
+  .replace(/^import .*;\r?\n/gm, '');
 const storeModuleUrl = `data:text/javascript;base64,${Buffer.from(pureStoreSource).toString('base64')}`;
 const { applyDataUpdate, hydrateState, safeDocumentMetadata } = await import(storeModuleUrl);
 

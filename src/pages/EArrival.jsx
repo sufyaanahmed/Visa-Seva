@@ -59,7 +59,7 @@ export default function EArrival() {
             const icsContent = [
               'BEGIN:VCALENDAR',
               'VERSION:2.0',
-              'PRODID:-//Bharat Visa Seva//Pre-Flight Reminder//EN',
+              'PRODID:-//India Visa Seva//Pre-Flight Reminder//EN',
               'BEGIN:VEVENT',
               `DTSTART:${eventStart.toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
               `DTEND:${new Date(eventStart.getTime() + 60 * 60 * 1000).toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,

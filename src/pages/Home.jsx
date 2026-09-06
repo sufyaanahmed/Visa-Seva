@@ -251,8 +251,8 @@ export default function Home() {
 
             {/* Repeating text lines as subtle borders */}
             <div className="hero-microprint absolute left-0 w-full h-full pointer-events-none flex flex-col justify-between py-[20%] opacity-[0.07] text-[5px] leading-none overflow-hidden text-[#D4AF37] font-serif tracking-widest">
-               <div className="w-[200%] whitespace-nowrap">BHARAT VISA SEVA · REPUBLIC OF INDIA · OFFICIAL VISA PORTAL · IMMIGRATION BUREAU</div>
-               <div className="w-[200%] whitespace-nowrap">BHARAT VISA SEVA · REPUBLIC OF INDIA · OFFICIAL VISA PORTAL · IMMIGRATION BUREAU</div>
+               <div className="w-[200%] whitespace-nowrap">INDIA VISA SEVA · REPUBLIC OF INDIA · OFFICIAL VISA PORTAL · IMMIGRATION BUREAU</div>
+               <div className="w-[200%] whitespace-nowrap">INDIA VISA SEVA · REPUBLIC OF INDIA · OFFICIAL VISA PORTAL · IMMIGRATION BUREAU</div>
             </div>
 
             <div className="relative z-10 flex flex-col flex-1 p-5 sm:p-8 w-full text-[#FAF7F0]">
@@ -261,7 +261,7 @@ export default function Home() {
               <div className="hero-card-heading flex items-start justify-between gap-3">
                 <div className="min-w-0 text-left">
                   <h2 className="text-[10px] sm:text-xs font-bold font-serif text-[#D4AF37]/80 tracking-[0.18em] sm:tracking-[0.3em] uppercase">अखिल भारतीय ई-वीज़ा पोर्टल</h2>
-                  <h2 className="text-xs sm:text-sm font-bold font-serif text-[#D4AF37] tracking-[0.2em] sm:tracking-[0.25em] uppercase mt-0.5">BHARAT VISA SEVA</h2>
+                  <h2 className="text-xs sm:text-sm font-bold font-serif text-[#D4AF37] tracking-[0.2em] sm:tracking-[0.25em] uppercase mt-0.5">INDIA VISA SEVA</h2>
                 </div>
                 <span className="shrink-0 text-[10px] sm:text-xs font-bold font-sans text-white/30 tracking-[0.2em] sm:tracking-[0.3em] uppercase border border-white/10 px-2 py-1 rounded">E-Visa</span>
               </div>
@@ -270,27 +270,56 @@ export default function Home() {
               <div className="hero-divider w-full h-px bg-gradient-to-r from-transparent via-[#D4AF37]/30 to-transparent my-4" />
 
               {/* Central gateway text */}
-              <div className="flex-1 flex flex-col items-center justify-center py-2 z-10 text-center">
-                 <p className="hero-eyebrow text-[10px] font-sans font-bold tracking-[0.5em] text-white/40 uppercase mb-3">Welcome To</p>
-                 <h1 className="focus:outline-none text-4xl sm:text-5xl font-serif font-light text-white leading-[1.15]">
+              <div className="flex-1 flex flex-col items-center justify-center py-4 z-10 text-center">
+                 <p className="hero-eyebrow text-[11px] sm:text-xs font-serif font-bold tracking-[0.25em] text-[#D4AF37] uppercase mb-2">
+                   Welcome to India
+                 </p>
+                 <h1 className="focus:outline-none text-4xl sm:text-5xl md:text-[3.25rem] font-serif font-normal text-white leading-[1.12] tracking-tight">
                    <span className="hero-line-mask"><span className="hero-title-first">Your Gateway</span></span>
-                   <span className="hero-line-mask mt-1"><span className="hero-title-second italic text-[#D4AF37]">to India</span></span>
+                   <span className="hero-line-mask mt-1.5"><span className="hero-title-second font-serif italic text-[#E5C158]">to India</span></span>
                  </h1>
-                 <p className="hero-tagline text-[11px] font-sans text-white/40 tracking-widest uppercase mt-4"> Discover · Experience · Flourish</p>
+                 <div className="hero-tagline flex items-center justify-center gap-2.5 sm:gap-3.5 mt-5 text-white/70">
+                   <span className="h-px w-6 bg-[#D4AF37]/40 hidden sm:block" />
+                   <span className="tracking-[0.18em] uppercase font-sans text-[10.5px] sm:text-[11.5px] text-white/60">Discover</span>
+                   <span className="text-[#D4AF37] text-[8px] opacity-75">✦</span>
+                   <span className="tracking-[0.18em] uppercase font-sans text-[10.5px] sm:text-[11.5px] text-white/60">Experience</span>
+                   <span className="text-[#D4AF37] text-[8px] opacity-75">✦</span>
+                   <span className="tracking-[0.18em] uppercase font-sans text-[10.5px] sm:text-[11.5px] text-white/60">Flourish</span>
+                   <span className="h-px w-6 bg-[#D4AF37]/40 hidden sm:block" />
+                 </div>
               </div>
             </div>
 
             {/* ACTION BUTTONS (Inside the sticker) */}
             <div className="hero-action-panel relative z-10 flex flex-col w-full">
               <div className="hero-actions flex flex-col sm:flex-row gap-3 p-4 sm:p-6 pb-3 justify-center">
-                <Link to="/guide/visa-finder"
-                  className="relative bg-gradient-to-r from-[#D4AF37] to-[#C9933A] text-[#1E2A4F] px-8 py-3.5 font-sans font-bold uppercase tracking-widest text-xs overflow-hidden group shadow-[0_8px_20px_rgba(212,175,55,0.25)] hover:shadow-[0_12px_28px_rgba(212,175,55,0.35)] transition-all duration-300 hover:-translate-y-0.5 text-center rounded-lg">
-                  <span className="absolute inset-1 border border-[#1E2A4F]/15 pointer-events-none rounded transition-all duration-300" />
-                  <span className="relative z-10 flex items-center justify-center gap-2">Start Application <span className="text-sm">→</span></span>
+                <Link
+                  to="/guide/visa-finder"
+                  className="relative group bg-gradient-to-b from-[#E5C158] via-[#D4AF37] to-[#C49A32] text-[#162040] font-sans font-bold uppercase tracking-[0.16em] text-xs px-8 py-3.5 text-center transition-all duration-300 hover:-translate-y-0.5 shadow-[0_4px_16px_rgba(212,175,55,0.25)] hover:shadow-[0_8px_24px_rgba(212,175,55,0.38)] cursor-pointer"
+                  style={{
+                    clipPath: 'polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px)',
+                  }}
+                >
+                  {/* Subtle inner hairline border */}
+                  <span
+                    className="absolute inset-[3px] border border-[#162040]/25 pointer-events-none transition-colors duration-300 group-hover:border-[#162040]/40"
+                    style={{
+                      clipPath: 'polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px)',
+                    }}
+                  />
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    <span>Start Application</span>
+                    <span className="text-sm transition-transform duration-300 group-hover:translate-x-0.5">→</span>
+                  </span>
                 </Link>
-                <Link to="/status"
-                  className="bg-white/[0.06] border border-white/20 text-white/80 px-8 py-3.5 font-sans font-bold uppercase tracking-widest text-xs hover:bg-white/10 hover:text-white hover:border-white/30 transition-all duration-300 hover:-translate-y-0.5 text-center rounded-lg">
-                  Check Application Status
+                <Link
+                  to="/status"
+                  className="relative group bg-white/[0.05] border border-white/20 text-white/80 font-sans font-bold uppercase tracking-[0.16em] text-xs px-8 py-3.5 text-center transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/[0.09] hover:text-white hover:border-white/35 cursor-pointer"
+                  style={{
+                    clipPath: 'polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px)',
+                  }}
+                >
+                  <span className="relative z-10">Check Application Status</span>
                 </Link>
               </div>
               

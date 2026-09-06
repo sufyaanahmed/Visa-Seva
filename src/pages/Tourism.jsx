@@ -286,12 +286,45 @@ export default function Tourism() {
   return (
     // Changed overflow-hidden to overflow-x-hidden so vertical scrolling still works!
     <div className="w-full bg-[#FAF7F0] min-h-screen relative overflow-x-hidden">
-      {/* Subtle Background Mandala for the page */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] opacity-[0.03] pointer-events-none translate-x-1/3 -translate-y-1/4">
-        <svg viewBox="0 0 100 100" className="w-full h-full text-[#1E2A4F] animate-[spin_120s_linear_infinite]">
-          <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 4" />
-          <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="0.2" />
-          <path d="M50 2 L50 98 M2 50 L98 50 M16 16 L84 84 M16 84 L84 16" stroke="currentColor" strokeWidth="0.2" />
+      {/* Authentic High-Detail Ashoka Chakra (Dharmachakra) Background Watermark */}
+      <div className="absolute top-0 right-0 w-[750px] h-[750px] md:w-[900px] md:h-[900px] opacity-[0.045] pointer-events-none translate-x-1/4 -translate-y-1/4 select-none">
+        <svg 
+          viewBox="0 0 200 200" 
+          className="w-full h-full text-[#1E2A4F] animate-[spin_240s_linear_infinite]"
+          fill="currentColor"
+        >
+          {/* Outer Dual Concentric Rim with Fluting */}
+          <circle cx="100" cy="100" r="95" fill="none" stroke="currentColor" strokeWidth="2.5" />
+          <circle cx="100" cy="100" r="91" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
+          <circle cx="100" cy="100" r="84" fill="none" stroke="currentColor" strokeWidth="2.5" />
+          
+          {/* Central Hub Rings (Nabhi) */}
+          <circle cx="100" cy="100" r="22" fill="none" stroke="currentColor" strokeWidth="2.5" />
+          <circle cx="100" cy="100" r="17" fill="none" stroke="currentColor" strokeWidth="1" />
+          <circle cx="100" cy="100" r="10" fill="currentColor" />
+          <circle cx="100" cy="100" r="4" fill="#FAF7F0" />
+          
+          {/* 24 Tapered Spokes & Intermediate Petal Finials */}
+          {Array.from({ length: 24 }).map((_, i) => {
+            const deg = i * 15;
+            const degMid = deg + 7.5;
+            return (
+              <React.Fragment key={i}>
+                {/* Primary Tapered Spoke with Hub Rivet and Petal Finial */}
+                <g transform={`rotate(${deg} 100 100)`}>
+                  <polygon points="98.2,78 99.3,25 100,20 100.7,25 101.8,78" fill="currentColor" />
+                  <polygon points="100,16 103,24 97,24" fill="currentColor" />
+                  <circle cx="100" cy="78" r="1.8" fill="currentColor" />
+                  <circle cx="100" cy="88" r="1.4" fill="currentColor" opacity="0.85" />
+                </g>
+                {/* Intermediate Tooth between Spokes */}
+                <g transform={`rotate(${degMid} 100 100)`}>
+                  <polygon points="100,21 102.5,28 97.5,28" fill="currentColor" opacity="0.75" />
+                  <circle cx="100" cy="91" r="1.2" fill="currentColor" opacity="0.6" />
+                </g>
+              </React.Fragment>
+            );
+          })}
         </svg>
       </div>
 
@@ -314,25 +347,38 @@ export default function Tourism() {
         <div className="flex flex-col lg:flex-row gap-12 relative items-start">
           
           {/* LEFT: Map */}
-          <div className="w-full lg:w-1/2 bg-white rounded-2xl shadow-lg p-8 flex items-center justify-center border border-[#D4AF37]/20 relative z-20 sticky top-28 lg:h-[calc(100vh-10rem)]">
-            <style>{`
-              .india-map-container path,
-              svg path {
-                fill: #F3EFE7 !important;
-                stroke: #D4AF37 !important;
-                stroke-width: 1px !important;
-                cursor: pointer !important;
-                transition: fill 0.3s ease, stroke-width 0.3s ease !important;
-              }
-              .india-map-container path:hover,
-              svg path:hover {
-                fill: #C4762A !important;
-                stroke: #1E2A4F !important;
-                stroke-width: 2.5px !important;
-                outline: none;
-              }
-            `}</style>
-            <IndiaSvgMap onStateClick={handleStateClick} />
+          <div className="w-full lg:w-1/2 flex flex-col relative sticky top-28 z-20">
+            {/* Handcrafted Crayon Indian Flag Artwork shifted to the far left */}
+            <div className="flex justify-start -ml-2 sm:-ml-6 lg:-ml-8 mb-1 z-30 pointer-events-none">
+              <img 
+                src="/Flag_art.png" 
+                alt="National Flag of India" 
+                className="w-32 sm:w-40 md:w-48 lg:w-52 h-auto object-contain select-none drop-shadow-xs" 
+                loading="eager"
+              />
+            </div>
+
+            {/* Map Container */}
+            <div className="w-full bg-white rounded-2xl shadow-lg p-8 flex items-center justify-center border border-[#D4AF37]/20 relative z-10 lg:h-[calc(100vh-10rem)]">
+              <style>{`
+                .india-map-container path,
+                svg path {
+                  fill: #F3EFE7 !important;
+                  stroke: #D4AF37 !important;
+                  stroke-width: 1px !important;
+                  cursor: pointer !important;
+                  transition: fill 0.3s ease, stroke-width 0.3s ease !important;
+                }
+                .india-map-container path:hover,
+                svg path:hover {
+                  fill: #C4762A !important;
+                  stroke: #1E2A4F !important;
+                  stroke-width: 2.5px !important;
+                  outline: none;
+                }
+              `}</style>
+              <IndiaSvgMap onStateClick={handleStateClick} />
+            </div>
           </div>
 
           {/* RIGHT: Desktop Details & Mobile Fallback Content */}
