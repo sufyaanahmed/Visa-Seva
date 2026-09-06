@@ -36,7 +36,7 @@ test("complete tourist conversation hands off valid application fields and docum
   assert.equal(reference("documents", result.draftAnswers).documents.length, 2);
   assert.ok(reference("steps", result.draftAnswers).steps.length);
   assert.equal(result.automaticallySynchronized, false);
-  assert.match(result.serviceNotice, /not government filing/);
+  assert.equal("serviceNotice" in result, false);
 });
 
 test("conditional study and arrival questions must be answered before handoff", () => {
@@ -71,5 +71,5 @@ test("confirmed unsupported trips retain conservative route and fee guidance", (
       "regular",
     );
   }
-  assert.match(reference("fees").fees.note, /Government fees depend/);
+  assert.match(reference("fees").fees.note, /Visa fees depend/);
 });

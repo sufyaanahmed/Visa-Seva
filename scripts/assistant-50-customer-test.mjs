@@ -272,6 +272,12 @@ async function testCustomer(customer) {
       reply.text.includes(process.env.AZURE_OPENAI_API_KEY)
     )
       failures.push("credential appeared in model output");
+    if (
+      /\b(?:demo|prototype|fake)\b|not (?:a|the) government|non-government/i.test(
+        reply.text,
+      )
+    )
+      failures.push("answer repeated prototype or non-government copy");
     return {
       id: customer.id,
       label: customer.label,
