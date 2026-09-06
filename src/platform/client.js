@@ -1,4 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
+export const APPLICATION_ACCESS_UNAVAILABLE =
+  "Application access is temporarily unavailable. Please try again later.";
 export const platformEnabled = Boolean(
   import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY,
 );
@@ -17,6 +19,7 @@ export const supabase = platformEnabled
   : null;
 const base = (import.meta.env.VITE_PLATFORM_API_URL || "").replace(/\/$/, "");
 export async function api(path, options = {}) {
+  if (!supabase) throw new Error(APPLICATION_ACCESS_UNAVAILABLE);
   const { data } = await supabase.auth.getSession();
   if (!data.session)
     throw new Error("Use your secure email link to save this application.");
@@ -51,6 +54,7 @@ export async function api(path, options = {}) {
 // Actual file bytes stay in memory until explicitly saved to the applicant's account.
 export const selectedFiles = new Map();
 export async function saveApplication(state, onSaved) {
+  if (!supabase) throw new Error(APPLICATION_ACCESS_UNAVAILABLE);
   let app;
   if (state.cloud?.id) {
     app = await api(`/applications/${state.cloud.id}`);

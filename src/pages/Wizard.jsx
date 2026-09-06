@@ -8,8 +8,7 @@ import { field, getSteps, validateStep, isVisible, isRequired, afghanPurposes } 
 import { getEvisaWizardGate } from '../domain/visaEligibility';
 import { useStore, formatReference } from '../store';
 import Auth from '../platform/Auth';
-import { platformEnabled, saveApplication, supabase } from '../platform/client';
-import { syncSyntheticApplication } from '../api/showcaseBackend';
+import { platformEnabled, saveApplication, supabase, APPLICATION_ACCESS_UNAVAILABLE } from '../platform/client';
 
 const demoFixture = (type, current) => {
   const futureDate = (days) => {
@@ -75,7 +74,7 @@ export default function Wizard() {
 }
 
 function WizardForm() {
-  const { state, updateState, updateData, completeDemo } = useStore();
+  const { state, updateState, updateData } = useStore();
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const [errors, setErrors] = useState({});
@@ -161,25 +160,14 @@ function WizardForm() {
     } else {
       setBackendSync({ status: 'saving', message: 'Preparing your application…' });
       try {
-        if (platformEnabled) {
-          if (!(await supabase.auth.getSession()).data.session) { setAccessPrompt(true); setBackendSync({ status: 'idle', message: '' }); return; }
-          const app = await saveApplication(state, (cloud, docs) => updateState({ cloud, ...(docs ? { docs } : {}) }));
-          navigate(`/applications/${app.id}`);
-          return;
-        }
-        const backendRecord = await syncSyntheticApplication({
-          data: state.data,
-          documents: state.docs,
-          attemptId: state.identifiers?.temporaryDemoId,
-        });
-        completeDemo(appType === 'voa' ? 'voa-form' : 'application-preparation', backendRecord);
-        setBackendSync({ status: 'saved', message: 'Your application is ready to review.' });
+        if (!platformEnabled) throw new Error(APPLICATION_ACCESS_UNAVAILABLE);
+        if (!(await supabase.auth.getSession()).data.session) { setAccessPrompt(true); setBackendSync({ status: 'idle', message: '' }); return; }
+        const app = await saveApplication(state, (cloud, docs) => updateState({ cloud, ...(docs ? { docs } : {}) }));
+        navigate(`/applications/${app.id}`);
       } catch (error) {
         setBackendSync({
           status: 'error',
-          message: platformEnabled ? error.message : error.retryable
-            ? 'Please try again. Your answers are still available.'
-            : 'Review your application details and try again.',
+          message: error.message,
         });
       }
     }
@@ -585,7 +573,7 @@ function WizardForm() {
 
             <div className="mt-12 flex gap-4 pt-6 border-t border-border">
               <button type="button" onClick={handleBack} className="btn-secondary">Back</button>
-              <button type="submit" disabled={backendSync.status === 'saving'} className="btn-primary ml-auto disabled:opacity-60">{backendSync.status === 'saving' ? 'Preparing application…' : stepIndex === steps.length - 1 ? (platformEnabled ? 'Review and checkout' : appType === 'voa' ? 'Prepare Annexure I' : 'Prepare application') : 'Save and continue'}</button>
+              <button type="submit" disabled={backendSync.status === 'saving'} className="btn-primary ml-auto disabled:opacity-60">{backendSync.status === 'saving' ? 'Preparing application…' : stepIndex === steps.length - 1 ? 'Review and checkout' : 'Save and continue'}</button>
             </div>
           </fieldset>
           </form>

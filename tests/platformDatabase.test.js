@@ -51,6 +51,23 @@ test("draft creation is idempotent per owner and inaccessible to another applica
   });
   assert.notEqual(separate.id, a.id);
 });
+test("one applicant can retrieve multiple applications with independent persisted statuses", async () => {
+  const first = await create("status-first");
+  const second = await create("status-second");
+  await cmd(owner, "applicant", second.id, "confirm", { version: second.version });
+  assert.notEqual(first.reference, second.reference);
+  await db.exec(`set role authenticated;select set_config('request.jwt.claim.sub','${owner}',false);`);
+  try {
+    const { rows } = await db.query(
+      "select id,status from applications where id in ($1,$2)", [first.id, second.id],
+    );
+    assert.equal(rows.length, 2);
+    assert.equal(rows.find((row) => row.id === first.id).status, "draft");
+    assert.equal(rows.find((row) => row.id === second.id).status, "awaiting_payment");
+  } finally {
+    await db.exec("reset role");
+  }
+});
 test("RLS prevents applicants reading others, writing decisions, or assigning roles", async () => {
   await db.exec(
     `set role authenticated;select set_config('request.jwt.claim.sub','${owner}',false);`,

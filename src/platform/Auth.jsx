@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { supabase, platformEnabled } from "./client";
+import { supabase, platformEnabled, APPLICATION_ACCESS_UNAVAILABLE } from "./client";
 import "./platform.css";
 export default function Auth({ children, admin = false, initialEmail = "" }) {
   const defaultEmail = import.meta.env.VITE_AUTH_EMAIL_TEMPLATE === "default";
@@ -24,8 +24,8 @@ export default function Auth({ children, admin = false, initialEmail = "" }) {
   if (!platformEnabled)
     return (
       <div className="platform-page">
-        <h1>Application access is not configured</h1>
-        <p>Connect the email service to enable secure application links.</p>
+        <h1>Application access unavailable</h1>
+        <p role="alert">{APPLICATION_ACCESS_UNAVAILABLE}</p>
       </div>
     );
   if (session === undefined)

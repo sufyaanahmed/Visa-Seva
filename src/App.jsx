@@ -5,7 +5,6 @@ import Loader from './components/Loader';
 import VisaAssistant from './components/VisaAssistant';
 import { useStore, isMeaningfulDraft } from './store';
 import Home from './pages/Home';
-import { platformEnabled } from './platform/client';
 const Applications = lazy(() => import('./platform/Applications'));
 const ApplicationDetail = lazy(() => import('./platform/Applications').then(m => ({ default: m.ApplicationDetail })));
 const Checkout = lazy(() => import('./platform/Applications').then(m => ({ default: m.Checkout })));
@@ -95,7 +94,7 @@ const Header = () => {
 
         <nav aria-label="Primary navigation" className="hidden items-center gap-3 lg:flex xl:gap-6">
           <Link to={hasDraft ? "/dashboard" : "/guide/visa-finder"} className={navLinkClass}>Apply</Link>
-          <Link to="/status" className={navLinkClass}>{platformEnabled ? "My applications" : "Check Status"}</Link>
+          <Link to="/status" className={navLinkClass}>My applications</Link>
           <Link to="/tourism" className={navLinkClass}>Discover India</Link>
           <Link to="/help" className={navLinkClass}>Help</Link>
         </nav>
@@ -150,7 +149,7 @@ const Header = () => {
       {menuOpen && (
         <nav id="mobile-navigation" aria-label="Mobile navigation" className="absolute left-0 z-40 flex w-full flex-col border-t border-gray-100 bg-white px-6 py-4 shadow-xl lg:hidden">
           <Link to={hasDraft ? "/dashboard" : "/guide/visa-finder"} onClick={closeMenu} className="border-b border-gray-100 py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">Apply</Link>
-          <Link to="/status" onClick={closeMenu} className="border-b border-gray-100 py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">{platformEnabled ? "My applications" : "Check Status"}</Link>
+          <Link to="/status" onClick={closeMenu} className="border-b border-gray-100 py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">My applications</Link>
           <Link to="/tourism" onClick={closeMenu} className="border-b border-gray-100 py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">Discover India</Link>
           <Link to="/help" onClick={closeMenu} className="py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">Help</Link>
         </nav>
@@ -221,7 +220,7 @@ export default function App() {
             <Route path="/flow/regular" element={<RegularFlow />} />
             <Route path="/guide/visa-finder" element={<VisaFinder />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/status" element={platformEnabled ? <Applications /> : <Status />} />
+            <Route path="/status" element={<Status />} />
             <Route path="/auth/confirm" element={<MagicLink />} />
             <Route path="/applications" element={<Applications />} />
             <Route path="/applications/:id" element={<ApplicationDetail />} />
