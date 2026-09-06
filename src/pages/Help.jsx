@@ -3,65 +3,97 @@ import { Link } from 'react-router-dom';
 
 const faqs = [
   {
-    category: "General & Eligibility",
+    category: "Documents & Photo Specifications",
     items: [
       {
-        q: "What is an e-Visa?",
-        a: "An e-Visa is an electronic authorization to travel to India for tourism, business, or medical purposes. You can apply for it completely online without visiting an embassy."
+        q: "What are the exact photo size and format specifications?",
+        a: "Your photograph must be a recent, clear color photograph with a plain white background. Dimensions must be square (minimum 350x350 pixels, recommended 2x2 inches / 50mm x 50mm). The file format must be JPEG (.jpg/.jpeg), with file size between 10 KB (minimum) and 1 MB (maximum). The applicant's face must be centered, full front view with eyes open, neutral expression, and even lighting. Spectacles/sunglasses, tinted lenses, uniforms, headwear (except religious headwear), and shadows are not permitted.",
+        keywords: ['photo', 'photo size', 'photograph', 'image size', 'dimension', 'dimensions', '50mm', '2x2', 'square', 'pixels', 'kb', 'mb', 'jpeg', 'jpg', 'white background', 'face', 'glasses', 'specifications', 'specs']
+      },
+      {
+        q: "What are the passport bio-page scan file size and format requirements?",
+        a: "The scanned copy of your passport's bio-data page (showing your photograph and personal particulars) must be uploaded in PDF (.pdf) format only. The file size must be between 10 KB (minimum) and 300 KB (maximum). The document must be crisp and clearly legible without glare, flash reflection, or cropped borders. The Machine Readable Zone (MRZ lines at the bottom) must be completely visible.",
+        keywords: ['passport', 'bio page', 'pdf', 'passport scan', 'file size', 'size', 'kb', 'format', 'upload', 'mrz', 'documents', 'scanned copy']
+      },
+      {
+        q: "What additional supporting documents are needed for Business, Medical, or Student visas?",
+        a: "• e-Business: A clear PDF copy of your business card or formal letter of invitation from the Indian company/organization (10 KB to 300 KB).\n• e-Medical: A formal letter on the letterhead of the accredited Indian hospital/medical institution detailing the treatment plan (PDF, 10 KB to 300 KB).\n• e-Medical Attendant: A copy of the principal patient's medical visa or hospital letter.\n• e-Student: Admission letter from an eligible Indian educational institute and financial undertaking/scholarship proof.",
+        keywords: ['business visa', 'medical visa', 'student visa', 'documents', 'invitation letter', 'hospital letter', 'business card', 'pdf size', 'attendant']
+      },
+      {
+        q: "What passport validity is required for an e-Visa?",
+        a: "Your physical passport must have at least 6 months of validity remaining from your expected date of arrival in India. It must also contain at least two blank pages for official stamping by the Immigration Officer upon arrival.",
+        keywords: ['passport validity', '6 months', 'validity', 'blank pages', 'expiry', 'passport rules']
+      }
+    ]
+  },
+  {
+    category: "General Rules & Eligibility",
+    items: [
+      {
+        q: "What is an e-Visa and who is eligible?",
+        a: "An e-Visa is an official electronic travel authorization issued by the Government of India for foreign nationals traveling for tourism, recreation, casual business visits, short-term medical treatment, conferences, or qualifying study. Citizens of over 165 countries can apply completely online without visiting an Indian Embassy or Consular Mission.",
+        keywords: ['what is evisa', 'eligibility', 'eligible countries', 'online visa', 'tourism', 'embassy', 'government']
       },
       {
         q: "How early should I apply before my travel date?",
-        a: "You can apply for an e-Visa up to 120 days in advance of your arrival, but you must apply at least 4 days before your date of travel."
-      },
-      {
-        q: "Are there restricted areas I cannot visit with an e-Visa?",
-        a: "Yes. The e-Visa does not allow entry into Protected/Restricted Areas (like certain parts of Sikkim or Arunachal Pradesh). You will need to obtain a separate Protected Area Permit (PAP) to visit those regions."
+        a: "You can apply up to 120 days in advance of your proposed arrival date. Applications should be submitted at least 4 business days before your scheduled flight departure to account for consular review.",
+        keywords: ['how early', 'when to apply', 'advance application', '120 days', '4 days', 'timeline', 'departure']
       },
       {
         q: "What is the difference between Visa on Arrival and e-Visa?",
-        a: "Visa on Arrival (VoA) is restricted strictly to qualifying citizens of Japan, South Korea, and the UAE at 6 designated airports. All other eligible foreign nationals should obtain an e-Visa online prior to boarding."
+        a: "Visa on Arrival (VoA) is restricted strictly to qualifying passport holders of Japan, South Korea, and the UAE (if previously holding an Indian visa) at 6 designated international airports (Delhi, Mumbai, Kolkata, Chennai, Bengaluru, Hyderabad). All other eligible nationalities must obtain an approved e-Visa online prior to boarding.",
+        keywords: ['voa', 'visa on arrival', 'japan', 'south korea', 'korea', 'uae', 'difference', 'ports']
+      },
+      {
+        q: "Are there restricted or protected areas in India that require extra permits?",
+        a: "Yes. An e-Visa permits general travel across India, but does not grant entry into designated Protected or Restricted Areas (such as certain border regions in Sikkim, Arunachal Pradesh, parts of Ladakh, Andaman & Nicobar tribal areas, and Lakshadweep). A separate Protected Area Permit (PAP) or Restricted Area Permit (RAP) must be obtained from the Ministry of Home Affairs or competent local authority.",
+        keywords: ['restricted areas', 'protected areas', 'pap', 'rap', 'sikkim', 'arunachal', 'ladakh', 'permits', 'andaman']
       }
     ]
   },
   {
-    category: "Application & Documents",
+    category: "Validity, Stay Limits & Entry Ports",
     items: [
       {
-        q: "What documents do I need to apply?",
-        a: "Generally, you need a recent photograph (white background, 50mm x 50mm) and a scanned copy of your passport's bio page (PDF). Business and medical visas require an invitation card/letter or hospital referral."
+        q: "What is the difference between visa validity and allowable continuous stay?",
+        a: "• 30-Day e-Tourist Visa: Valid for 30 days from the date of first arrival in India, allowing Double Entry.\n• 1-Year & 5-Year e-Tourist Visa: Multiple entries during the validity period. Continuous stay during each visit cannot exceed 90 days for most nationalities (180 days for citizens of the US, UK, Canada, and Japan).\n• e-Business Visa: Valid for 1 year with Multiple Entries; continuous stay cannot exceed 180 days per calendar year.",
+        keywords: ['validity', 'length of stay', 'continuous stay', 'duration', '30 days', '1 year', '5 years', 'multiple entry', 'double entry', '90 days', '180 days']
       },
       {
-        q: "How long does the processing take?",
-        a: "e-Visas are typically processed within 72 hours. However, it is highly recommended to apply at least 7 to 10 days in advance during peak tourism seasons."
+        q: "Which international airports and seaports accept e-Visa entry?",
+        a: "e-Visa holders can arrive at 31 designated international airports: Ahmedabad, Amritsar, Bagdogra, Bengaluru, Bhubaneswar, Calicut, Chandigarh, Chennai, Cochin, Coimbatore, Delhi, Gaya, Goa (Dabolim & MOPA), Guwahati, Hyderabad, Indore, Jaipur, Kannur, Kolkata, Lucknow, Madurai, Mangalore, Mumbai, Nagpur, Port Blair, Pune, Tiruchirappalli, Trivandrum, Varanasi, and Visakhapatnam, plus 6 designated seaports (Cochin, Goa, Mangalore, Mumbai, Chennai, Port Blair). You may exit via any authorized Immigration Check Post (ICP) in India.",
+        keywords: ['ports of entry', 'airports', 'seaports', 'delhi', 'mumbai', 'goa', 'bangalore', 'chennai', 'arrival ports', 'where can i enter', 'icp']
       },
       {
-        q: "Can I edit my application after submitting?",
-        a: "No. Once you submit the final application, no further edits can be made. Ensure all details match your physical passport exactly."
-      },
-      {
-        q: "What passport validity is required?",
-        a: "Your physical passport must have at least 6 months of remaining validity from the date of arrival in India and contain at least 2 blank pages for immigration stamps."
+        q: "Can an e-Visa be extended or converted while in India?",
+        a: "No. Under Government of India regulations, e-Visas are strictly non-extendable and non-convertible to any other visa type (such as employment or permanent residency). In extraordinary circumstances of acute medical emergency, contact the local Foreigners Regional Registration Office (FRRO).",
+        keywords: ['extend', 'extension', 'convert', 'conversion', 'overstay', 'frro', 'change visa']
       }
     ]
   },
   {
-    category: "Payment & Post-Submission",
+    category: "Payment, Status & Arrival Protocols",
     items: [
       {
-        q: "Do I need to carry a printed copy of the ETA?",
-        a: "Yes. You must print your official 1-page Electronic Travel Authorization (ETA) and carry it with you to present at Immigration upon your arrival in India. Digital photos or mobile phone screenshots are not accepted."
+        q: "What should I do if my payment fails or is charged twice?",
+        a: "Visa processing fees are non-refundable. If your payment fails, wait 30 minutes for automated bank settlement before attempting payment again. Do not make rapid consecutive transactions to avoid duplicate holds. You can check the payment status directly on the portal using your Application ID.",
+        keywords: ['payment', 'failed payment', 'fee', 'cost', 'charge', 'refund', 'card declined', 'double charge', 'transaction']
       },
       {
-        q: "What is the mandatory e-Arrival Card requirement?",
-        a: "Foreign passengers must submit the online arrival declaration within 72 hours before flight departure. This is an arrival health and customs record, not a visa."
+        q: "Do I need to carry a printed copy of the Electronic Travel Authorization (ETA)?",
+        a: "Yes. You must carry a printed physical copy of your Electronic Travel Authorization (ETA) confirmation document at the time of boarding and present it to the Immigration Officer upon arrival in India. Digital photos or mobile screenshots alone may not be accepted by airlines.",
+        keywords: ['eta', 'print', 'printed copy', 'electronic travel authorization', 'paper copy', 'boarding']
       },
       {
-        q: "Is the e-Visa valid for multiple entries?",
-        a: "It depends on the category. For example, 1-year and 5-year e-Tourist visas allow multiple entries. The 30-day e-Tourist visa allows double entry."
+        q: "What is the mandatory 72-hour e-Arrival Card requirement?",
+        a: "All foreign passengers traveling to India must complete the online e-Arrival Card declaration within 72 hours before their flight departure. This is a mandatory customs and health arrival declaration, completely free of charge.",
+        keywords: ['arrival card', '72 hours', 'air suvidha', 'customs declaration', 'pre-flight', 'health declaration']
       },
       {
-        q: "What if my payment fails?",
-        a: "If payment fails, wait a few minutes before trying again or try an alternate card. Avoid rapid repetitive payment attempts to prevent temporary bank locks."
+        q: "Can I correct an error or typo in my name or passport number after submission?",
+        a: "No changes can be made once an application is submitted and payment is processed. If there is a critical discrepancy (e.g. incorrect passport number, misspelled name, or wrong nationality), the airline will deny boarding and you must submit a new application with the correct details.",
+        keywords: ['correction', 'typo', 'mistake', 'error', 'edit application', 'wrong name', 'wrong passport number', 'change details']
       }
     ]
   }
@@ -74,71 +106,118 @@ export default function Help() {
   const categories = ['All', ...faqs.map((f) => f.category)];
 
   const filteredFaqs = useMemo(() => {
-    const q = searchTerm.toLowerCase().trim();
+    const raw = searchTerm.toLowerCase().trim();
+    if (!raw) {
+      return faqs
+        .filter((group) => selectedCategory === 'All' || group.category === selectedCategory)
+        .filter((group) => group.items.length > 0);
+    }
+
+    const queryTokens = raw.split(/\s+/).filter(Boolean);
+
     return faqs
       .filter((group) => selectedCategory === 'All' || group.category === selectedCategory)
       .map((group) => {
-        const matchingItems = group.items.filter(
-          (item) => !q || item.q.toLowerCase().includes(q) || item.a.toLowerCase().includes(q)
-        );
+        const matchingItems = group.items.filter((item) => {
+          const qText = item.q.toLowerCase();
+          const aText = item.a.toLowerCase();
+          const kwList = (item.keywords || []).map((k) => k.toLowerCase());
+
+          // Match if every token is found in question, answer, or keywords
+          return queryTokens.every((token) =>
+            qText.includes(token) ||
+            aText.includes(token) ||
+            kwList.some((kw) => kw.includes(token))
+          );
+        });
         return { ...group, items: matchingItems };
       })
       .filter((group) => group.items.length > 0);
   }, [searchTerm, selectedCategory]);
+
+  const totalResultsCount = useMemo(() => {
+    return filteredFaqs.reduce((acc, g) => acc + g.items.length, 0);
+  }, [filteredFaqs]);
 
   return (
     <div className="min-h-screen bg-surface pattern-kalamkari py-12 px-4 relative">
       <div className="absolute inset-0 bg-surface/90" />
       <div className="max-w-4xl mx-auto relative z-10">
         
+        {/* Page Header */}
         <div className="text-center mb-10">
-          <p className="text-xs font-sans font-bold uppercase tracking-[0.3em] text-[#C4762A] mb-3">Guidance & Support Center</p>
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-4">Frequently Asked Questions</h1>
-          <p className="text-text-secondary font-sans max-w-2xl mx-auto">Find authoritative answers regarding eligibility rules, document requirements, fees, and pre-arrival procedures.</p>
+          <p className="text-xs font-sans font-bold uppercase tracking-[0.3em] text-[#C4762A] mb-3">
+            Official Guidance & Support Center
+          </p>
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-primary mb-4">
+            Frequently Asked Questions
+          </h1>
+          <p className="text-text-secondary font-sans text-sm max-w-2xl mx-auto">
+            Authoritative answers on photo specifications, document requirements, entry rules, processing timelines, and arrival procedures.
+          </p>
         </div>
 
-        {/* Live Search & Filter Bar */}
-        <div className="bg-white border border-border-dark p-6 rounded-xl shadow-md mb-10 space-y-4">
+        {/* Live Search & Clean Category Filter Bar */}
+        <div className="bg-white border-2 border-[#D4AF37]/40 p-6 sm:p-7 rounded-2xl shadow-lg mb-10 space-y-4">
+          
+          {/* Search Input Bar */}
           <div className="relative">
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search by keyword (e.g., photo size, validity, 72 hours, fee, arrival card)..."
-              className="w-full bg-[#FAF7F0] border border-border-dark px-4 py-3.5 pl-11 text-sm font-sans text-primary focus:outline-none focus:border-[#D4AF37] rounded-lg"
+              placeholder="Search by keyword (e.g. photo size, passport scan, 72 hours, ports, fee, validity)..."
+              className="w-full bg-[#FAF7F0] border-2 border-[#D4AF37]/30 px-4 py-3.5 pl-12 pr-24 text-sm font-sans text-primary focus:outline-none focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/20 rounded-xl transition-all shadow-inner placeholder:text-gray-400"
             />
-            <div className="absolute left-3.5 top-3.5 text-gray-400 pointer-events-none">
+            <div className="absolute left-4 top-3.5 text-[#D4AF37] pointer-events-none">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
             {searchTerm && (
               <button
                 type="button"
                 onClick={() => setSearchTerm('')}
-                className="absolute right-3.5 top-3 text-xs font-bold text-gray-500 hover:text-gray-800 uppercase px-2 py-1"
+                className="absolute right-3.5 top-3 text-xs font-bold text-gray-500 hover:text-primary bg-white border border-gray-300 hover:border-[#D4AF37] px-2.5 py-1 rounded-md transition-all cursor-pointer"
               >
                 Clear
               </button>
             )}
           </div>
 
-          {/* Category Filter Chips */}
-          <div className="flex flex-wrap gap-2 pt-1">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                  selectedCategory === cat
-                    ? 'bg-[#1E2A4F] text-white shadow-xs'
-                    : 'bg-[#FAF7F0] text-gray-700 border border-gray-300 hover:border-[#D4AF37]'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          {/* Clean Category Filter Tabs */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+            <div className="flex flex-wrap gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                    selectedCategory === cat
+                      ? 'bg-[#1E2A4F] text-white shadow-xs'
+                      : 'bg-[#FAF7F0] text-gray-700 border border-gray-300 hover:border-[#D4AF37] hover:bg-white'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Results Counter / Reset */}
+            {searchTerm && (
+              <div className="text-xs text-gray-500 font-sans flex items-center gap-2">
+                <span><strong>{totalResultsCount}</strong> result{totalResultsCount === 1 ? '' : 's'}</span>
+                <span className="text-gray-300">·</span>
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm('')}
+                  className="text-[#C4762A] font-bold hover:underline cursor-pointer"
+                >
+                  Reset
+                </button>
+              </div>
+            )}
           </div>
         </div>
         
@@ -147,8 +226,8 @@ export default function Help() {
           {filteredFaqs.length > 0 ? (
             filteredFaqs.map((group, idx) => (
               <section key={idx}>
-                <h2 className="text-lg font-serif font-bold text-primary border-b border-border-dark pb-3 mb-4 flex items-center gap-3">
-                  <span className="w-7 h-7 rounded-full bg-secondary-accent/20 flex items-center justify-center text-secondary-accent text-xs font-bold font-mono">
+                <h2 className="text-lg font-serif font-bold text-primary border-b-2 border-[#D4AF37]/30 pb-3 mb-4 flex items-center gap-3">
+                  <span className="w-7 h-7 rounded-full bg-[#1E2A4F] text-white flex items-center justify-center text-xs font-bold font-mono shadow-xs">
                     {idx + 1}
                   </span>
                   {group.category}
@@ -158,15 +237,17 @@ export default function Help() {
                     <details
                       key={fIdx}
                       open={Boolean(searchTerm)}
-                      className="group border border-border-dark bg-white shadow-xs p-5 transition-all duration-300 hover:border-secondary-accent/50 open:shadow-md open:border-secondary-accent/30 rounded-lg"
+                      className="group border border-[#D4AF37]/25 bg-white shadow-xs p-5 transition-all duration-300 hover:border-[#D4AF37]/70 open:shadow-md open:border-[#D4AF37] rounded-xl"
                     >
-                      <summary className="font-sans font-bold text-primary cursor-pointer list-none flex justify-between items-center pr-2 text-sm">
+                      <summary className="font-sans font-bold text-primary cursor-pointer list-none flex justify-between items-center pr-2 text-sm sm:text-[15px] leading-snug">
                         <span className="pr-4">{faq.q}</span>
-                        <span className="text-secondary-accent transform group-open:rotate-180 transition-transform duration-300 flex-shrink-0">
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                        <span className="text-[#D4AF37] transform group-open:rotate-180 transition-transform duration-300 flex-shrink-0">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                          </svg>
                         </span>
                       </summary>
-                      <div className="mt-3 text-text-secondary text-xs sm:text-sm font-sans leading-relaxed border-t border-border pt-3">
+                      <div className="mt-3.5 text-text-secondary text-xs sm:text-sm font-sans leading-relaxed border-t border-border pt-3.5 whitespace-pre-line">
                         {faq.a}
                       </div>
                     </details>
@@ -175,13 +256,20 @@ export default function Help() {
               </section>
             ))
           ) : (
-            <div className="bg-white border border-border p-8 rounded-xl text-center">
-              <h3 className="font-serif font-bold text-lg text-gray-900 mb-1">No FAQs Match Your Search</h3>
-              <p className="text-gray-500 text-xs mb-4">Try searching for a different keyword or browse all categories.</p>
+            <div className="bg-white border-2 border-dashed border-[#D4AF37]/40 p-10 rounded-2xl text-center shadow-sm">
+              <div className="w-12 h-12 rounded-full bg-[#FAF7F0] border border-[#D4AF37]/40 text-[#D4AF37] flex items-center justify-center mx-auto mb-3 text-lg font-bold">
+                ?
+              </div>
+              <h3 className="font-serif font-bold text-lg text-gray-900 mb-1">
+                No FAQs Match &ldquo;{searchTerm}&rdquo;
+              </h3>
+              <p className="text-gray-500 text-xs sm:text-sm mb-5 max-w-md mx-auto">
+                Try searching for broader keywords like <em>photo, passport, validity, fee, ports, arrival</em>, or explore all categories.
+              </p>
               <button
                 type="button"
                 onClick={() => { setSearchTerm(''); setSelectedCategory('All'); }}
-                className="btn-secondary text-xs"
+                className="bg-[#1E2A4F] text-white px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-[#162040] transition-colors cursor-pointer"
               >
                 Reset Search Filters
               </button>
@@ -189,7 +277,7 @@ export default function Help() {
           )}
 
           {/* Direct Assistance Card */}
-          <section className="bg-primary-dark text-white p-8 sm:p-10 mt-12 text-center border-t-4 border-secondary-accent shadow-xl relative overflow-hidden rounded-xl">
+          <section className="bg-[#1E2A4F] text-white p-8 sm:p-10 mt-12 text-center border-t-4 border-[#D4AF37] shadow-xl relative overflow-hidden rounded-2xl">
             <div className="absolute inset-0 pattern-jali opacity-10" />
             <div className="relative z-10">
               <h2 className="text-2xl font-serif font-bold mb-3">Ready to Begin Your Application?</h2>
@@ -197,10 +285,10 @@ export default function Help() {
                 Use the interactive Visa Finder to verify requirements or launch your e-Visa application directly.
               </p>
               <div className="flex flex-wrap justify-center gap-3">
-                <Link to="/guide/visa-finder" className="bg-gradient-to-r from-secondary-accent to-[#C9933A] text-primary-dark px-6 py-3 font-sans font-bold uppercase tracking-widest text-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 rounded">
+                <Link to="/guide/visa-finder" className="bg-gradient-to-r from-[#D4AF37] to-[#C9933A] text-[#1E2A4F] px-6 py-3 font-sans font-bold uppercase tracking-widest text-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 rounded-lg">
                   Explore Visa Finder →
                 </Link>
-                <Link to="/status" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3 font-sans font-bold uppercase tracking-widest text-xs transition-all duration-300 rounded">
+                <Link to="/status" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3 font-sans font-bold uppercase tracking-widest text-xs transition-all duration-300 rounded-lg">
                   Track Application Status
                 </Link>
               </div>

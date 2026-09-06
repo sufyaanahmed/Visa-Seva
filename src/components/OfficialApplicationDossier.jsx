@@ -141,7 +141,7 @@ function VerificationCeremony({ reference, onComplete }) {
     const timer3 = setTimeout(() => setStepStage(3), 2300);
     const timerComplete = setTimeout(() => {
       onComplete();
-    }, 3200);
+    }, 3300);
 
     return () => {
       clearTimeout(timer1);
@@ -153,77 +153,145 @@ function VerificationCeremony({ reference, onComplete }) {
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-12 animate-[fadeIn_0.5s_ease-out]">
-      <div className="max-w-md w-full bg-white border border-[#D4AF37]/40 shadow-2xl rounded-2xl p-8 sm:p-10 text-center relative overflow-hidden">
+      <div className="max-w-lg w-full bg-[#FAF7F0] border-2 border-[#D4AF37]/50 shadow-[0_20px_50px_rgba(30,42,79,0.15)] rounded-2xl p-8 sm:p-10 text-center relative overflow-hidden">
         
-        {/* Background Mandala & Rings */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-[0.04] pointer-events-none">
-          <svg viewBox="0 0 200 200" className="w-[300px] h-[300px] animate-[spin_60s_linear_infinite] text-[#1E2A4F]">
-            <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" strokeWidth="4" />
-            <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
+        {/* Background Rotating Cultural Mandala */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-[0.05] pointer-events-none">
+          <svg viewBox="0 0 200 200" className="w-[360px] h-[360px] animate-[spin_80s_linear_infinite] text-[#1E2A4F]">
+            <circle cx="100" cy="100" r="92" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="3 3" />
+            <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <circle cx="100" cy="100" r="65" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="4 2" />
+            {Array.from({ length: 24 }, (_, i) => (
+              <line
+                key={i}
+                x1="100"
+                y1="35"
+                x2="100"
+                y2="50"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                transform={`rotate(${i * 15} 100 100)`}
+              />
+            ))}
           </svg>
         </div>
 
-        {/* Central Animated Seal */}
+        {/* Central Sovereign Emblem Seal */}
         <div className="relative mx-auto w-24 h-24 mb-6 flex items-center justify-center">
-          {/* Pulsing ring */}
-          <div className="absolute inset-0 rounded-full border-2 border-[#D4AF37] animate-ping opacity-30" />
-          <div className="absolute -inset-2 rounded-full border border-dashed border-[#1E2A4F]/30 animate-[spin_20s_linear_infinite]" />
-          
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#0B2540] to-[#163A5F] border-2 border-[#D4AF37] flex items-center justify-center shadow-xl">
-            <svg className="w-10 h-10 text-[#D4AF37]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M5 13l4 4L19 7"
-                className="stroke-dasharray-[24] stroke-dashoffset-[24] animate-[strokeDraw_0.8s_ease-out_forwards]"
-              />
-            </svg>
+          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#1E2A4F] via-[#162040] to-[#0B1528] border-2 border-[#D4AF37] flex flex-col items-center justify-center shadow-xl p-2 relative z-10">
+            <img
+              src="/emblem.svg"
+              alt="Emblem of India"
+              className="w-12 h-12 object-contain filter drop-shadow-[0_2px_8px_rgba(212,175,55,0.4)]"
+              style={{ filter: 'brightness(0) saturate(100%) invert(88%) sepia(21%) saturate(1210%) hue-rotate(345deg) brightness(91%) contrast(85%)' }}
+            />
+            <span className="text-[7px] font-serif font-bold uppercase tracking-widest text-[#D4AF37] mt-0.5">
+              SATYAMEVA JAYATE
+            </span>
           </div>
         </div>
 
-        {/* Ceremonial Titles */}
-        <span className="text-[11px] font-sans font-bold uppercase tracking-[0.25em] text-[#C4762A] block mb-1">
-          Application ready
-        </span>
-        <h2 className="text-2xl font-serif font-bold text-[#1E2A4F] tracking-wide mb-6">
-          Preparing your summary
-        </h2>
+        {/* Sovereign Header Titles */}
+        <div className="mb-6">
+          <span className="text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-[#C4762A] block mb-1">
+            GOVERNMENT OF INDIA
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#1E2A4F] tracking-wide">
+            Sealing Application Dossier
+          </h2>
+          <p className="text-xs font-serif italic text-gray-600 mt-1">
+            Official Registry Enrolment & Consular Attestation
+          </p>
+        </div>
 
-        {/* Progressive Verification Steps */}
-        <div className="space-y-3 text-left mb-8 max-w-xs mx-auto">
-          {/* Check 1 */}
-          <div className={`flex items-center gap-3 text-xs transition-all duration-300 ${stepStage >= 1 ? 'text-gray-900 font-medium' : 'text-gray-400 opacity-40'}`}>
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${stepStage >= 1 ? 'bg-[#176B45] text-white' : 'bg-gray-200 text-gray-500'}`}>
+        {/* Cultural Progressive Verification Milestones */}
+        <div className="space-y-3.5 text-left mb-7 max-w-sm mx-auto bg-white/85 backdrop-blur-sm border border-[#D4AF37]/30 rounded-xl p-4 sm:p-5 shadow-xs">
+          
+          {/* Milestone 1 */}
+          <div className={`flex items-start gap-3 text-xs transition-all duration-500 ${stepStage >= 1 ? 'text-gray-900 font-medium' : 'text-gray-400 opacity-40'}`}>
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 transition-all duration-300 ${stepStage >= 1 ? 'bg-[#176B45] text-white shadow-xs' : 'bg-gray-200 text-gray-500'}`}>
               {stepStage >= 1 ? '✓' : '1'}
             </span>
-            <span>Application details ready</span>
+            <div>
+              <strong className="block text-gray-900 font-serif font-bold text-[12.5px]">Bio-Data & Passport Authentication</strong>
+              <span className="text-[10.5px] text-gray-500 block leading-tight">Passport credentials & entry parameters verified</span>
+            </div>
           </div>
 
-          {/* Check 2 */}
-          <div className={`flex items-center gap-3 text-xs transition-all duration-300 ${stepStage >= 2 ? 'text-gray-900 font-medium' : 'text-gray-400 opacity-40'}`}>
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${stepStage >= 2 ? 'bg-[#176B45] text-white' : 'bg-gray-200 text-gray-500'}`}>
+          {/* Milestone 2 */}
+          <div className={`flex items-start gap-3 text-xs transition-all duration-500 ${stepStage >= 2 ? 'text-gray-900 font-medium' : 'text-gray-400 opacity-40'}`}>
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 transition-all duration-300 ${stepStage >= 2 ? 'bg-[#176B45] text-white shadow-xs' : 'bg-gray-200 text-gray-500'}`}>
               {stepStage >= 2 ? '✓' : '2'}
             </span>
-            <span>Declarations complete</span>
+            <div>
+              <strong className="block text-gray-900 font-serif font-bold text-[12.5px]">Statutory Declarations & Attestation</strong>
+              <span className="text-[10.5px] text-gray-500 block leading-tight">Security compliance & truthful declaration sealed</span>
+            </div>
           </div>
 
-          {/* Check 3 */}
-          <div className={`flex items-center gap-3 text-xs transition-all duration-300 ${stepStage >= 3 ? 'text-gray-900 font-medium' : 'text-gray-400 opacity-40'}`}>
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${stepStage >= 3 ? 'bg-[#176B45] text-white' : 'bg-gray-200 text-gray-500'}`}>
+          {/* Milestone 3 */}
+          <div className={`flex items-start gap-3 text-xs transition-all duration-500 ${stepStage >= 3 ? 'text-gray-900 font-medium' : 'text-gray-400 opacity-40'}`}>
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 transition-all duration-300 ${stepStage >= 3 ? 'bg-[#176B45] text-white shadow-xs' : 'bg-gray-200 text-gray-500'}`}>
               {stepStage >= 3 ? '✓' : '3'}
             </span>
-            <span>Application reference created</span>
+            <div>
+              <strong className="block text-gray-900 font-serif font-bold text-[12.5px]">Generating Official Reference ID</strong>
+              <span className="text-[10.5px] text-gray-500 block leading-tight">Enrolling dossier into National Immigration Registry</span>
+            </div>
+          </div>
+
+        </div>
+
+        {/* ── INDIAN NATIONAL FLAG (TIRANGA) LOADING BAR ── */}
+        <div className="max-w-sm mx-auto">
+          <div className="w-full bg-[#E5E0D5] h-7 rounded-lg border-2 border-[#D4AF37]/70 overflow-hidden shadow-inner relative p-0">
+            {/* Expanding Flag Strip */}
+            <div
+              className="h-full relative overflow-hidden transition-all duration-700 ease-out flex flex-col justify-between shadow-sm"
+              style={{ width: `${Math.min(100, Math.max(12, stepStage * 34))}%` }}
+            >
+              {/* Saffron (Kesari) Band */}
+              <div className="w-full h-1/3 bg-[#FF9933]" />
+              
+              {/* White Band with spinning Ashoka Chakra */}
+              <div className="w-full h-1/3 bg-white relative flex items-center justify-center overflow-hidden">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-2.5 h-2.5 text-[#000080] animate-[spin_3s_linear_infinite]"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <circle cx="12" cy="12" r="10" strokeWidth="1.5" />
+                  <circle cx="12" cy="12" r="2" fill="currentColor" />
+                  {Array.from({ length: 24 }, (_, i) => (
+                    <line
+                      key={i}
+                      x1="12"
+                      y1="12"
+                      x2="12"
+                      y2="3"
+                      stroke="currentColor"
+                      strokeWidth="0.8"
+                      transform={`rotate(${i * 15} 12 12)`}
+                    />
+                  ))}
+                </svg>
+              </div>
+              
+              {/* India Green (Kavach) Band */}
+              <div className="w-full h-1/3 bg-[#138808]" />
+
+              {/* Shimmer sweep effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none" />
+            </div>
+          </div>
+          
+          <div className="flex justify-between items-center text-[9px] font-sans font-bold uppercase tracking-wider text-gray-500 mt-2 px-1">
+            <span>Processing · In Progress</span>
+            <span className="font-mono text-[#1E2A4F]">{Math.min(100, stepStage * 34)}%</span>
           </div>
         </div>
 
-        {/* Progress Bar */}
-        <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
-          <div
-            className="bg-gradient-to-r from-[#D4AF37] to-[#1E2A4F] h-1.5 rounded-full transition-all duration-700 ease-out"
-            style={{ width: `${Math.min(100, stepStage * 34)}%` }}
-          />
-        </div>
       </div>
     </div>
   );

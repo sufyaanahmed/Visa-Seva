@@ -4,8 +4,6 @@ import { useStore } from '../../store';
 import FlowGuide from '../../components/FlowGuide';
 import Disclosure from '../../components/Disclosure';
 
-const AFGHAN_PORTAL = 'https://www.indianvisaonline.gov.in/avisa/index.html';
-
 const categories = [
   { value: 'business', label: 'Business Visa', note: 'Business, investment, sports and eligible dependant purposes have different evidence requirements.' },
   { value: 'student', label: 'Student Visa', note: 'Scholarship, new or returning study, and eligible dependant purposes are assessed separately.' },
@@ -90,7 +88,6 @@ export default function AfghanFlow() {
           <button type="button" onClick={startApplication} className="btn-primary rounded-md">
             Continue application →
           </button>
-          <a href={AFGHAN_PORTAL} target="_blank" rel="noreferrer" className="text-sm text-primary underline">Official Afghan visa portal ↗</a>
         </div>
       </div>
     </FlowGuide>
