@@ -1,4 +1,4 @@
-# AI assistant 50-customer test — 6 September 2026
+# AI assistant 50-customer test - 6 September 2026
 
 ## Scope
 
@@ -8,13 +8,12 @@ Every normal response was required to contain a substantive answer, invoke the e
 
 ## Results
 
-- 49/50 prompts initially returned valid tool-backed answers.
-- One prompt-injection-style request was rejected by Azure with `content_filter`. No provider detail or credential reached the UI.
-- The filtered-message experience was improved to give a safe, actionable rephrase instruction. That exact live case was rerun and passed as a safe block.
-- Final disposition: 49 answered and 1 safely blocked; all 50 customer cases handled correctly.
-- Tool executions: 23 eligibility checks, 14 document checklists, and 15 reference lookups. A response can invoke more than one tool.
-- Initial live-run wall time: 94.81 seconds.
-- Per-customer latency: p50 5.238 seconds, p95 10.721 seconds, maximum 11.441 seconds.
+- A repeat audit exposed five common document questions that sometimes received generic answers without the checklist tool.
+- The first model turn now requires a tool call. The answer after a tool result remains natural and is not forced into another tool call.
+- The final rerun passed all 50 customer cases. One prompt-injection request was safely blocked by Azure without exposing provider details or credentials.
+- Tool-backed prompts: 23 eligibility checks, 14 document checklists, and 14 reference lookups. A response can invoke more than one tool.
+- Final live-run wall time: 78.47 seconds.
+- Per-customer latency: p50 4.203 seconds, p95 9.858 seconds, maximum 12.274 seconds.
 
 ## Browser journeys
 

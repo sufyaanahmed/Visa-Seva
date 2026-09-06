@@ -46,9 +46,11 @@ test("complete eligibility creates a validated prefilled application action", as
 });
 test("graph executes real tools, feeds results back to the model and exposes provenance", async () => {
   let calls = 0;
+  const toolChoices = [];
   const model = {
-    bindTools(tools) {
+    bindTools(tools, options) {
       assert.equal(tools.length, 3);
+      toolChoices.push(options?.tool_choice || "auto");
       return {
         async invoke(history) {
           calls++;
@@ -78,6 +80,7 @@ test("graph executes real tools, feeds results back to the model and exposes pro
     { model, onEvent: (e) => events.push(e) },
   );
   assert.equal(calls, 2);
+  assert.deepEqual(toolChoices, ["auto", "required"]);
   assert.deepEqual(reply.toolsUsed, ["get_document_checklist"]);
   assert.ok(
     reply.sources.every((s) =>

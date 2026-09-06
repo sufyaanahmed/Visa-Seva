@@ -72,10 +72,20 @@ export function createAzureModel(env = process.env) {
 export function createVisaGraph(model) {
   const tools = createVisaTools();
   const bound = model.bindTools(tools);
+  const grounded = model.bindTools(tools, { tool_choice: "required" });
   return new StateGraph(MessagesAnnotation)
-    .addNode("agent", async (state, config) => ({
-      messages: [await bound.invoke(state.messages, config)],
-    }))
+    .addNode("agent", async (state, config) => {
+      const lastMessage = state.messages.at(-1);
+      const answeringToolResult = lastMessage?.getType?.() === "tool";
+      return {
+        messages: [
+          await (answeringToolResult ? bound : grounded).invoke(
+            state.messages,
+            config,
+          ),
+        ],
+      };
+    })
     .addNode("tools", new ToolNode(tools))
     .addEdge(START, "agent")
     .addConditionalEdges(
