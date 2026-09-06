@@ -18,21 +18,28 @@
   .input-field {
     @apply w-full bg-surface border border-border-dark px-4 py-3 font-sans focus:outline-none focus:border-primary focus:bg-white transition-colors duration-200 placeholder-text-muted;
   }
-  
+
   /* Indian Heritage Patterns */
   .btn-mughal {
     @apply relative bg-surface text-primary border border-primary px-10 py-5 font-sans font-bold uppercase tracking-widest text-sm transition-all duration-500 shadow-md inline-flex items-center gap-3 overflow-hidden;
   }
-  .btn-mughal::before, .btn-mughal::after {
-    content: '';
+  .btn-mughal::before,
+  .btn-mughal::after {
+    content: "";
     position: absolute;
     width: 6px;
     height: 6px;
-    background-color: var(--tw-color-secondary-accent, #E37B40);
+    background-color: var(--tw-color-secondary-accent, #e37b40);
   }
-  .btn-mughal::before { top: 4px; left: 4px; }
-  .btn-mughal::after { bottom: 4px; right: 4px; }
-  
+  .btn-mughal::before {
+    top: 4px;
+    left: 4px;
+  }
+  .btn-mughal::after {
+    bottom: 4px;
+    right: 4px;
+  }
+
   .btn-mughal .inner-border {
     position: absolute;
     inset: 4px;
@@ -50,11 +57,13 @@
 
   .pattern-jali {
     background-color: transparent;
-    background-image: 
+    background-image:
       radial-gradient(var(--tw-color-border-dark) 1px, transparent 1px),
       radial-gradient(var(--tw-color-border-dark) 1px, transparent 1px);
     background-size: 20px 20px;
-    background-position: 0 0, 10px 10px;
+    background-position:
+      0 0,
+      10px 10px;
   }
   .pattern-kalamkari {
     background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M20 0c11 0 20 9 20 20s-9 20-20 20S0 31 0 20 9 0 20 0zm0 2c-9.9 0-18 8.1-18 18s8.1 18 18 18 18-8.1 18-18S29.9 2 20 2zm0 4c7.7 0 14 6.3 14 14s-6.3 14-14 14S6 27.7 6 20 12.3 6 20 6z" fill="%231E2A4F" fill-opacity="0.05" fill-rule="evenodd"/></svg>');
@@ -62,7 +71,7 @@
   .card-heritage {
     @apply bg-white border border-border-dark p-6 transition-all duration-300 hover:border-primary-light hover:shadow-sm relative overflow-hidden;
   }
-  
+
   /* Themed Cards */
   .theme-card {
     @apply relative overflow-hidden rounded-t-full border-4 border-surface shadow-lg transition-transform duration-700 hover:-translate-y-4;
@@ -88,14 +97,28 @@
   display: block;
   width: 35%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, #D4AF37, #1E2A4F, transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #d4af37,
+    #1e2a4f,
+    transparent
+  );
   animation: route-cue-travel 1.6s cubic-bezier(0.45, 0, 0.3, 1) infinite;
 }
 
-@keyframes route-cue-in { to { opacity: 1; } }
+@keyframes route-cue-in {
+  to {
+    opacity: 1;
+  }
+}
 @keyframes route-cue-travel {
-  from { transform: translateX(-110%); }
-  to { transform: translateX(390%); }
+  from {
+    transform: translateX(-110%);
+  }
+  to {
+    transform: translateX(390%);
+  }
 }
 
 @layer utilities {
@@ -106,33 +129,68 @@
   .text-zoom-2 {
     font-size: 125% !important;
   }
-  
+
   /* Accessibility: High Contrast (Smart Invert) */
   .high-contrast {
     filter: invert(1) hue-rotate(180deg) contrast(120%) !important;
     background-color: #111 !important;
   }
-  .high-contrast img, .high-contrast video, .high-contrast svg {
+  .high-contrast img,
+  .high-contrast video,
+  .high-contrast svg {
     filter: invert(1) hue-rotate(180deg) !important;
   }
 
   /* Accessibility: Highlight Links */
-  .highlight-links a, .highlight-links button {
+  .highlight-links a,
+  .highlight-links button {
     outline: 3px solid #ffaa00 !important;
     outline-offset: 2px !important;
     text-decoration: underline !important;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .route-loading-track, .route-loading-track > span {
+  .route-loading-track,
+  .route-loading-track > span {
     animation: none;
     opacity: 1;
   }
-  .route-loading-track > span { width: 100%; }
-  *, *::before, *::after {
+  .route-loading-track > span {
+    width: 100%;
+  }
+  *,
+  *::before,
+  *::after {
     scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+/* Short landscape phones need the same full-screen chat treatment as narrow phones. */
+@media (max-width: 639px), (max-height: 500px) {
+  .visa-assistant-header,
+  .visa-assistant-messages,
+  .visa-assistant-composer {
+    padding-left: max(0.875rem, env(safe-area-inset-left)) !important;
+    padding-right: max(0.875rem, env(safe-area-inset-right)) !important;
+  }
+}
+
+@media (max-height: 500px) {
+  .visa-assistant-shell:has(.visa-assistant-panel) {
+    inset: 0 !important;
+  }
+
+  .visa-assistant-panel {
+    width: 100vw !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .visa-assistant-shell:has(.visa-assistant-panel) .visa-assistant-launcher {
+    display: none !important;
   }
 }
