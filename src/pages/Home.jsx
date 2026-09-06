@@ -408,69 +408,128 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── DESTINATION CARDS ── */}
-      <section className="bg-[#FAF7F0] py-24 px-6 relative z-20">
+      {/* ── 3 THEMATIC CULTURAL & TRAVEL EXPLORATIONS ── */}
+      <section className="bg-[#FAF7F0] py-28 px-6 relative z-20 border-t border-[#EBE5D9]">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-20">
-            <p className="text-xs font-sans font-bold uppercase tracking-[0.3em] text-[#C4762A] mb-3">A Land of Contrasts</p>
-            <h2 className="text-4xl md:text-5xl font-serif font-bold text-[#1E2A4F] mb-4">Where Will Your Journey Take You?</h2>
-            <div className="w-20 h-[2px] bg-[#D4AF37] mx-auto" />
+          {/* Header */}
+          <div className="text-center mb-16 max-w-2xl mx-auto">
+            <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-[#C4762A] mb-2 block">
+              Curated Journeys
+            </span>
+            <h2 className="text-4xl md:text-5xl font-serif font-bold text-[#1E2A4F] mb-3">
+              Journeys Across Bharat
+            </h2>
+            <div className="w-12 h-0.5 bg-[#D4AF37] mx-auto mb-4" />
+            <p className="text-sm font-serif italic text-[#1E2A4F]/75 leading-relaxed">
+              Timeless stone monuments, ancient protected forests, and living waters.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">            {/* Kashmir: Tiger */}
-            <Link to="/tourism" className="group block relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-700 h-[500px] cursor-pointer">
-              <div className="absolute inset-0 w-full h-full bg-[#1E2A4F]">
-                <img src="/tiger.jpg" alt="Kashmir Tiger" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" />
+          {/* 3 Thematic Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+            {/* Card 1: UNESCO World Heritage */}
+            <Link 
+              to="/unesco-sites" 
+              className="group block relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-700 h-[520px] cursor-pointer"
+            >
+              <div className="absolute inset-0 w-full h-full bg-neutral-900">
+                <img 
+                  src="/Taj_Mahal.jpg" 
+                  alt="UNESCO World Heritage Sites" 
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" 
+                />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-85 group-hover:opacity-90 transition-opacity duration-500" />
 
-              <div className="absolute inset-0 p-8 flex flex-col justify-end items-center text-center transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37] font-sans mb-3 opacity-90">The North · Kashmir</span>
-                <h3 className="text-3xl font-serif font-bold text-white mb-2">Kashmir & the Himalayas</h3>
-                <div className="w-12 h-px bg-[#D4AF37] mb-4 opacity-50" />
-                <p className="text-sm font-sans text-white/80 leading-relaxed mb-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">Snow leopards, Dal Lake shikaras, and Mughal gardens where saffron blooms each autumn.</p>
-                <div className="px-6 sm:px-8 py-3 sm:py-4 border border-[#D4AF37]/50 bg-[#1E2A4F]/30 text-[#D4AF37] font-bold text-[10px] sm:text-xs uppercase tracking-widest group-hover:bg-[#D4AF37] group-hover:text-[#1E2A4F] group-hover:border-[#D4AF37] transition-all duration-500 backdrop-blur-md shadow-lg rounded-sm mt-2">
-                  Explore Kashmir
+              <div className="absolute inset-0 p-8 sm:p-9 flex flex-col justify-end items-start text-left z-10">
+                <span className="text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-[#D4AF37] mb-2">
+                  Heritage · 42 Monuments
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-2.5 leading-snug">
+                  World Heritage Sites
+                </h3>
+                <p className="text-xs font-serif italic text-white/80 leading-relaxed mb-5">
+                  White marble mirroring the morning sky, stone chariot wheels, and rock-hewn caves carved by hand.
+                </p>
+                <div className="inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-widest text-[#D4AF37] group-hover:text-white transition-colors">
+                  <span>Explore Heritage</span>
+                  <span className="transform group-hover:translate-x-1.5 transition-transform duration-300">→</span>
                 </div>
               </div>
             </Link>
 
-            {/* Rajasthan: Elephant */}
-            <Link to="/tourism" className="group block relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-700 h-[500px] cursor-pointer md:mt-12">
-              <div className="absolute inset-0 w-full h-full bg-[#1E2A4F]">
-                <img src="/elephant.jpg" alt="Rajasthan Elephant" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" />
+            {/* Card 2: Top National Parks */}
+            <Link 
+              to="/national-parks" 
+              className="group block relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-700 h-[520px] cursor-pointer md:mt-6"
+            >
+              <div className="absolute inset-0 w-full h-full bg-neutral-900">
+                <img 
+                  src="/Tiger1.jpg" 
+                  alt="National Parks and Wildlife" 
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" 
+                />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-85 group-hover:opacity-90 transition-opacity duration-500" />
 
-              <div className="absolute inset-0 p-8 flex flex-col justify-end items-center text-center transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37] font-sans mb-3 opacity-90">The Heartlands · Rajasthan</span>
-                <h3 className="text-3xl font-serif font-bold text-white mb-2">Palaces & Forts</h3>
-                <div className="w-12 h-px bg-[#D4AF37] mb-4 opacity-50" />
-                <p className="text-sm font-sans text-white/80 leading-relaxed mb-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">Royal elephants march towards Jaipur's Amber Fort as it rises above the plains in magnificent sandstone.</p>
-                <div className="px-6 sm:px-8 py-3 sm:py-4 border border-[#D4AF37]/50 bg-[#1E2A4F]/30 text-[#D4AF37] font-bold text-[10px] sm:text-xs uppercase tracking-widest group-hover:bg-[#D4AF37] group-hover:text-[#1E2A4F] group-hover:border-[#D4AF37] transition-all duration-500 backdrop-blur-md shadow-lg rounded-sm mt-2">
-                  Explore Rajasthan
+              <div className="absolute inset-0 p-8 sm:p-9 flex flex-col justify-end items-start text-left z-10">
+                <span className="text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-[#D4AF37] mb-2">
+                  Wildlife · Protected Sanctuaries
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-2.5 leading-snug">
+                  National Parks & Wilds
+                </h3>
+                <p className="text-xs font-serif italic text-white/80 leading-relaxed mb-5">
+                  Golden grass in the early dawn. The quiet gaze of the tiger resting beneath wild banyans.
+                </p>
+                <div className="inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-widest text-[#D4AF37] group-hover:text-white transition-colors">
+                  <span>Explore Sanctuaries</span>
+                  <span className="transform group-hover:translate-x-1.5 transition-transform duration-300">→</span>
                 </div>
               </div>
             </Link>
 
-            {/* Kerala: Peacock */}
-            <Link to="/tourism" className="group block relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-700 h-[500px] cursor-pointer">
-              <div className="absolute inset-0 w-full h-full bg-[#1E2A4F]">
-                <img src="/peacock.jpg" alt="Kerala Peacock" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" />
+            {/* Card 3: Top Natural Wonders */}
+            <Link 
+              to="/natural-wonders" 
+              className="group block relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-700 h-[520px] cursor-pointer"
+            >
+              <div className="absolute inset-0 w-full h-full bg-neutral-900">
+                <img 
+                  src="/Himalaya.jpg" 
+                  alt="Natural Wonders, Backwaters and Mountains" 
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" 
+                />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-85 group-hover:opacity-90 transition-opacity duration-500" />
 
-              <div className="absolute inset-0 p-8 flex flex-col justify-end items-center text-center transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37] font-sans mb-3 opacity-90">The South · Kerala</span>
-                <h3 className="text-3xl font-serif font-bold text-white mb-2">Backwaters & Temples</h3>
-                <div className="w-12 h-px bg-[#D4AF37] mb-4 opacity-50" />
-                <p className="text-sm font-sans text-white/80 leading-relaxed mb-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">The peacock dances in Periyar's forests as houseboats drift through ancient lush waterways.</p>
-                <div className="px-6 sm:px-8 py-3 sm:py-4 border border-[#D4AF37]/50 bg-[#1E2A4F]/30 text-[#D4AF37] font-bold text-[10px] sm:text-xs uppercase tracking-widest group-hover:bg-[#D4AF37] group-hover:text-[#1E2A4F] group-hover:border-[#D4AF37] transition-all duration-500 backdrop-blur-md shadow-lg rounded-sm mt-2">
-                  Explore Kerala
+              <div className="absolute inset-0 p-8 sm:p-9 flex flex-col justify-end items-start text-left z-10">
+                <span className="text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-[#D4AF37] mb-2">
+                  Landscapes · Waterways & Peaks
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-2.5 leading-snug">
+                  Natural Wonders
+                </h3>
+                <p className="text-xs font-serif italic text-white/80 leading-relaxed mb-5">
+                  Silent backwaters under palm shade, high mountain passes, and bridges woven through living tree roots.
+                </p>
+                <div className="inline-flex items-center gap-2 text-xs font-sans font-bold uppercase tracking-widest text-[#D4AF37] group-hover:text-white transition-colors">
+                  <span>Explore Landscapes</span>
+                  <span className="transform group-hover:translate-x-1.5 transition-transform duration-300">→</span>
                 </div>
               </div>
             </Link>
+          </div>
 
+          {/* Bottom Link to Full Interactive Map */}
+          <div className="mt-16 text-center">
+            <Link 
+              to="/tourism" 
+              className="inline-flex items-center gap-3 px-8 py-3.5 rounded-xl border border-[#D4AF37]/40 bg-white text-[#162040] hover:bg-[#162040] hover:text-white hover:border-[#162040] text-xs font-sans font-bold uppercase tracking-widest transition-all duration-300 shadow-2xs hover:shadow-md cursor-pointer"
+            >
+              <span>Explore All 28 States on the Interactive Travel Map</span>
+              <span className="text-[#D4AF37]">→</span>
+            </Link>
           </div>
         </div>
       </section>

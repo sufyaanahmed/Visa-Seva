@@ -25,6 +25,10 @@ const VoaFlow = lazy(() => import('./pages/flows/VoaFlow'));
 const NormalFlow = lazy(() => import('./pages/flows/NormalFlow'));
 const RegularFlow = lazy(() => import('./pages/flows/RegularFlow'));
 const VisaFinder = lazy(() => import('./pages/guide/VisaFinder'));
+const UnescoSites = lazy(() => import('./pages/guide/UnescoSites'));
+const NationalParks = lazy(() => import('./pages/guide/NationalParks'));
+const NaturalWonders = lazy(() => import('./pages/guide/NaturalWonders'));
+const SpiritualHeritage = lazy(() => import('./pages/guide/SpiritualHeritage'));
 const Dashboard = lazy(() => import('./pages/dashboard/Dashboard'));
 const Reviews = lazy(() => import('./pages/Reviews'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -231,6 +235,10 @@ export default function App() {
             <Route path="/resume" element={<Resume />} />
             <Route path="/help" element={<Help />} />
             <Route path="/tourism" element={<Tourism />} />
+            <Route path="/unesco-sites" element={<UnescoSites />} />
+            <Route path="/national-parks" element={<NationalParks />} />
+            <Route path="/natural-wonders" element={<NaturalWonders />} />
+            <Route path="/spiritual-heritage" element={<SpiritualHeritage />} />
             <Route path="/apply" element={<Wizard />} />
             <Route path="/reviews" element={<Reviews />} />
             <Route path="*" element={<NotFound />} />
