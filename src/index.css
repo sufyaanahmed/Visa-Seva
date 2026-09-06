@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-background text-text font-sans antialiased;
+  html, body {
+    background-color: #FAF7F0;
+    @apply text-text font-sans antialiased;
   }
 }
 

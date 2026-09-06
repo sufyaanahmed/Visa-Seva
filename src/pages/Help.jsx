@@ -99,6 +99,24 @@ const faqs = [
   }
 ];
 
+function JaliPattern({ id = 'jali-help', color = '#1E2A4F', opacity = 0.05 }) {
+  return (
+    <svg width="0" height="0" style={{ position: 'absolute' }}>
+      <defs>
+        <pattern id={id} x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+          <circle cx="30" cy="30" r="28" fill="none" stroke={color} strokeWidth="0.6" opacity={opacity} />
+          <circle cx="30" cy="30" r="18" fill="none" stroke={color} strokeWidth="0.4" opacity={opacity} />
+          <circle cx="30" cy="30" r="8"  fill="none" stroke={color} strokeWidth="0.8" opacity={opacity} />
+          <path d="M30 2 Q40 15 30 30 Q20 15 30 2Z" fill={color} fillOpacity={opacity * 0.6} />
+          <path d="M30 58 Q40 45 30 30 Q20 45 30 58Z" fill={color} fillOpacity={opacity * 0.6} />
+          <path d="M2 30 Q15 40 30 30 Q15 20 2 30Z" fill={color} fillOpacity={opacity * 0.6} />
+          <path d="M58 30 Q45 40 30 30 Q45 20 58 30Z" fill={color} fillOpacity={opacity * 0.6} />
+        </pattern>
+      </defs>
+    </svg>
+  );
+}
+
 export default function Help() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -140,8 +158,35 @@ export default function Help() {
   }, [filteredFaqs]);
 
   return (
-    <div className="min-h-screen bg-surface pattern-kalamkari py-12 px-4 relative">
-      <div className="absolute inset-0 bg-surface/90" />
+    <div className="min-h-screen bg-[#FAF7F0] py-12 px-4 relative overflow-x-hidden">
+      {/* Jali Pattern & Authentic Atmosphere */}
+      <JaliPattern id="jali-help" />
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-40" style={{ background: 'url(#jali-help)' }} aria-hidden="true">
+        <svg width="100%" height="100%">
+          <rect width="100%" height="100%" fill="url(#jali-help)" />
+        </svg>
+      </div>
+
+      {/* Ashoka Chakra Background Watermark */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] md:w-[800px] md:h-[800px] opacity-[0.045] pointer-events-none translate-x-1/4 -translate-y-1/4 select-none">
+        <svg viewBox="0 0 400 400" className="w-full h-full text-[#1E2A4F] animate-[spin_240s_linear_infinite]">
+          <g>
+            <circle cx="200" cy="200" r="185" fill="none" stroke="currentColor" strokeWidth="12" />
+            <circle cx="200" cy="200" r="172" fill="none" stroke="currentColor" strokeWidth="3" />
+
+            {Array.from({ length: 24 }, (_, i) => (
+              <g key={`spoke-${i}`} transform={`rotate(${i * 15} 200 200)`}>
+                <polygon points="192,180 208,180 202,30 198,30" fill="currentColor" />
+                <circle cx="200" cy="34" r="5.5" fill="currentColor" transform="rotate(7.5 200 200)" />
+              </g>
+            ))}
+
+            <circle cx="200" cy="200" r="32" fill="none" stroke="currentColor" strokeWidth="12" />
+            <circle cx="200" cy="200" r="14" fill="currentColor" />
+          </g>
+        </svg>
+      </div>
+
       <div className="max-w-4xl mx-auto relative z-10">
         
         {/* Page Header */}

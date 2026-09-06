@@ -23,10 +23,10 @@ export default {
           green: '#2C5D3F', // Deep green
           vermilion: '#D96C4A', // Muted vermilion
         },
-        background: '#FDFBF7', // Ivory
+        background: '#FAF7F0',
         surface: {
-          DEFAULT: '#F5F0E6', // Warm cream
-          dark: '#EAE1D1'
+          DEFAULT: '#FAF7F0',
+          dark: '#EBE5D9'
         },
         text: {
           DEFAULT: '#222222',

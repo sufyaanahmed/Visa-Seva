@@ -84,7 +84,7 @@ const Header = () => {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header className="relative z-50 border-b border-border bg-background print:hidden">
+    <header className="relative z-50 border-b border-[#E6DFD3] bg-[#FAF7F0] print:hidden">
       <div className="mx-auto flex min-h-[104px] w-full max-w-[1200px] flex-wrap items-center gap-4 px-4 py-4 sm:px-6 lg:flex-nowrap">
         <Link to="/" className="group mr-auto flex shrink-0 items-center gap-3 font-serif text-[1.2rem] text-primary no-underline sm:gap-4 sm:text-[1.4rem] md:text-2xl" aria-label="India Visa Seva home">
           <span className="grid h-[48px] w-[48px] shrink-0 place-items-center sm:h-[56px] sm:w-[56px]" aria-hidden="true">
@@ -108,35 +108,35 @@ const Header = () => {
             <button
               type="button"
               onClick={() => setAccessibilityOpen((open) => !open)}
-              className="flex h-[40px] items-center gap-2 rounded-full border border-gray-200 bg-white px-3 font-sans text-xs font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] sm:px-4 sm:text-sm"
+              className="flex h-[38px] items-center gap-2 rounded-lg border border-[#E6DFD3] bg-white px-3.5 font-sans font-medium text-[0.85rem] uppercase tracking-wider text-text shadow-xs transition-colors hover:bg-[#FAF7F0] hover:text-secondary-accent focus:outline-none focus:ring-2 focus:ring-[#D4AF37] cursor-pointer"
               aria-controls="accessibility-options"
               aria-expanded={accessibilityOpen}
             >
-              <svg viewBox="0 0 24 24" className="h-4 w-4 text-gray-600" fill="currentColor" aria-hidden="true">
+              <svg viewBox="0 0 24 24" className="h-4 w-4 text-text/70" fill="currentColor" aria-hidden="true">
                 <path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z" />
               </svg>
               <span className="hidden sm:inline">Accessibility</span>
             </button>
 
             {accessibilityOpen && (
-              <div id="accessibility-options" className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-xl border border-gray-100 bg-white py-2 text-gray-800 shadow-xl" aria-label="Accessibility options">
-                <div className="border-b border-gray-100 bg-gray-50 px-4 py-2 text-[0.65rem] font-bold uppercase tracking-widest text-gray-600">Display settings</div>
+              <div id="accessibility-options" className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-xl border border-[#E6DFD3] bg-white py-2 text-text shadow-xl font-sans" aria-label="Accessibility options">
+                <div className="border-b border-[#E6DFD3] bg-[#FAF7F0] px-4 py-2 font-sans text-[0.7rem] font-bold uppercase tracking-widest text-text/70">Display settings</div>
                 <div className="px-4 py-3">
-                  <p className="mb-2 text-xs font-bold text-gray-600">Text size</p>
-                  <div className="flex items-center justify-between border border-gray-200 rounded overflow-hidden shadow-sm">
-                    <button type="button" onClick={() => setTextZoom(Math.max(80, textZoom - 10))} className="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold transition-colors focus:outline-none focus:bg-gray-200" aria-label="Decrease text size">−</button>
-                    <span className="text-xs font-bold w-12 text-center text-gray-800">{textZoom}%</span>
-                    <button type="button" onClick={() => setTextZoom(Math.min(150, textZoom + 10))} className="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold transition-colors focus:outline-none focus:bg-gray-200" aria-label="Increase text size">+</button>
+                  <p className="mb-2 font-sans text-xs font-bold text-text/80 uppercase tracking-wider">Text size</p>
+                  <div className="flex items-center justify-between border border-[#E6DFD3] rounded-lg overflow-hidden shadow-xs">
+                    <button type="button" onClick={() => setTextZoom(Math.max(80, textZoom - 10))} className="px-4 py-2 bg-[#FAF7F0] hover:bg-white text-text font-bold transition-colors focus:outline-none cursor-pointer" aria-label="Decrease text size">−</button>
+                    <span className="font-sans text-xs font-bold w-12 text-center text-text">{textZoom}%</span>
+                    <button type="button" onClick={() => setTextZoom(Math.min(150, textZoom + 10))} className="px-4 py-2 bg-[#FAF7F0] hover:bg-white text-text font-bold transition-colors focus:outline-none cursor-pointer" aria-label="Increase text size">+</button>
                   </div>
                 </div>
-                <button type="button" aria-pressed={highContrast} onClick={() => setHighContrast((value) => !value)} className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-medium transition-colors hover:bg-[#FAF7F0] border-t border-gray-100">
-                  High contrast {highContrast && <span className="font-bold text-[#00875f]">On</span>}
+                <button type="button" aria-pressed={highContrast} onClick={() => setHighContrast((value) => !value)} className="flex w-full items-center justify-between px-4 py-3 text-left font-sans text-xs font-medium uppercase tracking-wider transition-colors hover:bg-[#FAF7F0] border-t border-[#E6DFD3] cursor-pointer">
+                  <span>High contrast</span> {highContrast && <span className="font-bold text-[#00875f]">On</span>}
                 </button>
-                <button type="button" aria-pressed={highlightLinks} onClick={() => setHighlightLinks((value) => !value)} className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-medium transition-colors hover:bg-[#FAF7F0] border-t border-gray-100">
-                  Highlight links {highlightLinks && <span className="font-bold text-[#00875f]">On</span>}
+                <button type="button" aria-pressed={highlightLinks} onClick={() => setHighlightLinks((value) => !value)} className="flex w-full items-center justify-between px-4 py-3 text-left font-sans text-xs font-medium uppercase tracking-wider transition-colors hover:bg-[#FAF7F0] border-t border-[#E6DFD3] cursor-pointer">
+                  <span>Highlight links</span> {highlightLinks && <span className="font-bold text-[#00875f]">On</span>}
                 </button>
-                <button type="button" aria-pressed={readAloud} onClick={() => setReadAloud((value) => !value)} className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-medium transition-colors hover:bg-[#FAF7F0] border-t border-gray-100">
-                  Read aloud on hover {readAloud && <span className="font-bold text-[#00875f]">On</span>}
+                <button type="button" aria-pressed={readAloud} onClick={() => setReadAloud((value) => !value)} className="flex w-full items-center justify-between px-4 py-3 text-left font-sans text-xs font-medium uppercase tracking-wider transition-colors hover:bg-[#FAF7F0] border-t border-[#E6DFD3] cursor-pointer">
+                  <span>Read aloud on hover</span> {readAloud && <span className="font-bold text-[#00875f]">On</span>}
                 </button>
               </div>
             )}
@@ -210,7 +210,7 @@ export default function App() {
   if (isAdminHost) return <Suspense fallback={<Loader />}><Admin /></Suspense>;
 
   return (
-    <div className="flex min-h-screen flex-col bg-background font-sans text-text print:bg-white">
+    <div className="flex min-h-screen flex-col bg-[#FAF7F0] font-sans text-text print:bg-white">
       <ScrollToTop />
       <Header />
 

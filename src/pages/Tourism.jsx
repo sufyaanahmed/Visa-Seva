@@ -297,45 +297,26 @@ export default function Tourism() {
   return (
     // Changed overflow-hidden to overflow-x-hidden so vertical scrolling still works!
     <div className="w-full bg-[#FAF7F0] min-h-screen relative overflow-x-hidden">
-      {/* Authentic High-Detail Ashoka Chakra (Dharmachakra) Background Watermark */}
-      <div className="absolute top-0 right-0 w-[750px] h-[750px] md:w-[900px] md:h-[900px] opacity-[0.045] pointer-events-none translate-x-1/4 -translate-y-1/4 select-none">
+      {/* Authentic Standard Ashoka Chakra (Dharmachakra) Background Watermark */}
+      <div className="absolute top-0 right-0 w-[750px] h-[750px] md:w-[900px] md:h-[900px] opacity-[0.05] pointer-events-none translate-x-1/4 -translate-y-1/4 select-none">
         <svg 
-          viewBox="0 0 200 200" 
+          viewBox="0 0 400 400" 
           className="w-full h-full text-[#1E2A4F] animate-[spin_240s_linear_infinite]"
-          fill="currentColor"
         >
-          {/* Outer Dual Concentric Rim with Fluting */}
-          <circle cx="100" cy="100" r="95" fill="none" stroke="currentColor" strokeWidth="2.5" />
-          <circle cx="100" cy="100" r="91" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
-          <circle cx="100" cy="100" r="84" fill="none" stroke="currentColor" strokeWidth="2.5" />
-          
-          {/* Central Hub Rings (Nabhi) */}
-          <circle cx="100" cy="100" r="22" fill="none" stroke="currentColor" strokeWidth="2.5" />
-          <circle cx="100" cy="100" r="17" fill="none" stroke="currentColor" strokeWidth="1" />
-          <circle cx="100" cy="100" r="10" fill="currentColor" />
-          <circle cx="100" cy="100" r="4" fill="#FAF7F0" />
-          
-          {/* 24 Tapered Spokes & Intermediate Petal Finials */}
-          {Array.from({ length: 24 }).map((_, i) => {
-            const deg = i * 15;
-            const degMid = deg + 7.5;
-            return (
-              <React.Fragment key={i}>
-                {/* Primary Tapered Spoke with Hub Rivet and Petal Finial */}
-                <g transform={`rotate(${deg} 100 100)`}>
-                  <polygon points="98.2,78 99.3,25 100,20 100.7,25 101.8,78" fill="currentColor" />
-                  <polygon points="100,16 103,24 97,24" fill="currentColor" />
-                  <circle cx="100" cy="78" r="1.8" fill="currentColor" />
-                  <circle cx="100" cy="88" r="1.4" fill="currentColor" opacity="0.85" />
-                </g>
-                {/* Intermediate Tooth between Spokes */}
-                <g transform={`rotate(${degMid} 100 100)`}>
-                  <polygon points="100,21 102.5,28 97.5,28" fill="currentColor" opacity="0.75" />
-                  <circle cx="100" cy="91" r="1.2" fill="currentColor" opacity="0.6" />
-                </g>
-              </React.Fragment>
-            );
-          })}
+          <g>
+            <circle cx="200" cy="200" r="185" fill="none" stroke="currentColor" strokeWidth="12" />
+            <circle cx="200" cy="200" r="172" fill="none" stroke="currentColor" strokeWidth="3" />
+
+            {Array.from({ length: 24 }, (_, i) => (
+              <g key={`spoke-${i}`} transform={`rotate(${i * 15} 200 200)`}>
+                <polygon points="192,180 208,180 202,30 198,30" fill="currentColor" />
+                <circle cx="200" cy="34" r="5.5" fill="currentColor" transform="rotate(7.5 200 200)" />
+              </g>
+            ))}
+
+            <circle cx="200" cy="200" r="32" fill="none" stroke="currentColor" strokeWidth="12" />
+            <circle cx="200" cy="200" r="14" fill="currentColor" />
+          </g>
         </svg>
       </div>
 
@@ -374,9 +355,9 @@ export default function Tourism() {
               <style>{`
                 .india-map-container path,
                 svg path {
-                  fill: #F3EFE7 !important;
+                  fill: #F5EFE6 !important;
                   stroke: #D4AF37 !important;
-                  stroke-width: 1px !important;
+                  stroke-width: 0.8px !important;
                   cursor: pointer !important;
                   transition: fill 0.3s ease, stroke-width 0.3s ease !important;
                 }
@@ -384,7 +365,7 @@ export default function Tourism() {
                 svg path:hover {
                   fill: #C4762A !important;
                   stroke: #1E2A4F !important;
-                  stroke-width: 2.5px !important;
+                  stroke-width: 2px !important;
                   outline: none;
                 }
               `}</style>
