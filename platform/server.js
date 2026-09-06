@@ -1,4 +1,5 @@
 import express from "express";
+import { installAssistant } from "./assistant/routes.js";
 import { rateLimit } from "express-rate-limit";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
@@ -119,6 +120,7 @@ export function createApp(db, config) {
       ),
     ),
   );
+  installAssistant(app);
   app.use("/api/platform", human);
   app.get("/api/platform/me", async (req, res) =>
     res.json({ id: req.actor.id, role: await service.role(req.actor) }),
