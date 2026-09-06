@@ -121,6 +121,18 @@
   border-radius: 8px;
   padding: 18px;
   text-align: left;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+.platform-stat:hover {
+  border-color: #b8993e;
+  transform: translateY(-1px);
+}
+.platform-stat[aria-pressed="true"] {
+  border-color: #202b50;
+  box-shadow: inset 0 0 0 1px #202b50;
 }
 .platform-stat strong {
   display: block;
@@ -267,6 +279,138 @@
 .platform-admin-header button {
   font-size: 13px;
   text-decoration: underline;
+}
+.platform-admin-account {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.platform-admin-account span {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 11px;
+  padding: 4px 9px;
+  text-transform: capitalize;
+}
+.platform-login .platform-primary {
+  width: 100%;
+}
+.platform-page-intro {
+  color: #5f6472;
+  margin: -10px 0 24px;
+}
+.platform-review-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.platform-queue-summary {
+  display: flex;
+  gap: 8px 20px;
+  flex-wrap: wrap;
+  padding: 14px 2px 4px;
+}
+.platform-queue-summary button {
+  color: #626775;
+  font-size: 13px;
+}
+.platform-queue-summary button:hover {
+  color: #202b50;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.platform-queue-summary strong {
+  color: #202b50;
+  margin-left: 4px;
+}
+.platform-filter-bar {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) 220px auto;
+  gap: 12px;
+  align-items: end;
+  margin-top: 22px;
+}
+.platform-filter-bar label {
+  margin: 0;
+}
+.platform-queue-card {
+  padding: 8px 24px;
+}
+.platform-row-action {
+  color: #202b50;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.platform-row-action:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.platform-record-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #707584;
+  font-size: 12px;
+}
+.platform-review-panel {
+  border-left: 4px solid #b8993e;
+  display: grid;
+  grid-template-columns: minmax(170px, 0.65fr) minmax(360px, 1.6fr) auto;
+  gap: 24px;
+  align-items: start;
+}
+.platform-review-panel h2 {
+  margin: 4px 0 0;
+}
+.platform-review-fields {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.7fr) minmax(260px, 1.3fr);
+  gap: 16px;
+}
+.platform-review-fields label {
+  margin: 0;
+}
+.platform-review-fields textarea {
+  min-height: 76px;
+}
+.platform-review-submit {
+  align-self: end;
+  text-align: right;
+}
+.platform-review-submit p {
+  margin-bottom: 8px;
+}
+.platform-disclosure > summary {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-family: Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #202b50;
+}
+.platform-disclosure[open] > summary {
+  border-bottom: 1px solid #ece8de;
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+}
+@media (max-width: 800px) {
+  .platform-review-stats,
+  .platform-filter-bar,
+  .platform-review-panel,
+  .platform-review-fields {
+    grid-template-columns: 1fr;
+  }
+  .platform-review-submit {
+    text-align: left;
+  }
+  .platform-review-submit .platform-primary {
+    width: 100%;
+  }
+  .platform-page {
+    padding-inline: 16px;
+  }
 }
 .platform-token {
   white-space: pre-wrap;
