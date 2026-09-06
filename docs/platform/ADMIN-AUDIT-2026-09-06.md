@@ -17,7 +17,7 @@
 ## Verification
 
 - Eleven React DOM interaction regression tests cover failed access and missing roles, detail retries, stale detail responses, clean queue hierarchy, reviewer/decision-maker/administrator choices, successful writes followed by failed refreshes, version conflicts, queue failures, duplicate submissions, pagination and navigation during pending requests.
-- The isolated pull request test suite passed: 87 tests, zero failures.
+- The complete shared checkout test suite passed: 101 tests, zero failures. This includes tests being added concurrently by the chatbot and MCP tasks.
 - The production admin build passed using `npm run platform:admin-build -- /private/tmp/visa-seva-admin-audit`.
 - All ten hosted integration scenarios passed against the dedicated Supabase project with synthetic applicants and staff. Coverage includes staff authentication, authorization boundaries, private document upload/download, requests for information, resubmission without a second charge, acceptance/rejection, decision reasons and queued notifications.
 - Browser verification on the existing hosted admin deployment confirmed a valid staff session, status filtering, application details, recorded decision history, queued email visibility and returning to the filtered queue. No console errors were reported during those checks.

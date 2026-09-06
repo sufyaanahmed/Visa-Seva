@@ -34,6 +34,13 @@ function stubDb() {
         eq() {
           return this;
         },
+        order() {
+          return this;
+        },
+        range: async () => ({
+          data: [{ id, reference: "VS-TEST", answers: { surname: "Private" } }],
+          count: 1,
+        }),
         is() {
           return this;
         },
@@ -119,8 +126,43 @@ test("real MCP SDK initializes, discovers focused tools, returns official source
     );
     try {
       const { tools } = await client.listTools();
-      assert.equal(tools.length, 10);
+      assert.equal(tools.length, 11);
       assert.ok(tools.some((t) => t.name === "create_checkout"));
+      assert.deepEqual(
+        tools.find((t) => t.name === "visa_information")._meta.securitySchemes,
+        [{ type: "noauth" }],
+      );
+      assert.equal(
+        tools.find((t) => t.name === "create_checkout").annotations
+          .openWorldHint,
+        true,
+      );
+      const overview = await client.callTool({
+        name: "visa_information",
+        arguments: {},
+      });
+      assert.equal(overview.structuredContent.firstQuestion.id, "passport");
+      assert.deepEqual(
+        overview.structuredContent,
+        JSON.parse(overview.content[0].text),
+      );
+      const partial = await client.callTool({
+        name: "visa_information",
+        arguments: {
+          topic: "eligibility",
+          answers: { passport: "United States" },
+        },
+      });
+      assert.equal(partial.structuredContent.recommendation, null);
+      assert.equal(partial.structuredContent.nextQuestion.id, "passportType");
+      const invalid = await client.callTool({
+        name: "visa_information",
+        arguments: {
+          topic: "eligibility",
+          answers: { passport: { nested: true } },
+        },
+      });
+      assert.equal(invalid.isError, true);
       const result = await client.callTool({
         name: "visa_information",
         arguments: {
@@ -146,6 +188,12 @@ test("real MCP SDK initializes, discovers focused tools, returns official source
       }),
     );
     try {
+      const found = await scoped.callTool({
+        name: "list_applications",
+        arguments: {},
+      });
+      assert.equal(found.structuredContent.applications[0].id, id);
+      assert.equal(found.structuredContent.applications[0].answers, undefined);
       const result = await scoped.callTool({
         name: "update_draft",
         arguments: { id, version: 1, answers: { application_type: "regular" } },

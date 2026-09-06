@@ -51,6 +51,9 @@ function Connections() {
         Choose what an assistant can access. You still confirm your application
         and authorize checkout here.
       </p>
+      <p className="mt-3">
+        New to this? <Link className="platform-link" to="/ai-assistants">See how to connect ChatGPT or Claude</Link>.
+      </p>
       {error && (
         <p className="platform-alert" role="alert">
           {error}

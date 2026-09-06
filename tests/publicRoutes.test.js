@@ -15,6 +15,7 @@ test("public routes render and reference existing local images", async () => {
     const { StoreProvider } = await server.ssrLoadModule("/src/store.jsx");
     for (const page of [
       "Home",
+      "AIAssistants",
       "Help",
       "Tourism",
       "EArrival",
@@ -38,6 +39,12 @@ test("public routes render and reference existing local images", async () => {
         ),
       );
       assert.ok(html.length > 100, `${page} should render content`);
+      if (page === "AIAssistants") {
+        assert.match(html, /Open setup[\s\S]*ChatGPT/);
+        assert.match(html, /https:\/\/chatgpt\.com\/plugins/);
+        assert.match(html, /https:\/\/claude\.ai\/customize\/connectors/);
+        assert.match(html, /Set up manually/);
+      }
       for (const [, src] of html.matchAll(/<img[^>]*src="(\/[^"?]+)"/g))
         assert.ok(existsSync(`public${src}`), `${page}: missing image ${src}`);
     }

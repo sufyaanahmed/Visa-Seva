@@ -19,6 +19,7 @@ const Status = lazy(() => import('./pages/Status'));
 const EArrival = lazy(() => import('./pages/EArrival'));
 const Resume = lazy(() => import('./pages/Resume'));
 const Help = lazy(() => import('./pages/Help'));
+const AIAssistants = lazy(() => import('./pages/AIAssistants'));
 const Tourism = lazy(() => import('./pages/Tourism'));
 const AfghanFlow = lazy(() => import('./pages/flows/AfghanFlow'));
 const VoaFlow = lazy(() => import('./pages/flows/VoaFlow'));
@@ -101,6 +102,7 @@ const Header = () => {
           <Link to="/status" className={navLinkClass}>My applications</Link>
           <Link to="/tourism" className={navLinkClass}>Discover India</Link>
           <Link to="/help" className={navLinkClass}>Help</Link>
+          <Link to="/ai-assistants" className={navLinkClass}>Use with AI</Link>
         </nav>
 
         <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
@@ -156,6 +158,7 @@ const Header = () => {
           <Link to="/status" onClick={closeMenu} className="border-b border-gray-100 py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">My applications</Link>
           <Link to="/tourism" onClick={closeMenu} className="border-b border-gray-100 py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">Discover India</Link>
           <Link to="/help" onClick={closeMenu} className="py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">Help</Link>
+          <Link to="/ai-assistants" onClick={closeMenu} className="py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">Use with AI</Link>
         </nav>
       )}
     </header>
@@ -194,6 +197,7 @@ const Footer = () => (
             <li><Link to="/tourism" className="transition-all hover:text-white hover:translate-x-1 inline-block">Discover India</Link></li>
             <li><Link to="/help" className="transition-all hover:text-white hover:translate-x-1 inline-block">Help & FAQ</Link></li>
             <li><Link to="/reviews" className="transition-all hover:text-white hover:translate-x-1 inline-block">Public Reviews</Link></li>
+            <li><Link to="/ai-assistants" className="transition-all hover:text-white hover:translate-x-1 inline-block">Use with ChatGPT or Claude</Link></li>
           </ul>
         </div>
       </div>
@@ -234,6 +238,7 @@ export default function App() {
             <Route path="/e-arrival" element={<EArrival />} />
             <Route path="/resume" element={<Resume />} />
             <Route path="/help" element={<Help />} />
+            <Route path="/ai-assistants" element={<AIAssistants />} />
             <Route path="/tourism" element={<Tourism />} />
             <Route path="/unesco-sites" element={<UnescoSites />} />
             <Route path="/national-parks" element={<NationalParks />} />

@@ -1,4 +1,5 @@
 import express from "express";
+import { installAssistant } from "./assistant/routes.js";
 import { rateLimit } from "express-rate-limit";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
@@ -98,13 +99,11 @@ export function createApp(db, config) {
         grantId: grant.id,
       };
       unwrap(
-        await db
-          .from("platform_audit")
-          .insert({
-            actor_id: grant.owner_id,
-            actor_kind: "agent",
-            action: `mcp:${String(req.body?.params?.name || req.body?.method || "request").slice(0, 100)}`,
-          }),
+        await db.from("platform_audit").insert({
+          actor_id: grant.owner_id,
+          actor_kind: "agent",
+          action: `mcp:${String(req.body?.params?.name || req.body?.method || "request").slice(0, 100)}`,
+        }),
       );
     }
     return handleMcp(req, res, service, config);
@@ -114,11 +113,19 @@ export function createApp(db, config) {
     res.json(
       reference(
         z
-          .enum(["categories", "eligibility", "documents", "fees", "steps"])
+          .enum([
+            "overview",
+            "categories",
+            "eligibility",
+            "documents",
+            "fees",
+            "steps",
+          ])
           .parse(req.params.topic),
       ),
     ),
   );
+  installAssistant(app);
   app.use("/api/platform", human);
   app.get("/api/platform/me", async (req, res) =>
     res.json({ id: req.actor.id, role: await service.role(req.actor) }),
@@ -263,13 +270,11 @@ export function createApp(db, config) {
         .eq("id", z.string().uuid().parse(req.params.id)),
     );
     unwrap(
-      await db
-        .from("platform_audit")
-        .insert({
-          actor_id: req.actor.id,
-          actor_kind: "applicant",
-          action: "agent_grant_revoked",
-        }),
+      await db.from("platform_audit").insert({
+        actor_id: req.actor.id,
+        actor_kind: "applicant",
+        action: "agent_grant_revoked",
+      }),
     );
     res.sendStatus(204);
   });
@@ -352,17 +357,15 @@ export function createApp(db, config) {
   );
   app.use((err, _req, res, _next) => {
     const status = err instanceof z.ZodError ? 400 : err.status || 500;
-    res
-      .status(status)
-      .json({
-        error:
-          status === 500
-            ? "Something went wrong. Please try again."
-            : err instanceof z.ZodError
-              ? "Check the submitted fields."
-              : err.message,
-        details: err.details,
-      });
+    res.status(status).json({
+      error:
+        status === 500
+          ? "Something went wrong. Please try again."
+          : err instanceof z.ZodError
+            ? "Check the submitted fields."
+            : err.message,
+      details: err.details,
+    });
   });
   return app;
 }

@@ -10,6 +10,8 @@
     "test": "node --test tests/*.test.js",
     "test:eligibility": "node --test tests/visaEligibility.test.js",
     "test:documents": "node --test tests/documentRequirements.test.js",
+    "test:assistant:50": "node --env-file=.env scripts/assistant-50-customer-test.mjs",
+    "test:assistant:long": "node --env-file=.env scripts/assistant-long-conversation-test.mjs",
     "load:local": "node scripts/load-test.mjs",
     "backend:up": "docker compose up -d --build",
     "backend:down": "docker compose down",
@@ -41,6 +43,9 @@
     "vite": "^8.2.1"
   },
   "dependencies": {
+    "@langchain/core": "^1.2.9",
+    "@langchain/langgraph": "^1.4.14",
+    "@langchain/openai": "^1.5.11",
     "@modelcontextprotocol/sdk": "^1.30.0",
     "@supabase/supabase-js": "^2.115.0",
     "@vercel/functions": "^3.9.5",
