@@ -33,6 +33,7 @@
     "@vitejs/plugin-react": "^6.0.5",
     "@vitejs/plugin-react-swc": "^4.3.3",
     "autoprefixer": "^10.5.4",
+    "jsdom": "^29.0.0",
     "lightningcss": "^1.33.0",
     "postcss": "^8.5.26",
     "prettier": "^3.9.6",
