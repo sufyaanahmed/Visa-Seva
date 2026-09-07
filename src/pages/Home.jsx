@@ -58,7 +58,7 @@ function shouldRevealHero() {
 function TigerIllustration({ className = '' }) {
   return (
     <div className={`overflow-hidden rounded-xl shadow-md ${className}`}>
-      <img src="/tiger.jpg" alt="Royal Bengal Tiger" className="w-full h-auto" />
+      <img src="/Kanha.jpg" alt="Royal Bengal Tiger" className="w-full h-auto" />
     </div>
   );
 }
@@ -76,7 +76,7 @@ function PeacockIllustration({ className = '' }) {
 function ElephantIllustration({ className = '' }) {
   return (
     <div className={`overflow-hidden rounded-xl shadow-md ${className}`}>
-      <img src="/elephant.jpg" alt="Elephant" className="w-full h-auto" />
+      <img src="/Periyar_Elephants.avif" alt="Elephant" className="w-full h-auto" />
     </div>
   );
 }

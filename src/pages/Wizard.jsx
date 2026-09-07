@@ -8,66 +8,9 @@ import { field, getSteps, validateStep, isVisible, isRequired, afghanPurposes } 
 import { getEvisaWizardGate } from '../domain/visaEligibility';
 import { useStore, formatReference } from '../store';
 import Auth from '../platform/Auth';
-import { platformEnabled, saveApplication, supabase, APPLICATION_ACCESS_UNAVAILABLE } from '../platform/client';
+import { platformEnabled, saveApplication, selectedFiles, supabase, APPLICATION_ACCESS_UNAVAILABLE } from '../platform/client';
 
-const demoFixture = (type, current) => {
-  const futureDate = (days) => {
-    const date = new Date();
-    date.setDate(date.getDate() + days);
-    return date.toISOString().slice(0, 10);
-  };
-  const common = {
-    surname: 'MORGAN', given_name: 'ALEX', date_of_birth: '1992-05-14', previous_name_used: 'no', gender: 'unspecified',
-    place_of_birth: 'Example City', country_of_birth: type === 'afghan' ? 'Afghanistan' : 'Canada', national_id: 'NA', religion: 'Not specified', visible_mark: 'NA', education: 'Graduate', nationality_acquisition: 'birth',
-    passport_number: 'P1234567', passport_issue_place: 'Example City', passport_issue_date: '2024-01-15', passport_expiry_date: '2034-01-14', other_passport: 'no',
-    present_address: '100 Example Street, Toronto', postal_code: '000000', phone_abroad: '+10000000000', permanent_same: 'yes',
-    father_details: 'JAMES MORGAN; Canadian; Toronto', mother_details: 'SARAH MORGAN; Canadian; Toronto', marital_status: 'single', pakistan_origin: 'no',
-    occupation: 'Software tester', designation: 'Test analyst', employer_name: 'Maple Studio', employer_address: '200 Sample Road, Toronto', employer_phone: '+10000000001', security_service_employment: 'no',
-    places_to_visit: 'Delhi and Agra', tour_operator_used: 'no', intended_exit_port: 'Delhi', visited_india_before: 'no', india_refused_before: 'no', countries_visited_10y: 'None', visited_saarc: 'no',
-    india_reference: 'Central Hotel, Example Road, Delhi; +910000000000', home_reference: 'Home Contact, 100 Example Street; +10000000002',
-    security_arrested: 'no', security_refused: 'no', security_offences: 'no', security_national_security: 'no', security_advocacy: 'no', security_asylum: 'no',
-    email: 'alex.morgan@example.invalid', confirm_email: 'alex.morgan@example.invalid', expected_arrival_date: futureDate(45), instructions_ready: true, resident_two_years: 'yes',
-  };
-  if (type === 'voa') return {
-    application_type: 'voa', nationality: current.nationality || 'Japan', visa_category: current.visa_category || 'tourism', intended_stay_days: current.intended_stay_days || '14', passport_type: current.passport_type || 'ordinary', no_india_residence_occupation: true, onward_ticket_confirmed: true, sufficient_funds_confirmed: true,
-    uae_previous_indian_visa: current.uae_previous_indian_visa || (current.nationality === 'United Arab Emirates' ? 'yes' : 'not_applicable'),
-    pakistan_origin: 'no', persona_non_grata: 'no', undesirable_person: 'no', surname: 'TANAKA', given_name: 'YUKI', date_of_birth: '1992-05-14', previous_nationality: 'NA', dual_nationality: 'no', marital_status: 'single',
-    father_details: 'KENJI TANAKA; JAPAN', mother_details: 'AKIKO TANAKA; JAPAN', occupation: 'Designer', passport_number: 'TR1234567', passport_expiry_date: '2034-01-14', permanent_address: '100 Example Street, Tokyo',
-    email: 'yuki.tanaka@example.invalid', phone_abroad: '+81000000000', address_in_india: 'Central Hotel, Delhi', phone_india: '+910000000000', india_reference: 'Central Hotel, Example Road, Delhi; +910000000000',
-    arrival_date: futureDate(45), arrival_flight: 'AI101', arrival_port: 'Delhi', onward_date: futureDate(59), onward_flight: 'AI102', final_destination: 'Tokyo', declaration_place: 'Tokyo', declaration_date: futureDate(1), typed_name: 'YUKI TANAKA', voa_truthful: true, voa_airport_process: true, voa_nonextendable: true,
-  };
-  if (type === 'afghan') {
-    const category = current.visa_category || 'medical';
-    const purpose = current.afghan_purpose || afghanPurposes[category]?.[0] || '';
-    return {
-      ...common,
-      application_type: 'afghan',
-      nationality: 'Afghanistan',
-      passport_type: current.passport_type || 'ordinary',
-      visa_category: category,
-      afghan_purpose: purpose,
-      tazkira_number: '123456789',
-      address_in_india: 'Hospital Guest House, Delhi',
-      principal_applicant_id: category === 'medical-attendant' || ['business-dependant', 'student-dependant'].includes(purpose) ? 'VS2026A00001' : current.principal_applicant_id,
-      is_minor: 'no',
-    };
-  }
-  if (type === 'regular') return { ...common, application_type: 'regular', nationality: 'Canada', country_of_application: 'Canada', passport_type: 'ordinary', visa_category: 'employment' };
-  return {
-    ...common,
-    application_type: 'evisa',
-    nationality: current.nationality || 'Canada',
-    passport_type: current.passport_type || 'ordinary',
-    arrival_port: current.arrival_port || 'Delhi Airport',
-    visa_category: current.visa_category || 'tourist',
-    student_course_type: current.visa_category === 'student' ? (current.student_course_type || 'general-course') : current.student_course_type,
-    eligibility_ruleset_id: current.eligibility_ruleset_id,
-    eligibility_reviewed_date: current.eligibility_reviewed_date,
-    purpose_intent: current.purpose_intent,
-    intended_stay_days: current.intended_stay_days,
-    study_in_india_institution: current.study_in_india_institution,
-  };
-};
+import { demoFixture } from '../domain/demoFixtures.js';
 
 export default function Wizard() {
   return <WizardForm />;
@@ -83,11 +26,22 @@ function WizardForm() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const stepHeadingRef = useRef(null);
   const errorSummaryRef = useRef(null);
+  const accessPromptRef = useRef(null);
   const previousStepRef = useRef(state.step);
-  const appType = ['evisa', 'afghan', 'voa', 'regular'].includes(state.data.application_type) ? state.data.application_type : 'evisa';
+  const appType = ['evisa', 'afghan', 'voa', 'regular', 'oci'].includes(state.data.application_type) ? state.data.application_type : 'evisa';
   const steps = getSteps(appType, state.data);
   const stepIndex = Math.min(state.step, steps.length - 1);
   const step = steps[stepIndex];
+
+  useEffect(() => {
+    const flowParam = params.get('flow') || params.get('type');
+    if (flowParam === 'oci' && state.data.application_type !== 'oci') {
+      updateData('application_type', 'oci');
+      if (!state.data.oci_category) {
+        updateData('oci_category', 'former-indian');
+      }
+    }
+  }, [params]);
 
   useEffect(() => {
     const requested = steps.findIndex((item) => item.id === params.get('step'));
@@ -111,6 +65,14 @@ function WizardForm() {
     window.scrollTo(0, 0);
     stepHeadingRef.current?.focus({ preventScroll: true });
   }, [stepIndex]);
+
+  useEffect(() => {
+    if (accessPrompt) {
+      setTimeout(() => {
+        accessPromptRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    }
+  }, [accessPrompt]);
 
   const evisaGate = appType === 'evisa' ? getEvisaWizardGate(state.data) : { allowed: true, reason: null };
   const evisaRouteBlocked = !evisaGate.allowed;
@@ -161,7 +123,12 @@ function WizardForm() {
       setBackendSync({ status: 'saving', message: 'Preparing your application…' });
       try {
         if (!platformEnabled) throw new Error(APPLICATION_ACCESS_UNAVAILABLE);
-        if (!(await supabase.auth.getSession()).data.session) { setAccessPrompt(true); setBackendSync({ status: 'idle', message: '' }); return; }
+        if (!(await supabase.auth.getSession()).data.session) {
+          setAccessPrompt(true);
+          setBackendSync({ status: 'idle', message: '' });
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
         const app = await saveApplication(state, (cloud, docs) => updateState({ cloud, ...(docs ? { docs } : {}) }));
         navigate(`/applications/${app.id}`);
       } catch (error) {
@@ -197,7 +164,48 @@ function WizardForm() {
 
   const fillDemoData = () => {
     const fixture = demoFixture(appType, state.data);
-    Object.entries(fixture).forEach(([name, value]) => updateData(name, value));
+    const merged = { ...fixture };
+    Object.keys(state.data).forEach((key) => {
+      const val = state.data[key];
+      if (val !== undefined && val !== null && val !== '') {
+        merged[key] = val;
+      }
+    });
+    Object.entries(merged).forEach(([name, value]) => updateData(name, value));
+
+    const requiredDocs = getRequiredDocuments(merged);
+    if (requiredDocs && requiredDocs.length > 0) {
+      const sampleDocs = requiredDocs.map((req) => {
+        const isImage = req.type === 'photograph' || req.type === 'signature';
+        const isPhoto = req.type === 'photograph';
+        const ext = isImage ? 'jpg' : 'pdf';
+        const mime = isImage ? 'image/jpeg' : 'application/pdf';
+        const size = isPhoto ? 145 * 1024 : req.type === 'signature' ? 45 * 1024 : 220 * 1024;
+
+        if (platformEnabled && typeof File !== 'undefined') {
+          try {
+            const dummyContent = new Uint8Array([0x25, 0x50, 0x44, 0x46]);
+            const mockFile = new File([dummyContent], `sample_${req.type}.${ext}`, { type: mime });
+            selectedFiles.set(req.type, mockFile);
+          } catch {
+            // Ignore in environments without File constructor
+          }
+        }
+
+        return {
+          type: req.type,
+          status: 'selected-this-session',
+          extension: ext,
+          mimeType: mime,
+          size,
+          width: isPhoto ? 350 : undefined,
+          height: isPhoto ? 350 : undefined,
+          selectedAt: new Date().toISOString(),
+        };
+      });
+      updateState({ docs: sampleDocs });
+    }
+
     setErrors({});
   };
 
@@ -423,14 +431,49 @@ function WizardForm() {
             </div>
           </div>
 
-          {accessPrompt && <section className="mb-8 rounded-lg border border-border bg-background p-4" aria-label="Secure email access">
-            <Auth initialEmail={state.data.email || ''}><div className="p-5"><p>Your email is verified. Your answers are ready to save.</p><button type="button" className="platform-primary mt-4" disabled={backendSync.status === 'saving'} onClick={async () => {
-              setBackendSync({ status: 'saving', message: 'Saving your progress…' });
-              try { const app = await saveApplication(state, (cloud, docs) => updateState({ cloud, ...(docs ? { docs } : {}) })); setAccessPrompt(false); setBackendSync({ status: 'saved', message: 'Your progress is saved.' }); if (stepIndex === steps.length - 1) navigate(`/applications/${app.id}`); }
-              catch (error) { setBackendSync({ status: 'error', message: error.message }); }
-            }}>Save and continue</button></div></Auth>
-            <button type="button" className="platform-link" onClick={() => setAccessPrompt(false)}>Keep filling my application</button>
-          </section>}
+          {accessPrompt && (
+            <section
+              ref={accessPromptRef}
+              className="mb-8 rounded-xl border-2 border-primary/40 bg-gradient-to-b from-slate-50 to-white p-5 shadow-md ring-4 ring-primary/10 transition-all"
+              aria-label="Secure email access"
+            >
+              <div className="mb-3 text-primary font-bold text-sm">
+                <span>Save and Proceed to Verification &amp; Checkout</span>
+              </div>
+              <Auth initialEmail={state.data.email || ''}>
+                <div className="p-5">
+                  <p>Your email is verified. Your answers are ready to save.</p>
+                  <button
+                    type="button"
+                    className="platform-primary mt-4"
+                    disabled={backendSync.status === 'saving'}
+                    onClick={async () => {
+                      setBackendSync({ status: 'saving', message: 'Saving your progress…' });
+                      try {
+                        const app = await saveApplication(state, (cloud, docs) =>
+                          updateState({ cloud, ...(docs ? { docs } : {}) }),
+                        );
+                        setAccessPrompt(false);
+                        setBackendSync({ status: 'saved', message: 'Your progress is saved.' });
+                        if (stepIndex === steps.length - 1) navigate(`/applications/${app.id}`);
+                      } catch (error) {
+                        setBackendSync({ status: 'error', message: error.message });
+                      }
+                    }}
+                  >
+                    Save and continue
+                  </button>
+                </div>
+              </Auth>
+              <button
+                type="button"
+                className="platform-link mt-3 inline-block"
+                onClick={() => setAccessPrompt(false)}
+              >
+                ← Keep filling my application
+              </button>
+            </section>
+          )}
           {step.description && <p className="text-text-secondary text-sm sm:text-base mb-8 pb-4 border-b border-border leading-relaxed">{step.description}</p>}
 
           {platformEnabled && <div className="mb-5 flex items-center justify-between gap-4"><button type="button" className="platform-secondary" disabled={backendSync.status === 'saving'} onClick={async () => {

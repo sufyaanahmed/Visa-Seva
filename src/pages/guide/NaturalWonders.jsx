@@ -172,6 +172,23 @@ const NATURAL_SPOTS = [
     desc: 'An open alpine bowl blanketed in wildflowers in summer, rising to 3,980 meters at Apharwat Peak via one of the highest cable cars in the world.',
     highlights: ['High Cable Car (3,980m)', 'Alpine Wildflower Meadows', 'Apharwat Mountain Lake', 'Winter Powder Slopes'],
     travelTip: 'The second stage of the cable car brings you directly to the alpine ridge with open views of distant Himalayan snow crests.',
+  },
+  {
+    id: 'mizoram-green-hills',
+    title: 'Lush Green Hills & Blue Mountains of Mizoram',
+    location: 'Phawngpui & Reiek, Mizoram',
+    stateId: 'IN-MZ',
+    state: 'Mizoram',
+    category: 'mountains',
+    altitude: '2,157m (Phawngpui Summit)',
+    climate: 'Subtropical Montane Rainforest & Evergreen Valleys',
+    bestSeason: 'October to April (Misty Horizons & Clear Mountain Skies)',
+    airport: 'Lengpui Airport (AJL) in Aizawl',
+    img: '/Places/Mizoram.jpg',
+    aspect: 'aspect-[16/10]',
+    desc: 'Rolling emerald hills blanketed in virgin bamboo forests and mountain wildflowers, where morning mists drift through tranquil valleys and silent hill peaks.',
+    highlights: ['Phawngpui Blue Mountain Sanctuary', 'Reiek Mountain Heritage Ridge', 'Misty Green Mountain Folds', 'Vantawng 229m Waterfall'],
+    travelTip: 'Early mornings along Reiek Ridge offer panoramic views across endless waves of green mountain peaks emerging from soft white cloud valleys.',
   }
 ];
 
@@ -182,7 +199,7 @@ export default function NaturalWonders() {
   const [activeModalSpot, setActiveModalSpot] = useState(null);
 
   const categories = [
-    { id: 'all', label: 'All Landscapes (10)' },
+    { id: 'all', label: 'All Landscapes (11)' },
     { id: 'mountains', label: 'Mountains & Treks' },
     { id: 'waterfalls', label: 'Waterfalls & Rainforests' },
     { id: 'backwaters', label: 'Backwaters & Lagoons' },

@@ -26,6 +26,7 @@ const VoaFlow = lazy(() => import('./pages/flows/VoaFlow'));
 const NormalFlow = lazy(() => import('./pages/flows/NormalFlow'));
 const RegularFlow = lazy(() => import('./pages/flows/RegularFlow'));
 const VisaFinder = lazy(() => import('./pages/guide/VisaFinder'));
+const OciGuidance = lazy(() => import('./pages/guide/OciGuidance'));
 const UnescoSites = lazy(() => import('./pages/guide/UnescoSites'));
 const NationalParks = lazy(() => import('./pages/guide/NationalParks'));
 const NaturalWonders = lazy(() => import('./pages/guide/NaturalWonders'));
@@ -187,6 +188,7 @@ const Footer = () => (
             <li><Link to="/guide/visa-finder" className="transition-all hover:text-white hover:translate-x-1 inline-block">Find Visa Route</Link></li>
             <li><Link to="/status" className="transition-all hover:text-white hover:translate-x-1 inline-block">Check Status</Link></li>
             <li><Link to="/e-arrival" className="transition-all hover:text-white hover:translate-x-1 inline-block">e-Arrival Guidance</Link></li>
+            <li><Link to="/guide/oci" className="transition-all hover:text-white hover:translate-x-1 inline-block text-[#D4AF37]">OCI Card Guide</Link></li>
           </ul>
         </div>
 
@@ -229,6 +231,7 @@ export default function App() {
             <Route path="/flow/normal" element={<NormalFlow />} />
             <Route path="/flow/regular" element={<RegularFlow />} />
             <Route path="/guide/visa-finder" element={<VisaFinder />} />
+            <Route path="/guide/oci" element={<OciGuidance />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/status" element={<Status />} />
             <Route path="/auth/confirm" element={<MagicLink />} />

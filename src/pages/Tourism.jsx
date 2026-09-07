@@ -4,15 +4,15 @@ import IndiaSvgMap from "../components/IndiaSvgMap";
 const destinations = [
   { img: '/Places/Assam.jpg', title: 'Assam', desc: 'Journey through emerald tea gardens where the morning mist rolls like a slow river. Let the mighty Brahmaputra wash over your soul.' },
   { img: '/Places/Bangalore.jpg', title: 'Bangalore', desc: 'Where the pulse of tomorrow beats beneath ancient rain trees. A city of gardens that blooms with the energy of a billion dreams.' },
-  { img: '/Places/Bhopal.jpg', title: 'Bhopal', desc: 'Twin lakes reflecting the whispers of bygone nawabs. Step into a city where history and nature dance an eternal waltz.' },
+  { img: '/Bhopal_statue.jpg', title: 'Bhopal', desc: 'Twin lakes reflecting the whispers of bygone nawabs. Step into a city where history and nature dance an eternal waltz.' },
   { img: '/Dal_lake.jpg', title: 'Dal Lake', desc: 'A mirror of heaven reflecting the mighty Himalayas. Drift softly on wooden shikaras through a floating paradise of lotus blooms.' },
-  { img: '/Places/Delhi.jpg', title: 'Delhi', desc: 'The beating heart of India, where empires have risen and fallen like the tides. Walk through centuries of history etched in sandstone.' },
+  { img: '/Qutub_minar.jpg', title: 'Delhi', desc: 'The beating heart of India, where empires have risen and fallen like the tides. Walk through centuries of history etched in sandstone.' },
   { img: '/Gir_Lion.avif', title: 'Gir National Park', desc: 'Into the wild domain of the majestic Asiatic lion. Feel the raw, untamed spirit of the forest awaken your primal senses.' },
-  { img: '/Places/Goa.jpg', title: 'Goa', desc: 'Where golden sands meet the rhythmic crash of the Arabian Sea. Let the ocean breeze wash away your worries under a painted sunset.' },
-  { img: '/Places/Gujarat.jpg', title: 'Gujarat', desc: 'A vibrant tapestry of color spread across the great white desert. Experience a land where ancient legends are spun in silk.' },
+  { img: '/Goa_church.jpg', title: 'Goa', desc: 'Where golden sands meet the rhythmic crash of the Arabian Sea. Let the ocean breeze wash away your worries under a painted sunset.' },
+  { img: '/Stepwell.jpg', title: 'Gujarat', desc: 'A vibrant tapestry of color spread across the great white desert. Experience a land where ancient legends are spun in silk.' },
   { img: '/Places/Gulmarg.jpg', title: 'Gulmarg', desc: 'Meadows of flowers blanketed in pristine, untouched snow. Breathe the crisp mountain air at the very edge of the world.' },
   { img: '/Places/Hyderabad.jpg', title: 'Hyderabad', desc: 'Where the scent of biryani mingles with the echoes of the Charminar. A royal city where tradition glistens like rare pearls.' },
-  { img: '/Places/Jaipur.jpg', title: 'Jaipur', desc: 'Step into a realm of sun-drenched palaces and timeless royal intrigue. The Pink City whispers legends of forgotten kings on the desert wind.' },
+  { img: '/Hawa_Mahal.avif', title: 'Jaipur', desc: 'Step into a realm of sun-drenched palaces and timeless royal intrigue. The Pink City whispers legends of forgotten kings on the desert wind.' },
   { img: '/Places/Kashmir.jpg', title: 'Kashmir', desc: 'Paradise on earth, veiled in mist and emerald valleys. Let the song of the Chinar trees serenade your wandering spirit.' },
   { img: '/Kerala_backwaters.avif', title: 'Kerala', desc: 'Drift through emerald waters under a canopy of ancient palms. Let the silent backwaters carry you to a world untouched by time.' },
   { img: '/Places/Kolkata.jpg', title: 'Kolkata', desc: 'The city of joy, echoing with the poetry of Tagore and colonial charm. Lose yourself in the soul-stirring rhythm of its vibrant streets.' },
@@ -26,13 +26,14 @@ const destinations = [
   { img: '/Places/Sikkim.jpg', title: 'Sikkim', desc: 'A hidden kingdom of orchids and ancient Buddhist chants. Stand in the shadow of Kanchenjunga and feel the earth touch the heavens.' },
   { img: '/Places/Srinagar.jpg', title: 'Srinagar', desc: 'A summer capital cradled by mountains and shimmering waters. Experience the melancholic beauty of a city wrapped in eternal romance.' },
   { img: '/Taj_Mahal.jpg', title: 'Taj Mahal', desc: "A monument of marble born from an emperor's undying love. Witness a timeless romance etched in stone at the edge of the Yamuna." },
-  { img: '/Places/Tamil_Nadu.jpg', title: 'Tamil Nadu', desc: 'A glorious peninsula of towering temple gopurams and classical rhythms. Journey into the ancient soul of the Dravidian heartland.' },
+  { img: '/Chola_Temple.avif', title: 'Tamil Nadu', desc: 'A glorious peninsula of towering temple gopurams and classical rhythms. Journey into the ancient soul of the Dravidian heartland.' },
   { img: '/Places/Varanasi.jpg', title: 'Varanasi', desc: "Where the sacred river meets the eternal fires of devotion. Experience the spiritual heart of the world at dawn's golden hour." },
   { img: '/Places/Vizag.jpg', title: 'Visakhapatnam', desc: 'Where the lush Eastern Ghats plunge into the azure Bay of Bengal. Discover a coastal jewel glistening with untold marine secrets.' },
   { img: '/Places/Andaman_Nicobar.jpg', title: 'Andaman & Nicobar Islands', desc: 'Pristine white-sand beaches surrounded by crystal-clear turquoise waters. A tropical haven for marine life and vibrant coral reefs.' },
-  { img: '/Places/Odisha.jpg', title: 'Odisha', desc: 'Where the Sun Temple of Konark stands as a testament to ancient architectural marvels. Discover golden beaches and deeply rooted tribal heritage.' },
+  { img: '/Sun_Temple.webp', title: 'Odisha', desc: 'Where the Sun Temple of Konark stands as a testament to ancient architectural marvels. Discover golden beaches and deeply rooted tribal heritage.' },
   { img: '/Places/Punjab.jpg', title: 'Punjab', desc: 'The land of five rivers, resonating with the golden glow of the Harmandir Sahib. Experience boundless warmth and vibrant harvest festivals.' },
-  { img: '/Places/Uttarakhand.jpg', title: 'Uttarakhand', desc: 'The land of the gods, nestled in the majestic Himalayas. A spiritual sanctuary offering serene hill stations and sacred pilgrimage routes.' }
+  { img: '/Places/Mizoram.jpg', title: 'Mizoram', desc: 'The land of rolling green hills, whispering bamboo groves, and misty morning valleys. Discover an untouched paradise of tranquility in the northeastern highlands.' },
+  { img: '/Chamoli.jpg', title: 'Uttarakhand', desc: 'The land of the gods, nestled in the majestic Himalayas. A spiritual sanctuary offering serene hill stations and sacred pilgrimage routes.' }
 ];
 
 
@@ -51,6 +52,7 @@ const stateToDestinations = {
   'IN-KL': ['Kerala'],
   'IN-WB': ['Kolkata'],
   'IN-ML': ['Meghalaya'],
+  'IN-MZ': ['Mizoram'],
   'IN-MH': ['Mumbai'],
   'IN-TN': ['Ooty', 'Tamil Nadu'],
   'IN-HP': ['Shimla'],

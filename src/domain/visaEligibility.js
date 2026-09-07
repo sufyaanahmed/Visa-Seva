@@ -201,6 +201,52 @@ export function evaluateVisaRoute(answers) {
   const purpose = purposeByValue.get(answers.purpose);
   const days = Number(answers.durationDays);
 
+  if (answers.hasOciCard === 'cardholder' || answers.purpose === 'oci-holder') {
+    return recommendation({
+      type: 'OCI Cardholder (Visa-Free Entry)',
+      applicationType: 'oci_holder',
+      visaCategory: 'oci',
+      path: '/e-arrival',
+      description: 'OCI cardholders enjoy lifelong multi-purpose entry to India without needing a visa. Simply carry your valid foreign passport and physical OCI card booklet.',
+      rationale: [
+        'You indicated holding a valid Overseas Citizen of India (OCI) card.',
+        'OCI cardholders are exempt from Indian visa requirements for tourism, business, study, and residential stays.',
+        'Ensure you complete the mandatory e-Arrival card within 72 hours of travel.',
+      ],
+      cautions: [
+        'Carry your valid foreign passport along with your physical OCI booklet.',
+        'OCI cardholders visiting protected/restricted areas (RAP/PAP) or conducting research/journalism require prior official permission.',
+      ],
+      actionLabel: 'Complete e-Arrival Card',
+    });
+  }
+
+  if (answers.hasOciCard === 'apply_new' || answers.purpose === 'oci-apply') {
+    if (answers.passport === 'Pakistan' || answers.passport === 'Bangladesh' || answers.pakistanOrigin === 'yes') {
+      return regularRoute(
+        'Applicants of Pakistani or Bangladeshi origin are not eligible for OCI registration under Section 7A of the Citizenship Act, 1955.',
+        ['Persons who have ever been citizens of Pakistan or Bangladesh (or whose parents/grandparents held citizenship) must apply for a regular visa.'],
+      );
+    }
+    return recommendation({
+      type: 'OCI Card Application Guidance',
+      applicationType: 'oci_applicant',
+      visaCategory: 'oci',
+      path: '/guide/oci',
+      description: 'Foreign nationals of Indian origin, former Indian citizens, and eligible spouses/children can apply for lifelong Overseas Citizenship of India.',
+      rationale: [
+        'OCI provides multi-purpose, multiple-entry, lifelong visa-free travel to India.',
+        'Applications are submitted online via the official MHA portal (ociservices.gov.in) and processed through your nearest Indian Mission/Post.',
+        'Standard processing time is 4–8 weeks. If urgent travel is required, an interim e-Visa can be obtained.',
+      ],
+      cautions: [
+        'Former Indian citizens must possess an official Surrender Certificate for their cancelled Indian passport before OCI approval.',
+        'Foreign spouses must be in a registered marriage lasting at least 2 continuous years prior to submission.',
+      ],
+      actionLabel: 'View OCI Application Guide',
+    });
+  }
+
   if (answers.passport === 'Afghanistan') {
     return recommendation({
       type: 'Afghan online visa',
@@ -314,7 +360,7 @@ export function evaluateVisaRoute(answers) {
     return regularRoute(
       'We could not confirm e-Visa eligibility for this passport.',
       [`${answers.passport} was not found in the e-Visa nationality list used by this finder.`],
-      ['Government lists can change; check the official portal and use an Indian Mission/Post if the nationality is still unavailable.'],
+      [],
     );
   }
 

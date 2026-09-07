@@ -100,6 +100,8 @@ export const PURPOSES = Object.freeze([
   { value: 'family', label: 'Family, dependant or qualifying entry visit', evisaCategory: 'family', finderStayLimitDays: 365 },
   { value: 'film', label: 'Film production', evisaCategory: 'film', finderStayLimitDays: 365 },
   { value: 'production-investment', label: 'Production investment', evisaCategory: 'production-investment', finderStayLimitDays: 180 },
+  { value: 'oci-holder', label: 'Travel as an OCI (Overseas Citizen of India) cardholder', evisaCategory: null, finderStayLimitDays: 3650 },
+  { value: 'oci-apply', label: 'Apply for a new OCI (Overseas Citizen of India) card', evisaCategory: null, finderStayLimitDays: 3650 },
   { value: 'employment', label: 'Employment or paid work in India', evisaCategory: null },
   { value: 'other', label: 'Another purpose or I am not sure', evisaCategory: null },
 ]);

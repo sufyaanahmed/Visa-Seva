@@ -5,6 +5,7 @@ import { selectedFiles, platformEnabled } from "../platform/client";
 import { getRequiredDocuments } from "../domain/documentRequirements.js";
 export { getRequiredDocuments } from "../domain/documentRequirements.js";
 import { validateFile } from "../domain/documentValidation.js";
+import { compressImage } from "../domain/imageCompression.js";
 const KB = 1024;
 
 export default function SmartDocuments() {
@@ -15,12 +16,36 @@ export default function SmartDocuments() {
 
   const handleDocument = async (event, requirement) => {
     const input = event.target;
-    const file = input.files?.[0];
+    let file = input.files?.[0];
     if (!file) return;
     input.value = "";
     const attempt = (selections.current[requirement.type] || 0) + 1;
     selections.current[requirement.type] = attempt;
     try {
+      let wasOptimized = false;
+      let originalSize = file.size;
+
+      // Auto-compress and center-crop if image exceeds size limit or needs square ratio (100% in browser, 0 server load)
+      const isImage = file.type.startsWith("image/") || ["jpg", "jpeg", "png", "webp"].some((ext) => file.name.toLowerCase().endsWith(ext));
+      if (isImage && (requirement.square || (requirement.maxBytes && file.size > requirement.maxBytes) || file.size > 1024 * 1024)) {
+        try {
+          const compressionResult = await compressImage(file, {
+            maxBytes: requirement.maxBytes || 1024 * 1024,
+            minBytes: requirement.minBytes || 10 * 1024,
+            square: Boolean(requirement.square),
+            maxWidth: requirement.square ? 1000 : 1600,
+            maxHeight: requirement.square ? 1000 : 1600,
+          });
+          if (compressionResult && compressionResult.file) {
+            file = compressionResult.file;
+            wasOptimized = compressionResult.wasCompressed;
+            originalSize = compressionResult.originalSize;
+          }
+        } catch (compressionErr) {
+          console.warn("Client-side image compression fallback:", compressionErr);
+        }
+      }
+
       const validation = await validateFile(file, requirement);
       if (selections.current[requirement.type] !== attempt) return;
       if (typeof validation === "string") {
@@ -36,6 +61,8 @@ export default function SmartDocuments() {
         extension: validation.extension,
         mimeType: file.type || requirement.mimeTypes[0],
         size: file.size,
+        originalSize: wasOptimized ? originalSize : undefined,
+        wasOptimized,
         width: validation.width,
         height: validation.height,
         selectedAt: new Date().toISOString(),
@@ -98,12 +125,22 @@ export default function SmartDocuments() {
                     {!requirement.maxBytes && " Upload limit: 10 MB per file."}
                   </p>
                   {selected && (
-                    <p className="mt-2 text-sm text-green-800 font-bold">
-                      {selected.extension?.toUpperCase()}
-                      {selected.size
-                        ? ` · ${Math.round(selected.size / KB)} KB`
-                        : ""}
-                    </p>
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      <p className="text-sm text-green-800 font-bold">
+                        {selected.extension?.toUpperCase()}
+                        {selected.size
+                          ? ` · ${Math.round(selected.size / KB)} KB`
+                          : ""}
+                      </p>
+                      {selected.wasOptimized && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                          <span>Auto-optimized</span>
+                          <span className="text-emerald-700 font-normal">
+                            ({Math.round((selected.originalSize || 0) / KB)} KB → {Math.round(selected.size / KB)} KB)
+                          </span>
+                        </span>
+                      )}
+                    </div>
                   )}
                   {!selected && remembered?.status === "needs-reselection" && (
                     <p className="mt-2 text-sm font-bold text-amber-800">
