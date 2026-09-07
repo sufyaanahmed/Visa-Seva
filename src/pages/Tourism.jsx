@@ -374,7 +374,7 @@ export default function Tourism() {
           </div>
 
           {/* RIGHT: Desktop Details & Mobile Fallback Content */}
-          <div className="w-full lg:w-1/2 flex flex-col relative z-10 lg:h-[calc(100vh-10rem)] lg:overflow-y-auto custom-scrollbar pr-2">
+          <div className="w-full lg:w-1/2 flex flex-col relative z-10 lg:pr-2">
             {!activeStateId ? (
               <FeaturedShowcase />
             ) : (
