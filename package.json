@@ -28,7 +28,8 @@
     "platform:local-env": "node scripts/platform-local-env.mjs",
     "test:platform:e2e": "node --env-file=.env scripts/platform-e2e.mjs",
     "test:platform:hosted": "node --env-file=.env.hosted.local scripts/platform-e2e.mjs --hosted",
-    "platform:admin-build": "node scripts/platform-admin-build.mjs"
+    "platform:admin-build": "node scripts/platform-admin-build.mjs",
+    "admin:create": "node --env-file-if-exists=.env scripts/create-admin.mjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.8",

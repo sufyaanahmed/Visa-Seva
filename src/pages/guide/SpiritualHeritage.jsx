@@ -11,6 +11,7 @@ const SPIRITUAL_SITES = [
     tradition: 'Vedic Living Heritage',
     airport: 'Varanasi (VNS) or Delhi (DEL)',
     img: '/Places/Varanasi.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '80m',
     bestTime: 'October to March (Dawn Boat Journeys)',
     desc: 'Ancient stone ghats on the curve of the holy Ganga. Thousand-year-old brass lamps lifted in devotion at evening prayer as river waters reflect the fire.',
@@ -25,6 +26,7 @@ const SPIRITUAL_SITES = [
     tradition: 'Sikh Sacred Heritage',
     airport: 'Amritsar (ATQ)',
     img: '/Places/Punjab.jpg',
+    aspect: 'aspect-[4/5]',
     altitude: '230m',
     bestTime: 'October to March',
     desc: 'A gilded sanctum resting serenely in the center of the holy Amrit Sarovar. Four open doorways welcoming all travelers to community kitchen langar meals.',
@@ -39,6 +41,7 @@ const SPIRITUAL_SITES = [
     tradition: 'Classical Dravidian Temple Heritage',
     airport: 'Madurai (IXM) or Chennai (MAA)',
     img: '/Places/Tamil_Nadu.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '136m',
     bestTime: 'November to February',
     desc: 'Fourteen monumental stone gopuram towers rising over Madurai with thousands of carved and painted deities, sacred musical halls, and ancient oil lamps.',
@@ -53,6 +56,7 @@ const SPIRITUAL_SITES = [
     tradition: 'Yoga & Himalayan Meditation',
     airport: 'Dehradun (DED) or Delhi (DEL)',
     img: '/Places/Uttarakhand.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '372m',
     bestTime: 'September to April',
     desc: 'Where the emerald mountain Ganga enters the plains from the Himalayan foothills. Quiet river ashrams, evening fire prayers at Har Ki Pauri, and mountain meditation.',
@@ -67,6 +71,7 @@ const SPIRITUAL_SITES = [
     tradition: 'Kalinga Sacred Architecture',
     airport: 'Bhubaneswar (BBI)',
     img: '/Places/Odisha.jpg',
+    aspect: 'aspect-[4/5]',
     altitude: '10m',
     bestTime: 'October to March',
     desc: 'One of the four cardinal Char Dham sanctuaries of India by the Bay of Bengal, celebrated for monumental stone temple vimanas and chariot heritage.',
@@ -81,6 +86,7 @@ const SPIRITUAL_SITES = [
     tradition: 'Himalayan Buddhist Heritage',
     airport: 'Leh (IXL)',
     img: '/Places/Ladakh.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '3,500m',
     bestTime: 'May to September (Festival Season)',
     desc: 'Monasteries resting upon rocky cliff tops overlooking the Indus and Nubra valleys, preserving Sanskrit-Tibetan manuscripts, giant Buddha statues, and prayer flags.',
@@ -95,6 +101,7 @@ const SPIRITUAL_SITES = [
     tradition: 'Jain Sacred Heritage',
     airport: 'Udaipur (UDR) 185 km or Ahmedabad (AMD)',
     img: '/Places/Rajasthan.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '1,220m',
     bestTime: 'October to March',
     desc: 'White marble temples in the hills of Mount Abu with ceilings and pillars carved with such delicacy that solid stone resembles translucent lace and filigree.',
@@ -104,7 +111,6 @@ const SPIRITUAL_SITES = [
 ];
 
 export default function SpiritualHeritage() {
-  const [selectedTradition, setSelectedTradition] = useState('all');
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'map'
   const [selectedStateId, setSelectedStateId] = useState(null);
   const [activeModalSite, setActiveModalSite] = useState(null);
@@ -264,17 +270,17 @@ export default function SpiritualHeritage() {
           </div>
         )}
 
-        {/* EDITORIAL GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* EDITORIAL MASONRY GRID */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 [column-fill:_balance]">
           {filteredSites.map((site) => (
             <div
               key={site.id}
-              className="group flex flex-col justify-between bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#D97706] shadow-xs hover:shadow-xl transition-all duration-500 hover:-translate-y-1 relative"
+              className="break-inside-avoid mb-8 w-full inline-block group bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#D97706] shadow-xs hover:shadow-xl transition-all duration-500 hover:-translate-y-1 relative"
             >
               <div>
-                {/* Image Container */}
+                {/* Image Container with Dynamic Aspect Ratio */}
                 <div 
-                  className="relative h-60 w-full overflow-hidden bg-neutral-900 cursor-pointer"
+                  className={`relative w-full overflow-hidden bg-neutral-900 cursor-pointer ${site.aspect || 'aspect-[3/4]'}`}
                   onClick={() => setActiveModalSite(site)}
                 >
                   <img
@@ -310,7 +316,7 @@ export default function SpiritualHeritage() {
                     {site.tradition}
                   </div>
 
-                  <p className="text-xs font-serif italic text-[#1E2A4F]/85 leading-relaxed mb-4 line-clamp-3">
+                  <p className="text-xs font-serif italic text-[#1E2A4F]/85 leading-relaxed mb-4">
                     {site.desc}
                   </p>
 

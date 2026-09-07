@@ -198,6 +198,7 @@ const Footer = () => (
             <li><Link to="/help" className="transition-all hover:text-white hover:translate-x-1 inline-block">Help & FAQ</Link></li>
             <li><Link to="/reviews" className="transition-all hover:text-white hover:translate-x-1 inline-block">Public Reviews</Link></li>
             <li><Link to="/ai-assistants" className="transition-all hover:text-white hover:translate-x-1 inline-block">Use with ChatGPT or Claude</Link></li>
+            <li><Link to="/admin" className="transition-all hover:text-white hover:translate-x-1 inline-block text-[#D4AF37]/90 font-medium">Consular Officer Login</Link></li>
           </ul>
         </div>
       </div>
@@ -205,6 +206,7 @@ const Footer = () => (
       {/* Footer Bottom */}
       <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 font-sans text-xs text-white/40">
         <p>&copy; {new Date().getFullYear()} India Visa Seva. All rights reserved.</p>
+        <Link to="/admin" className="hover:text-white/80 transition-colors">Admin Portal</Link>
       </div>
     </div>
   </footer>
@@ -246,6 +248,7 @@ export default function App() {
             <Route path="/spiritual-heritage" element={<SpiritualHeritage />} />
             <Route path="/apply" element={<Wizard />} />
             <Route path="/reviews" element={<Reviews />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

@@ -13,6 +13,7 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Delhi (DEL) or Agra (AGR)',
     img: '/Taj_Mahal.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '171m',
     bestTime: 'October to March (Dawn and Full Moon nights)',
     desc: 'Luminous white Makrana marble rising by the sacred Yamuna. Built in memory of Mumtaz Mahal, where Persian symmetry meets fine Indian gemstone inlays.',
@@ -29,6 +30,7 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Hubballi (HBX) or Bengaluru (BLR)',
     img: '/Hampi.avif',
+    aspect: 'aspect-[16/10]',
     altitude: '467m',
     bestTime: 'November to February',
     desc: 'Ancient stone city carved amidst wild granite boulders. Monolithic temple chariots and musical pillars standing quietly beside the Tungabhadra River.',
@@ -45,6 +47,7 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Aurangabad (IXU) or Mumbai (BOM)',
     img: '/Ellora_Caves.avif',
+    aspect: 'aspect-[16/10]',
     altitude: '570m',
     bestTime: 'October to March',
     desc: 'Thirty-four sanctuaries hewn directly into vertical basalt cliffs. Crowned by Kailasa, the largest single rock excavation on earth, carved top to bottom from a single cliff.',
@@ -61,6 +64,7 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Aurangabad (IXU) or Jalgaon (JAG)',
     img: '/Ajanta_Caves.avif',
+    aspect: 'aspect-[16/10]',
     altitude: '495m',
     bestTime: 'September to March',
     desc: 'Thirty rock caves following the horseshoe curve of the Waghora River gorge. Renowned for ancient tempera frescoes painted in quiet lantern light two thousand years ago.',
@@ -77,6 +81,7 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Khajuraho (HJR) or Jabalpur (JLR)',
     img: '/Khajuraho.avif',
+    aspect: 'aspect-[16/10]',
     altitude: '283m',
     bestTime: 'October to March',
     desc: 'Golden sandstone spires reaching toward the sky. Celebrated for intricate carvings celebrating human life, music, devotion, and sacred dance.',
@@ -93,6 +98,7 @@ const UNESCO_SITES = [
     category: 'natural',
     airport: 'Guwahati (GAU) or Jorhat (JRH)',
     img: '/Kaziranga_Rhino.avif',
+    aspect: 'aspect-[16/10]',
     altitude: '80m',
     bestTime: 'November to April',
     desc: 'Vast tall grass floodplains on the banks of the mighty Brahmaputra. The peaceful home to two-thirds of the world’s great Indian one-horned rhinoceroses.',
@@ -109,6 +115,7 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Jaipur International Airport (JAI)',
     img: '/Places/Jaipur.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '431m',
     bestTime: 'October to March',
     desc: 'Hilltop ramparts over Maota Lake and pink terracotta city streets planned according to ancient Vedic geometry.',
@@ -125,6 +132,7 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Bhubaneswar (BBI)',
     img: '/Places/Odisha.jpg',
+    aspect: 'aspect-[4/5]',
     altitude: '10m',
     bestTime: 'October to March',
     desc: 'A colossal stone chariot of the Sun God with twenty-four carved wheels drawn by seven horses at the edge of the Bay of Bengal.',
@@ -141,6 +149,7 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Indira Gandhi International (DEL)',
     img: '/Places/Delhi.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '216m',
     bestTime: 'October to March',
     desc: 'Fluted red sandstone tower standing beside a rust-resistant iron pillar forged sixteen centuries ago.',
@@ -157,6 +166,7 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Bhopal (BHO)',
     img: '/Places/Bhopal.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '430m',
     bestTime: 'October to March',
     desc: 'India’s oldest stone structure commissioned by Emperor Ashoka. Four intricately carved stone gateways telling tales of peace, wisdom, and compassion.',
@@ -173,6 +183,7 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Ahmedabad (AMD)',
     img: '/Places/Gujarat.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '76m',
     bestTime: 'October to March',
     desc: 'An inverted subterranean temple honoring the sanctity of water, descending seven carved tiers with hundreds of fine sculptures.',
@@ -189,6 +200,7 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Tiruchirappalli (TRZ) or Chennai (MAA)',
     img: '/Places/Tamil_Nadu.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '59m',
     bestTime: 'November to February',
     desc: 'Towering granite temple vimanas where thousand-year-old temple rituals, sacred chants, and oil lamps still burn each evening.',
@@ -205,6 +217,7 @@ const UNESCO_SITES = [
     category: 'mixed',
     airport: 'Pakyong (PYG) or Bagdogra (IXB)',
     img: '/Himalaya.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '1,220m to 8,586m',
     bestTime: 'March to May & October to December',
     desc: 'The sacred mountain home of the world’s third highest peak. Pristine glaciers, high alpine lakes, and forests of red pandas and orchids.',
@@ -221,6 +234,7 @@ const UNESCO_SITES = [
     category: 'natural',
     airport: 'Dehradun (DED)',
     img: '/Places/Uttarakhand.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '3,350m to 3,650m',
     bestTime: 'July to September (Monsoon Floral Season)',
     desc: 'A high Himalayan valley carpeted in hundreds of wild endemic alpine flowers, framed by snow peaks and glacial mountain brooks.',
@@ -237,6 +251,7 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Goa (GOX / GOI)',
     img: '/Places/Goa.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '15m',
     bestTime: 'November to February',
     desc: 'Historic laterite cathedrals with gilded altars and resonant bells standing quietly amidst coastal palm groves.',
@@ -253,6 +268,7 @@ const UNESCO_SITES = [
     category: 'natural',
     airport: 'Cochin (COK) or Coimbatore (CJB)',
     img: '/Kerala_tea.avif',
+    aspect: 'aspect-[16/10]',
     altitude: '300m to 2,695m',
     bestTime: 'September to March',
     desc: 'Ancient green mountain chain older than the Himalayas. Mist-draped tea hills, cloud forests, and waterfalls that feed the rivers of the south.',
@@ -448,18 +464,17 @@ export default function UnescoSites() {
           </div>
         )}
 
-        {/* EDITORIAL HERITAGE SITES GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* EDITORIAL HERITAGE SITES MASONRY GRID */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 [column-fill:_balance]">
           {filteredSites.map((site) => (
             <div
               key={site.id}
-              className="group flex flex-col justify-between bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#1E2A4F]/30 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1 relative"
+              className="break-inside-avoid mb-8 w-full inline-block group bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#1E2A4F]/30 shadow-xs hover:shadow-xl transition-all duration-500 hover:-translate-y-1 relative"
             >
               <div>
-                {/* Image Container */}
-                {/* Image Container */}
+                {/* Image Container with Dynamic Aspect Ratio */}
                 <div 
-                  className="relative h-60 w-full overflow-hidden bg-neutral-900 cursor-pointer"
+                  className={`relative w-full overflow-hidden bg-neutral-900 cursor-pointer ${site.aspect || 'aspect-[16/10]'}`}
                   onClick={() => setActiveModalSite(site)}
                 >
                   <img
@@ -503,7 +518,7 @@ export default function UnescoSites() {
                     </span>
                   </div>
 
-                  <p className="text-xs font-serif italic text-[#1E2A4F]/85 leading-relaxed mb-4 line-clamp-3">
+                  <p className="text-xs font-serif italic text-[#1E2A4F]/85 leading-relaxed mb-4">
                     {site.desc}
                   </p>
 

@@ -15,6 +15,7 @@ const NATURAL_SPOTS = [
     bestSeason: 'October to April (Clear Streams) & June to September (Monsoon)',
     airport: 'Guwahati (GAU) 160 km or Shillong (SHL)',
     img: '/Living_Root_Bridge.avif',
+    aspect: 'aspect-[16/10]',
     desc: 'Ancient living tree roots guided across jungle rivers by the indigenous Khasi clans, forming suspension bridges that grow stronger with each passing monsoon.',
     highlights: ['Double Decker Root Bridge', 'Nohkalikai 340m Waterfall', 'Crystal Clear Dawki River', 'Mawsmai Limestone Caves'],
     travelTip: 'The stone steps down to Nongriat descend through emerald betel nut groves beside clear jungle pools.',
@@ -31,6 +32,7 @@ const NATURAL_SPOTS = [
     bestSeason: 'May to September (Clear Azure Water)',
     airport: 'Leh Kushok Bakula Rimpochee Airport (IXL) 150 km',
     img: '/Pangong_Tso.avif',
+    aspect: 'aspect-[16/10]',
     desc: 'A silent high-altitude lake extending past snow ridges into the horizon, shifting from morning turquoise to deep evening cobalt blue.',
     highlights: ['4,225m Altitude Waters', 'Chang La Pass (5,360m)', 'Starry Night Skies', 'Bar-Headed Geese'],
     travelTip: 'Warm woolens are essential even in mid-summer as mountain breezes cool rapidly at sunset.',
@@ -47,6 +49,7 @@ const NATURAL_SPOTS = [
     bestSeason: 'June to September (Cloud Treks) & October to February (Clear Sunrise)',
     airport: 'Mumbai (BOM) 150 km or Nashik (ISK)',
     img: '/Kalsubai.avif',
+    aspect: 'aspect-[16/10]',
     desc: 'The highest summit in the Western Ghats of Maharashtra. Iron ladders climbing vertical basalt cliffs to a peaceful hilltop temple above a sea of clouds.',
     highlights: ['Highest Peak in Maharashtra', 'Basalt Rock Ladder Trails', 'Arthur Lake Mountain Vistas', 'Monsoon Cloud Meadows'],
     travelTip: 'Starting the trek in the quiet early morning brings you to the summit in time for sunrise across the valley of clouds.',
@@ -63,6 +66,7 @@ const NATURAL_SPOTS = [
     bestSeason: 'April to October (Garden Blooms) & December to February (Snow)',
     airport: 'Srinagar Sheikh ul-Alam Airport (SXR)',
     img: '/Dal_lake.jpg',
+    aspect: 'aspect-[3/4]',
     desc: 'Carved cedar shikara boats gliding across mirror waters reflecting the snow peaks of the Pir Panjal, past floating lotus beds and morning markets.',
     highlights: ['Dawn Shikara Lake Cruises', 'Carved Cedar Houseboats', 'Floating Lotus Gardens', 'Nigeen Lake Reflections'],
     travelTip: 'A quiet dawn ride at 05:30 AM reveals farmers gathering in wooden boats for the floating morning market.',
@@ -79,6 +83,7 @@ const NATURAL_SPOTS = [
     bestSeason: 'September to March (Gentle Breeze) & June to August (Monsoon)',
     airport: 'Cochin (COK) 75 km or Trivandrum (TRV)',
     img: '/Kerala_backwaters.avif',
+    aspect: 'aspect-[16/10]',
     desc: 'Canals and palm-fringed lagoons running parallel to the Arabian Sea. Handcrafted thatched houseboats drifting past paddy fields and village riverbanks.',
     highlights: ['Thatched Kettuvallam Boats', 'Vembanad Bird Sanctuary', 'August Snake Boat Races', 'Ayurvedic Herb Gardens'],
     travelTip: 'Anchoring in the peaceful Kumarakom waters at dusk brings cool lake breezes and golden sunset reflections.',
@@ -95,6 +100,7 @@ const NATURAL_SPOTS = [
     bestSeason: 'September to March',
     airport: 'Cochin (COK) 110 km or Madurai (IXM)',
     img: '/Kerala_tea.avif',
+    aspect: 'aspect-[16/10]',
     desc: 'Rolling green tea plantations spread across high mountain ridges. Overlooked by Anamudi, the highest mountain summit in south India.',
     highlights: ['High-Altitude Tea Estates', 'Anamudi Summit (2,695m)', 'Nilgiri Tahr at Eravikulam', 'Top Station Cloud Views'],
     travelTip: 'Early morning walks through the tea trails offer cool mountain mist and panoramic views above the clouds.',
@@ -111,6 +117,7 @@ const NATURAL_SPOTS = [
     bestSeason: 'June to December',
     airport: 'Goa (GOX / GOI) 70 km',
     img: '/Dudhsagar_Falls.avif',
+    aspect: 'aspect-[16/10]',
     desc: 'Four massive tiers of white mountain water plunging 310 meters down sheer jungle cliffs, crossed by a stone railway viaduct surrounded by deep rainforest.',
     highlights: ['310m Cascading Falls', 'Historic Railway Viaduct', 'Forest Sanctuary Safaris', 'Natural Plunge Pools'],
     travelTip: 'The scenic railway line passing in front of the waterfall spray provides an unforgettable window view of the white cascade.',
@@ -127,6 +134,7 @@ const NATURAL_SPOTS = [
     bestSeason: 'October to May',
     airport: 'Port Blair (IXZ) then Ferry to Havelock',
     img: '/Havelock_Radhanagar.webp',
+    aspect: 'aspect-[16/10]',
     desc: 'White coral sands bordered by virgin rainforest and turquoise ocean waters. Celebrated for pristine barrier reefs and peaceful sunset shores.',
     highlights: ['Powdery White Sand Coast', 'Coral Reef Snorkeling', 'Night Kayaking in Bioluminescence', 'Elephant Beach Waters'],
     travelTip: 'Radhanagar beach faces west, making sunset walks along the curved bay especially serene and colorful.',
@@ -143,6 +151,7 @@ const NATURAL_SPOTS = [
     bestSeason: 'March to May (Rhododendron Season) & October to December',
     airport: 'Pakyong (PYG) 120 km or Bagdogra (IXB)',
     img: '/Himalaya.jpg',
+    aspect: 'aspect-[3/4]',
     desc: 'A high Himalayan valley framed by snow summits and natural sulphur springs, where twenty-four species of wild rhododendrons bloom in spring.',
     highlights: ['24 Rhododendron Species', 'Zero Point Glacial Plain', 'Natural Hot Springs', 'Kanchenjunga Mountain Views'],
     travelTip: 'Spring brings brilliant shades of red, rose, and purple blossoms across the entire valley floor.',
@@ -159,6 +168,7 @@ const NATURAL_SPOTS = [
     bestSeason: 'May to September (Wildflowers) & December to March (Snow)',
     airport: 'Srinagar Airport (SXR) 56 km',
     img: '/Places/Gulmarg.jpg',
+    aspect: 'aspect-[3/4]',
     desc: 'An open alpine bowl blanketed in wildflowers in summer, rising to 3,980 meters at Apharwat Peak via one of the highest cable cars in the world.',
     highlights: ['High Cable Car (3,980m)', 'Alpine Wildflower Meadows', 'Apharwat Mountain Lake', 'Winter Powder Slopes'],
     travelTip: 'The second stage of the cable car brings you directly to the alpine ridge with open views of distant Himalayan snow crests.',
@@ -356,17 +366,17 @@ export default function NaturalWonders() {
           </div>
         )}
 
-        {/* EDITORIAL SPOTS GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* EDITORIAL SPOTS MASONRY GRID */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 [column-fill:_balance]">
           {filteredSpots.map((spot) => (
             <div
               key={spot.id}
-              className="group flex flex-col justify-between bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#0284C7] shadow-xs hover:shadow-xl transition-all duration-500 hover:-translate-y-1 relative"
+              className="break-inside-avoid mb-8 w-full inline-block group bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#0284C7] shadow-xs hover:shadow-xl transition-all duration-500 hover:-translate-y-1 relative"
             >
               <div>
-                {/* Image Container */}
+                {/* Image Container with Dynamic Aspect Ratio */}
                 <div 
-                  className="relative h-60 w-full overflow-hidden bg-neutral-900 cursor-pointer"
+                  className={`relative w-full overflow-hidden bg-neutral-900 cursor-pointer ${spot.aspect || 'aspect-[16/10]'}`}
                   onClick={() => setActiveModalSpot(spot)}
                 >
                   <img
@@ -405,7 +415,7 @@ export default function NaturalWonders() {
                     {spot.climate}
                   </div>
 
-                  <p className="text-xs font-serif italic text-[#1E2A4F]/85 leading-relaxed mb-4 line-clamp-3">
+                  <p className="text-xs font-serif italic text-[#1E2A4F]/85 leading-relaxed mb-4">
                     {spot.desc}
                   </p>
 
