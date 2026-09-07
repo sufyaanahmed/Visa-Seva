@@ -35,12 +35,12 @@
     },
     {
       "datasource": { "type": "prometheus", "uid": "visa-seva-prometheus" },
-      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "decimals": 0, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 1000 }, { "color": "red", "value": 1800 }] }, "unit": "reqps" }, "overrides": [] },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "decimals": 0, "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 1000 }, { "color": "green", "value": 1800 }] }, "unit": "reqps" }, "overrides": [] },
       "gridPos": { "h": 4, "w": 4, "x": 0, "y": 2 },
       "id": 2,
-      "options": { "colorMode": "background", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showPercentChange": false, "textMode": "auto", "wideLayout": true },
+      "options": { "colorMode": "background", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["max"], "fields": "", "values": false }, "showPercentChange": false, "textMode": "auto", "wideLayout": true },
       "targets": [{ "editorMode": "code", "expr": "sum(rate(http_requests_total[15s]))", "legendFormat": "requests/sec", "range": true, "refId": "A" }],
-      "title": "Backend throughput",
+      "title": "Peak backend throughput",
       "type": "stat"
     },
     {
@@ -75,7 +75,7 @@
     },
     {
       "datasource": { "type": "prometheus", "uid": "visa-seva-prometheus" },
-      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "decimals": 0, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 24 }, { "color": "red", "value": 30 }] }, "unit": "short" }, "overrides": [] },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "decimals": 0, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 60 }, { "color": "red", "value": 72 }] }, "unit": "short" }, "overrides": [] },
       "gridPos": { "h": 4, "w": 4, "x": 16, "y": 2 },
       "id": 6,
       "options": { "colorMode": "background", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showPercentChange": false, "textMode": "auto", "wideLayout": true },
@@ -85,12 +85,12 @@
     },
     {
       "datasource": { "type": "prometheus", "uid": "visa-seva-prometheus" },
-      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "decimals": 0, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }, "unit": "reqps" }, "overrides": [] },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "decimals": 0, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }, "unit": "short" }, "overrides": [] },
       "gridPos": { "h": 4, "w": 4, "x": 20, "y": 2 },
       "id": 7,
       "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showPercentChange": false, "textMode": "auto", "wideLayout": true },
-      "targets": [{ "editorMode": "code", "expr": "rate(application_submissions_total[30s])", "legendFormat": "submissions/sec", "range": true, "refId": "A" }],
-      "title": "Completed submissions",
+      "targets": [{ "editorMode": "code", "expr": "sum(http_requests_total)", "legendFormat": "requests", "range": true, "refId": "A" }],
+      "title": "Requests since API start",
       "type": "stat"
     },
     {
