@@ -151,9 +151,23 @@
   animation: none !important;
 }
 
+@keyframes flag-sweep-ltr {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-flag-sweep {
+  animation: flag-sweep-ltr 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-reveal *, .hero-reveal *::before, .hero-reveal *::after {
     animation: none !important;
     transition: none !important;
   }
 }
+

@@ -100,7 +100,13 @@ export default function Auth({ children, admin = false, initialEmail = "" }) {
         );
       }
     } catch (error) {
-      setMessage(error.message);
+      if (error.message === "Failed to fetch" || error.name === "TypeError") {
+        setMessage(
+          `Unable to connect to the authentication server (${import.meta.env.VITE_SUPABASE_URL || "backend"}). Please ensure your Supabase instance is running or update your .env configuration.`
+        );
+      } else {
+        setMessage(error.message);
+      }
     } finally {
       setBusy(false);
     }

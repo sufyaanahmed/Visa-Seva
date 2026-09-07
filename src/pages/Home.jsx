@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/hero-reveal.css';
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -147,8 +147,19 @@ function TempleGopuram({ className = '' }) {
 ───────────────────────────────────────────────────────────────────────────── */
 
 export default function Home() {
+  const navigate = useNavigate();
   const [isRevealing, setIsRevealing] = useState(shouldRevealHero);
   const [isInteracting, setIsInteracting] = useState(false);
+  const [isAdminLoading, setIsAdminLoading] = useState(false);
+
+  const handleAdminClick = (e) => {
+    e.preventDefault();
+    if (isAdminLoading) return;
+    setIsAdminLoading(true);
+    setTimeout(() => {
+      navigate('/admin');
+    }, 700);
+  };
 
   useEffect(() => {
     // Returning through the router is instant. A fresh page load can play the
@@ -531,6 +542,73 @@ export default function Home() {
               <span className="text-[#D4AF37]">→</span>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* ── OFFICIAL ADMINISTRATION CONSOLE ACCESS ── */}
+      <section className="bg-white py-20 px-6 border-t border-[#EBE5D9]">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-[#C4762A] mb-3">
+            Official Administration
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#1E2A4F] mb-4">
+            Consular & Immigration Console
+          </h2>
+          <div className="w-12 h-0.5 bg-[#D4AF37] mx-auto mb-6" />
+          <p className="text-sm sm:text-base font-serif text-[#1E2A4F]/75 max-w-2xl mx-auto leading-relaxed mb-8">
+            Restricted access for consular officers, FRRO staff, and immigration authorities to review pending e-Visa dossiers, adjudicate applications, and manage entry clearances.
+          </p>
+          <div className="flex flex-col items-center justify-center">
+            <button
+              type="button"
+              onClick={handleAdminClick}
+              disabled={isAdminLoading}
+              className="relative overflow-hidden group inline-flex items-center justify-center gap-3 px-9 py-4 rounded-xl bg-[#1E2A4F] text-white hover:bg-[#141D36] text-xs font-sans font-bold uppercase tracking-widest transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer min-w-[240px]"
+            >
+              {/* Left-to-right one sweep Indian Flag (Tiranga) overlay */}
+              {isAdminLoading && (
+                <div className="absolute inset-0 z-0 flex flex-col justify-between animate-flag-sweep pointer-events-none">
+                  {/* Saffron Band */}
+                  <div className="w-full h-1/3 bg-[#FF9933]" />
+                  {/* White Band with spinning Ashoka Chakra */}
+                  <div className="w-full h-1/3 bg-white relative flex items-center justify-center overflow-hidden">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-3.5 h-3.5 text-[#000080] animate-[spin_1.5s_linear_infinite]"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <circle cx="12" cy="12" r="10" strokeWidth="1.5" />
+                      <circle cx="12" cy="12" r="2" fill="currentColor" />
+                      {Array.from({ length: 24 }, (_, i) => (
+                        <line
+                          key={i}
+                          x1="12"
+                          y1="12"
+                          x2="12"
+                          y2="2"
+                          stroke="currentColor"
+                          strokeWidth="0.8"
+                          transform={`rotate(${i * 15} 12 12)`}
+                        />
+                      ))}
+                    </svg>
+                  </div>
+                  {/* Green Band */}
+                  <div className="w-full h-1/3 bg-[#138808]" />
+                </div>
+              )}
+
+              {/* Foreground Button Label */}
+              <span className={`relative z-10 flex items-center justify-center gap-2 transition-opacity duration-200 ${isAdminLoading ? 'opacity-0' : 'opacity-100'}`}>
+                <span>Access Admin Console</span>
+                <span className="text-[#D4AF37] group-hover:translate-x-0.5 transition-transform duration-300">→</span>
+              </span>
+            </button>
+          </div>
+          <p className="text-xs font-sans text-[#1E2A4F]/50 tracking-wider uppercase mt-6">
+            Authorized Personnel Only · Protected under the Information Technology Act
+          </p>
         </div>
       </section>
     </div>

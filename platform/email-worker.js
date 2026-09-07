@@ -101,7 +101,7 @@ export async function deliverEmails(
   }
   return messages.length;
 }
-if (process.argv[1]?.endsWith("/platform/email-worker.js")) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith("/platform/email-worker.js")) {
   const config = configuration();
   const db = createClient(
     process.env.SUPABASE_URL,

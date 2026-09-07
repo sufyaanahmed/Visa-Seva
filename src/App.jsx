@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import Loader from './components/Loader';
 import VisaAssistant from './components/VisaAssistant';
@@ -38,6 +38,8 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 const Header = () => {
   const { state } = useStore();
   const hasDraft = isMeaningfulDraft(state);
+  const location = useLocation();
+  const pathname = location.pathname;
   
   const [menuOpen, setMenuOpen] = useState(false);
   const [accessibilityOpen, setAccessibilityOpen] = useState(false);
@@ -82,7 +84,40 @@ const Header = () => {
     };
   }, [textZoom, highContrast, highlightLinks]);
 
-  const navLinkClass = 'text-text font-sans font-medium text-[0.85rem] uppercase tracking-wider hover:text-secondary-accent transition-colors';
+  const isApplyActive = pathname === '/apply' || pathname.startsWith('/guide/visa-finder') || pathname.startsWith('/dashboard') || pathname.startsWith('/flow') || pathname.startsWith('/guide/oci') || pathname.startsWith('/e-arrival');
+  const isStatusActive = pathname.startsWith('/status') || pathname.startsWith('/applications') || pathname === '/resume';
+  const isTourismActive = pathname.startsWith('/tourism') || pathname.startsWith('/unesco-sites') || pathname.startsWith('/national-parks') || pathname.startsWith('/natural-wonders') || pathname.startsWith('/spiritual-heritage');
+  const isHelpActive = pathname.startsWith('/help') || pathname.startsWith('/faq');
+  const isAssistantsActive = pathname.startsWith('/ai-assistants');
+
+  const navItems = [
+    {
+      label: 'Apply',
+      to: hasDraft ? '/dashboard' : '/guide/visa-finder',
+      active: isApplyActive,
+    },
+    {
+      label: 'My applications',
+      to: '/status',
+      active: isStatusActive,
+    },
+    {
+      label: 'Discover India',
+      to: '/tourism',
+      active: isTourismActive,
+    },
+    {
+      label: 'Help',
+      to: '/help',
+      active: isHelpActive,
+    },
+    {
+      label: 'Use with AI',
+      to: '/ai-assistants',
+      active: isAssistantsActive,
+    },
+  ];
+
   const closeMenu = () => setMenuOpen(false);
 
   return (
@@ -98,12 +133,23 @@ const Header = () => {
           </span>
         </Link>
 
-        <nav aria-label="Primary navigation" className="hidden items-center gap-3 lg:flex xl:gap-6">
-          <Link to={hasDraft ? "/dashboard" : "/guide/visa-finder"} className={navLinkClass}>Apply</Link>
-          <Link to="/status" className={navLinkClass}>My applications</Link>
-          <Link to="/tourism" className={navLinkClass}>Discover India</Link>
-          <Link to="/help" className={navLinkClass}>Help</Link>
-          <Link to="/ai-assistants" className={navLinkClass}>Use with AI</Link>
+        <nav aria-label="Primary navigation" className="hidden items-center gap-4 lg:flex xl:gap-6">
+          {navItems.map((item) => (
+            <Link
+              key={item.label}
+              to={item.to}
+              className={`relative py-1.5 font-sans text-[0.85rem] uppercase tracking-wider transition-colors duration-200 group ${
+                item.active ? 'text-primary-dark font-bold' : 'text-text font-medium hover:text-secondary-accent'
+              }`}
+            >
+              <span>{item.label}</span>
+              {item.active ? (
+                <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#D4AF37] rounded-full animate-fadeIn" />
+              ) : (
+                <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-transparent group-hover:bg-[#D4AF37]/30 rounded-full transition-colors" />
+              )}
+            </Link>
+          ))}
         </nav>
 
         <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
@@ -155,11 +201,19 @@ const Header = () => {
 
       {menuOpen && (
         <nav id="mobile-navigation" aria-label="Mobile navigation" className="absolute left-0 z-40 flex w-full flex-col border-t border-gray-100 bg-white px-6 py-4 shadow-xl lg:hidden">
-          <Link to={hasDraft ? "/dashboard" : "/guide/visa-finder"} onClick={closeMenu} className="border-b border-gray-100 py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">Apply</Link>
-          <Link to="/status" onClick={closeMenu} className="border-b border-gray-100 py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">My applications</Link>
-          <Link to="/tourism" onClick={closeMenu} className="border-b border-gray-100 py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">Discover India</Link>
-          <Link to="/help" onClick={closeMenu} className="py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">Help</Link>
-          <Link to="/ai-assistants" onClick={closeMenu} className="py-3 font-sans text-[0.95rem] font-medium uppercase tracking-wider text-text hover:text-secondary-accent">Use with AI</Link>
+          {navItems.map((item) => (
+            <Link
+              key={item.label}
+              to={item.to}
+              onClick={closeMenu}
+              className={`border-b border-gray-100 py-3 font-sans text-[0.95rem] uppercase tracking-wider flex items-center justify-between transition-colors ${
+                item.active ? 'text-secondary-accent font-bold' : 'text-text font-medium hover:text-secondary-accent'
+              }`}
+            >
+              <span>{item.label}</span>
+              {item.active && <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37]" />}
+            </Link>
+          ))}
         </nav>
       )}
     </header>
