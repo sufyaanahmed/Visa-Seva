@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import IndiaSvgMap from "../components/IndiaSvgMap";
+import { useStore } from '../store';
+import { ALL_LANDMARKS, LANDMARK_CATEGORIES } from '../data/landmarksData';
 
 const destinations = [
   { img: '/Places/Assam.jpg', title: 'Assam', desc: 'Journey through emerald tea gardens where the morning mist rolls like a slow river. Let the mighty Brahmaputra wash over your soul.' },
@@ -36,13 +39,11 @@ const destinations = [
   { img: '/Chamoli.jpg', title: 'Uttarakhand', desc: 'The land of the gods, nestled in the majestic Himalayas. A spiritual sanctuary offering serene hill stations and sacred pilgrimage routes.' }
 ];
 
-
-
 const stateToDestinations = {
   'IN-AS': ['Assam'],
   'IN-KA': ['Bangalore', 'Mysore'],
   'IN-MP': ['Bhopal'],
-  'IN-JK': ['Dal Lake', 'Gulmarg', 'Kashmir', 'Srinagar', 'Ladakh'],
+  'IN-JK': ['Dal Lake', 'Gulmarg', 'Kashmir', 'Srinagar'],
   'IN-LA': ['Ladakh'],
   'IN-DL': ['Delhi'],
   'IN-GJ': ['Gir National Park', 'Gujarat'],
@@ -88,7 +89,10 @@ const stateDescriptions = {
   'IN-PB': { name: 'Punjab', desc: 'Known for its lush green fields, the magnificent Golden Temple in Amritsar, and a culture brimming with warmth and vibrant celebrations.' },
   'IN-AN': { name: 'Andaman & Nicobar Islands', desc: 'A stunning archipelago featuring pristine beaches, vibrant coral reefs, and historical landmarks like the Cellular Jail.' },
   'IN-OR': { name: 'Odisha', desc: 'A culturally rich state celebrated for the architectural wonder of the Konark Sun Temple, serene beaches, and vibrant classical dance.' },
-  'IN-UT': { name: 'Uttarakhand', desc: 'Often referred to as Devbhumi (Land of the Gods), known for its majestic Himalayan peaks, holy rivers, and peaceful ashrams.' }
+  'IN-UT': { name: 'Uttarakhand', desc: 'Often referred to as Devbhumi (Land of the Gods), known for its majestic Himalayan peaks, holy rivers, and peaceful ashrams.' },
+  'IN-BR': { name: 'Bihar', desc: 'The historic cradle of ancient empires and spiritual wisdom, home to the sacred Mahabodhi Temple at Bodh Gaya and ancient Nalanda University.' },
+  'IN-CT': { name: 'Chhattisgarh', desc: 'The herbal heartland of India, renowned for majestic tiered waterfalls like Chitrakote and ancient tribal forests.' },
+  'IN-JH': { name: 'Jharkhand', desc: 'A land of waterfalls, rolling plateaus, and sacred Jain and tribal pilgrimage hills.' }
 };
 
 const STATE_NAMES = {
@@ -110,6 +114,7 @@ const STATE_NAMES = {
   "IN-JK": "Jammu and Kashmir",
   "IN-KA": "Karnataka",
   "IN-KL": "Kerala",
+  "IN-LA": "Ladakh",
   "IN-LD": "Lakshadweep",
   "IN-MH": "Maharashtra",
   "IN-ML": "Meghalaya",
@@ -130,62 +135,6 @@ const STATE_NAMES = {
   "IN-WB": "West Bengal"
 };
 
-const ComingSoon = () => (
-  <div className="flex-1 flex flex-col items-center justify-center text-center p-12 border-2 border-dashed border-[#1E2A4F]/20 rounded-2xl bg-white/50 backdrop-blur-sm min-h-[300px]">
-    <svg className="w-16 h-16 text-[#D4AF37] mb-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-    <h3 className="text-2xl font-serif font-bold text-[#1E2A4F] mb-2">More Coming Soon</h3>
-    <p className="text-[#1E2A4F]/70 text-sm">We are curating premium experiences for this region. Check back later!</p>
-  </div>
-);
-
-const DestinationsGrid = ({ dests }) => (
-  <div className="columns-1 md:columns-2 gap-6 pb-12 relative z-10">
-    {dests.map((dest, i) => (
-      <div 
-        key={i} 
-        className="break-inside-avoid mb-6 group flex flex-col bg-white overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(30,42,79,0.12)] cursor-pointer shadow-lg rounded-3xl border border-[#EBE5D9]/60"
-      >
-        <div className="w-full overflow-hidden relative bg-[#1E2A4F]">
-          <img 
-            src={dest.img} 
-            alt={dest.title} 
-            className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.21,0.83,0.26,1)]" 
-            loading="lazy" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1E2A4F]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10" />
-        </div>
-        <div className="flex flex-col relative bg-white flex-1 p-6 items-center text-center">
-          <h3 className="text-xl font-serif font-bold text-[#1E2A4F] mb-3 tracking-wide">{dest.title}</h3>
-          <div className="h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent w-8 group-hover:w-16 mb-4 opacity-70 group-hover:opacity-100 transition-all duration-700 ease-out" />
-          <p className="text-[0.85rem] text-[#1E2A4F]/80 leading-relaxed italic font-serif max-w-xl">
-            "{dest.desc}"
-          </p>
-        </div>
-      </div>
-    ))}
-  </div>
-);
-
-const FeaturedShowcase = () => {
-  const featured = destinations.filter(d => ['Kashmir', 'Rajasthan', 'Kerala', 'Varanasi'].includes(d.title));
-  
-  return (
-    <div className="flex-1 flex flex-col relative z-10">
-      <div className="mb-6 flex flex-col items-center text-center">
-        <h3 className="text-2xl font-serif font-bold text-[#1E2A4F]">Editor's Picks</h3>
-        <p className="text-[#1E2A4F]/70 text-sm mt-1">Discover India's most breathtaking destinations.</p>
-        <div className="w-12 h-0.5 bg-[#D4AF37] mt-3" />
-      </div>
-      <DestinationsGrid dests={featured} />
-    </div>
-  );
-};
-
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useStore } from '../store';
-
 const STATE_AIRPORTS = {
   'IN-RJ': 'Jaipur International Airport (JAI) or Delhi (DEL)',
   'IN-KL': 'Cochin (COK) or Trivandrum (TRV)',
@@ -202,7 +151,42 @@ const STATE_AIRPORTS = {
   'IN-LA': 'Leh Kushok Bakula Rimpochee Airport via Delhi',
   'IN-HP': 'Chandigarh (IXC) or Delhi (DEL) Checkpoint',
   'IN-UT': 'Dehradun Jolly Grant Airport via Delhi',
+  'IN-BR': 'Gaya (GAY) or Patna (PAT)',
+  'IN-OR': 'Bhubaneswar Biju Patnaik Airport (BBI)',
+  'IN-AN': 'Port Blair Veer Savarkar Airport (IXZ)',
+  'IN-PB': 'Amritsar Sri Guru Ram Dass Jee Airport (ATQ)',
+  'IN-AP': 'Visakhapatnam (VTZ) or Tirupati (TIR)',
+  'IN-MP': 'Bhopal (BHO), Indore (IDR) or Khajuraho (HJR)',
 };
+
+const DestinationsGrid = ({ dests }) => (
+  <div className="columns-1 md:columns-2 gap-6 pb-12 relative z-10">
+    {dests.map((dest, i) => (
+      <div 
+        key={i} 
+        className="break-inside-avoid mb-6 group flex flex-col bg-white overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(30,42,79,0.12)] cursor-pointer shadow-lg rounded-3xl border border-[#EBE5D9]/60"
+      >
+        <div className="w-full overflow-hidden relative bg-[#1E2A4F]">
+          <img 
+            src={dest.img} 
+            alt={dest.title} 
+            className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.21,0.83,0.26,1)]" 
+            loading="lazy" 
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1E2A4F]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10" />
+        </div>
+        <div className="flex flex-col relative bg-white flex-1 p-6 items-center text-center">
+          <h3 className="text-xl font-serif font-bold text-[#1E2A4F] mb-3 tracking-wide">{dest.title}</h3>
+          <div className="h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent w-8 group-hover:w-16 mb-4 opacity-70 group-hover:opacity-100 transition-all duration-700 ease-out" />
+          <p className="text-[0.85rem] text-[#1E2A4F]/80 leading-relaxed italic font-serif max-w-xl">
+            "{dest.desc}"
+          </p>
+        </div>
+      </div>
+    ))}
+  </div>
+);
 
 const StateHeader = ({ stateId }) => {
   const navigate = useNavigate();
@@ -230,12 +214,11 @@ const StateHeader = ({ stateId }) => {
   };
 
   return (
-    <div className="mb-8 flex flex-col items-center text-center">
+    <div className="mb-6 flex flex-col items-center text-center">
       <h2 className="text-3xl font-serif font-bold text-[#1E2A4F] mb-2">{info.name}</h2>
-      <p className="text-[#1E2A4F]/80 text-[0.95rem] max-w-lg leading-relaxed mb-5">{info.desc}</p>
+      <p className="text-[#1E2A4F]/80 text-[0.95rem] max-w-lg leading-relaxed mb-4">{info.desc}</p>
       
-      {/* Contextual Visa Callout Card */}
-      <div className="w-full max-w-md bg-white border border-[#D4AF37]/50 rounded-xl p-4 shadow-sm text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+      <div className="w-full max-w-md bg-white border border-[#D4AF37]/50 rounded-xl p-4 shadow-sm text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-2">
         <div>
           <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-[#C4762A] block">
             Official Travel Facilitation
@@ -256,7 +239,6 @@ const StateHeader = ({ stateId }) => {
           <span className="text-[#D4AF37] ml-1">→</span>
         </button>
       </div>
-
       <div className="w-16 h-0.5 bg-[#D4AF37] mt-2 opacity-70" />
     </div>
   );
@@ -270,25 +252,36 @@ export default function Tourism() {
     return stateFromUrl && (stateDescriptions[stateFromUrl] || STATE_NAMES[stateFromUrl]) ? stateFromUrl : null;
   });
 
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [hoveredPin, setHoveredPin] = useState(null);
+  const [activeModalLandmark, setActiveModalLandmark] = useState(null);
+
   useEffect(() => {
     if (stateFromUrl && (stateDescriptions[stateFromUrl] || STATE_NAMES[stateFromUrl])) {
       setActiveStateId(stateFromUrl);
     }
   }, [stateFromUrl]);
 
-  // Lock body scroll when bottom sheet is open on mobile
   useEffect(() => {
-    if (activeStateId && window.innerWidth < 1024) {
+    if ((activeStateId && window.innerWidth < 1024) || activeModalLandmark) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
     }
     return () => { document.body.style.overflow = 'auto'; };
-  }, [activeStateId]);
+  }, [activeStateId, activeModalLandmark]);
 
   const handleStateClick = (stateId) => {
     setActiveStateId(stateId);
   };
+
+  const filteredLandmarks = selectedCategory === 'all'
+    ? ALL_LANDMARKS
+    : ALL_LANDMARKS.filter(lm => lm.category === selectedCategory);
+
+  const stateLandmarks = activeStateId
+    ? ALL_LANDMARKS.filter(lm => lm.stateId === activeStateId)
+    : [];
 
   let displayedDestinations = [];
   if (activeStateId && stateToDestinations[activeStateId]) {
@@ -297,25 +290,18 @@ export default function Tourism() {
   }
 
   return (
-    // Changed overflow-hidden to overflow-x-hidden so vertical scrolling still works!
     <div className="w-full bg-[#FAF7F0] min-h-screen relative overflow-x-hidden">
-      {/* Authentic Standard Ashoka Chakra (Dharmachakra) Background Watermark */}
       <div className="absolute top-0 right-0 w-[750px] h-[750px] md:w-[900px] md:h-[900px] opacity-[0.05] pointer-events-none translate-x-1/4 -translate-y-1/4 select-none">
-        <svg 
-          viewBox="0 0 400 400" 
-          className="w-full h-full text-[#1E2A4F] animate-[spin_240s_linear_infinite]"
-        >
+        <svg viewBox="0 0 400 400" className="w-full h-full text-[#1E2A4F] animate-[spin_240s_linear_infinite]">
           <g>
             <circle cx="200" cy="200" r="185" fill="none" stroke="currentColor" strokeWidth="12" />
             <circle cx="200" cy="200" r="172" fill="none" stroke="currentColor" strokeWidth="3" />
-
             {Array.from({ length: 24 }, (_, i) => (
               <g key={`spoke-${i}`} transform={`rotate(${i * 15} 200 200)`}>
                 <polygon points="192,180 208,180 202,30 198,30" fill="currentColor" />
                 <circle cx="200" cy="34" r="5.5" fill="currentColor" transform="rotate(7.5 200 200)" />
               </g>
             ))}
-
             <circle cx="200" cy="200" r="32" fill="none" stroke="currentColor" strokeWidth="12" />
             <circle cx="200" cy="200" r="14" fill="currentColor" />
           </g>
@@ -323,37 +309,82 @@ export default function Tourism() {
       </div>
 
       <div className="max-w-[1400px] mx-auto py-[4.75rem] px-6 relative z-10">
-        
-        {/* Header Section */}
-        <section className="text-center mb-16 flex flex-col items-center">
-          <p className="uppercase tracking-widest text-[0.8rem] text-[#C4762A] font-bold mb-3">
-            Incredible India
+        <section className="text-center mb-8 flex flex-col items-center">
+          <p className="uppercase tracking-widest text-[0.8rem] text-[#C4762A] font-bold mb-2">
+            Incredible India · Grand Atlas of Bharat
           </p>
-          <h1 className="text-5xl md:text-6xl font-serif font-bold text-[#1E2A4F] mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-[#1E2A4F] mb-3">
             Interactive Travel Map
           </h1>
-          <p className="text-[1.15rem] text-[#1E2A4F]/80 max-w-2xl leading-relaxed">
-            Click on any state to uncover its hidden gems and timeless heritage.
+          <p className="text-[1.05rem] text-[#1E2A4F]/80 max-w-2xl leading-relaxed mb-6">
+            Explore pinpoint locations of UNESCO monuments, tiger sanctuaries, natural landscapes, and sacred pilgrimage circuits across India.
           </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 p-2 bg-white/90 backdrop-blur-xs rounded-2xl border border-[#D4AF37]/35 shadow-xs mb-4">
+            <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-[#1E2A4F]/60 px-2 hidden md:inline">
+              Map Layers:
+            </span>
+            {LANDMARK_CATEGORIES.map(cat => {
+              const count = cat.id === 'all' 
+                ? ALL_LANDMARKS.length 
+                : ALL_LANDMARKS.filter(l => l.category === cat.id).length;
+              const isActive = selectedCategory === cat.id;
+              
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-sans font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-1.5 cursor-pointer ${
+                    isActive 
+                      ? `${cat.badgeBg} text-white shadow-sm ring-2 ring-offset-1 ring-[#D4AF37]/40` 
+                      : 'bg-[#FAF7F0] text-[#1E2A4F]/80 hover:bg-white border border-[#EBE5D9]'
+                  }`}
+                >
+                  <span>{cat.icon}</span>
+                  <span>{cat.label}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-black/5 text-gray-600'}`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs text-[#1E2A4F]/70">
+            <span className="text-[10.5px] uppercase font-bold tracking-widest text-[#C4762A]">Curated Guides:</span>
+            <Link to="/unesco-sites" className="hover:text-[#B45309] font-medium underline underline-offset-4 decoration-[#D4AF37]/50 transition-colors">UNESCO Monuments →</Link>
+            <span>·</span>
+            <Link to="/national-parks" className="hover:text-[#15803D] font-medium underline underline-offset-4 decoration-[#D4AF37]/50 transition-colors">National Parks & Wilds →</Link>
+            <span>·</span>
+            <Link to="/natural-wonders" className="hover:text-[#0369A1] font-medium underline underline-offset-4 decoration-[#D4AF37]/50 transition-colors">Natural Wonders →</Link>
+            <span>·</span>
+            <Link to="/spiritual-heritage" className="hover:text-[#C2410C] font-medium underline underline-offset-4 decoration-[#D4AF37]/50 transition-colors">Sacred Circuits →</Link>
+          </div>
         </section>
 
-        {/* Split View: Map + Details */}
-        <div className="flex flex-col lg:flex-row gap-12 relative items-start">
-          
-          {/* LEFT: Map */}
+        <div className="flex flex-col lg:flex-row gap-10 relative items-start">
           <div className="w-full lg:w-1/2 flex flex-col relative sticky top-28 z-20">
-            {/* Handcrafted Crayon Indian Flag Artwork shifted to the far left */}
-            <div className="flex justify-start -ml-2 sm:-ml-6 lg:-ml-8 mb-1 z-30 pointer-events-none">
+            <div className="flex justify-between items-center -ml-2 sm:-ml-6 lg:-ml-8 mb-1 z-30 pointer-events-none">
               <img 
                 src="/Flag_art.png" 
                 alt="National Flag of India" 
-                className="w-32 sm:w-40 md:w-48 lg:w-52 h-auto object-contain select-none drop-shadow-xs" 
+                className="w-28 sm:w-36 md:w-44 h-auto object-contain select-none drop-shadow-xs" 
                 loading="eager"
+                decoding="async"
               />
+              <div className="pointer-events-auto pr-2">
+                {activeStateId && (
+                  <button
+                    onClick={() => setActiveStateId(null)}
+                    className="text-[11px] font-sans font-bold text-[#1E2A4F] bg-white border border-[#D4AF37]/40 px-3 py-1 rounded-full shadow-2xs hover:bg-[#FAF7F0] transition-colors cursor-pointer"
+                  >
+                    Reset Map View ✕
+                  </button>
+                )}
+              </div>
             </div>
 
-            {/* Map Container */}
-            <div className="w-full bg-white rounded-2xl shadow-lg p-8 flex items-center justify-center border border-[#D4AF37]/20 relative z-10 lg:h-[calc(100vh-10rem)]">
+            <div className="w-full bg-white rounded-3xl shadow-xl p-6 sm:p-8 flex flex-col items-center justify-center border border-[#D4AF37]/30 relative z-10 overflow-visible">
               <style>{`
                 .india-map-container path,
                 svg path {
@@ -365,80 +396,416 @@ export default function Tourism() {
                 }
                 .india-map-container path:hover,
                 svg path:hover {
-                  fill: #C4762A !important;
+                  fill: #EBE5D9 !important;
                   stroke: #1E2A4F !important;
                   stroke-width: 2px !important;
                   outline: none;
                 }
+                ${activeStateId ? `
+                  .india-map-container path#${activeStateId},
+                  svg path#${activeStateId} {
+                    fill: #C4762A !important;
+                    stroke: #162040 !important;
+                    stroke-width: 2.5px !important;
+                  }
+                ` : ''}
               `}</style>
-              <IndiaSvgMap onStateClick={handleStateClick} />
+              
+              <IndiaSvgMap onStateClick={handleStateClick}>
+                <g className="landmarks-pin-layer" style={{ pointerEvents: 'auto' }}>
+                  {filteredLandmarks.map((lm) => {
+                    const isSelected = activeStateId === lm.stateId;
+                    const isHovered = hoveredPin?.id === lm.id;
+                    const catConfig = LANDMARK_CATEGORIES.find(c => c.id === lm.category);
+                    const pinColor = catConfig?.color || '#D4AF37';
+                    
+                    return (
+                      <g 
+                        key={lm.id}
+                        transform={`translate(${lm.mapX}, ${lm.mapY})`}
+                        className="cursor-pointer group"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActiveStateId(lm.stateId);
+                          setActiveModalLandmark(lm);
+                        }}
+                        onMouseEnter={(e) => {
+                          e.stopPropagation();
+                          setHoveredPin(lm);
+                        }}
+                        onMouseLeave={() => setHoveredPin(null)}
+                      >
+                        <circle
+                          r={isHovered || isSelected ? "7" : "5"}
+                          fill={pinColor}
+                          stroke="#FFFFFF"
+                          strokeWidth={isHovered || isSelected ? "2" : "1.6"}
+                          className="drop-shadow-md transition-all duration-200 group-hover:scale-125"
+                        />
+                        <circle r="1.8" fill="#FFFFFF" />
+
+                        {(isHovered || isSelected) && (
+                          <g transform="translate(0, -14)" className="pointer-events-none">
+                            <rect
+                              x={-((lm.title.length * 4.2) + 12)}
+                              y="-16"
+                              width={(lm.title.length * 8.4) + 24}
+                              height="20"
+                              rx="5"
+                              fill="#162040"
+                              stroke="#D4AF37"
+                              strokeWidth="0.75"
+                              opacity="0.95"
+                              className="drop-shadow-lg"
+                            />
+                            <text
+                              x="0"
+                              y="-3"
+                              textAnchor="middle"
+                              fill="#FFFFFF"
+                              fontSize="8.5"
+                              fontWeight="bold"
+                              fontFamily="sans-serif"
+                            >
+                              {lm.title}
+                            </text>
+                          </g>
+                        )}
+                      </g>
+                    );
+                  })}
+                </g>
+              </IndiaSvgMap>
+
+              <div className="w-full flex items-center justify-between text-[11px] text-[#1E2A4F]/65 mt-2 px-2">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse inline-block" />
+                  Click pins or states to inspect regional landmarks
+                </span>
+                <span className="font-semibold text-[#C4762A]">
+                  Showing {filteredLandmarks.length} Pins
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* RIGHT: Desktop Details & Mobile Fallback Content */}
           <div className="w-full lg:w-1/2 flex flex-col relative z-10 lg:h-[calc(100vh-10rem)] lg:overflow-y-auto custom-scrollbar pr-2">
             {!activeStateId ? (
-              <FeaturedShowcase />
+              <div className="flex-1 flex flex-col relative z-10">
+                <div className="mb-6 flex flex-col items-center text-center">
+                  <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-[#C4762A]">
+                    National Landmark Highlights
+                  </span>
+                  <h3 className="text-2xl font-serif font-bold text-[#1E2A4F] mt-1">
+                    Signature Experiences of Bharat
+                  </h3>
+                  <p className="text-[#1E2A4F]/75 text-xs font-serif italic mt-1 max-w-md">
+                    Select any pin on the map to explore UNESCO monuments, tiger reserves, living backwaters, and sacred temples.
+                  </p>
+                  <div className="w-12 h-0.5 bg-[#D4AF37] mt-3" />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                  {filteredLandmarks.slice(0, 8).map(lm => {
+                    const catConfig = LANDMARK_CATEGORIES.find(c => c.id === lm.category);
+                    return (
+                      <div
+                        key={lm.id}
+                        onClick={() => {
+                          setActiveStateId(lm.stateId);
+                          setActiveModalLandmark(lm);
+                        }}
+                        className="bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#D4AF37] shadow-xs hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col group text-left"
+                      >
+                        <div className="relative h-36 w-full overflow-hidden bg-neutral-900">
+                          <img
+                            src={lm.img}
+                            alt={lm.title}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                          <div className="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-center">
+                            <span className="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-xs text-white text-[9px] font-bold">
+                              {lm.state}
+                            </span>
+                            <span className={`px-2 py-0.5 rounded-full text-white text-[9px] font-bold ${catConfig?.badgeBg || 'bg-[#1E2A4F]'}`}>
+                              {lm.categoryLabel}
+                            </span>
+                          </div>
+                          <div className="absolute bottom-2 left-3 right-3">
+                            <h4 className="font-serif font-bold text-sm text-white drop-shadow-xs truncate">
+                              {lm.title}
+                            </h4>
+                          </div>
+                        </div>
+                        <div className="p-3.5 flex-1 flex flex-col justify-between">
+                          <p className="text-[11px] text-[#1E2A4F]/80 font-serif italic line-clamp-2 mb-3">
+                            "{lm.desc}"
+                          </p>
+                          <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider pt-2 border-t border-[#FAF7F0]">
+                            <span className="text-[#C4762A]">Explore Pin Details</span>
+                            <span className="text-[#1E2A4F] group-hover:translate-x-1 transition-transform">→</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="pt-4 border-t border-[#D4AF37]/20">
+                  <h4 className="font-serif font-bold text-lg text-[#1E2A4F] text-center mb-4">
+                    Iconic Heritage Cities
+                  </h4>
+                  <DestinationsGrid dests={destinations.slice(0, 6)} />
+                </div>
+              </div>
             ) : (
               <div className="hidden lg:flex flex-col h-fit w-full pb-8">
                 <StateHeader stateId={activeStateId} />
-                {displayedDestinations.length === 0 ? <ComingSoon /> : <DestinationsGrid dests={displayedDestinations} />}
+                {stateLandmarks.length > 0 && (
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[10.5px] font-sans font-bold uppercase tracking-widest text-[#C4762A]">
+                        Pinpoint Landmarks in {stateDescriptions[activeStateId]?.name || STATE_NAMES[activeStateId]} ({stateLandmarks.length})
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {stateLandmarks.map(lm => {
+                        const catConfig = LANDMARK_CATEGORIES.find(c => c.id === lm.category);
+                        return (
+                          <div
+                            key={lm.id}
+                            onClick={() => setActiveModalLandmark(lm)}
+                            className="bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#D4AF37] shadow-xs hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col group text-left"
+                          >
+                            <div className="relative h-36 w-full overflow-hidden bg-neutral-900">
+                              <img
+                                src={lm.img}
+                                alt={lm.title}
+                                loading="lazy"
+                                decoding="async"
+                                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                              <div className="absolute top-2.5 left-2.5 right-2.5 flex justify-between items-center">
+                                <span className={`px-2 py-0.5 rounded-full text-white text-[9px] font-bold ${catConfig?.badgeBg || 'bg-[#1E2A4F]'}`}>
+                                  {lm.categoryLabel}
+                                </span>
+                              </div>
+                              <div className="absolute bottom-2 left-3 right-3">
+                                <h4 className="font-serif font-bold text-sm text-white drop-shadow-xs truncate">
+                                  {lm.title}
+                                </h4>
+                              </div>
+                            </div>
+                            <div className="p-3.5 flex-1 flex flex-col justify-between">
+                              <p className="text-[11px] text-[#1E2A4F]/80 font-serif italic line-clamp-2 mb-3">
+                                "{lm.desc}"
+                              </p>
+                              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider pt-2 border-t border-[#FAF7F0]">
+                                <span className="text-[#C4762A]">Read Factsheet</span>
+                                <span className="text-[#1E2A4F] group-hover:translate-x-1 transition-transform">→</span>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+                {displayedDestinations.length > 0 && (
+                  <div>
+                    <span className="text-[10.5px] font-sans font-bold uppercase tracking-widest text-[#1E2A4F]/70 block mb-3 text-left">
+                      Regional Experiences & Towns
+                    </span>
+                    <DestinationsGrid dests={displayedDestinations} />
+                  </div>
+                )}
               </div>
             )}
           </div>
-
         </div>
       </div>
 
-      {/* MOBILE OVERLAY (Darkens background when bottom sheet is active) */}
+      {activeModalLandmark && (
+        <div 
+          className="fixed inset-0 z-[110] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+          onClick={() => setActiveModalLandmark(null)}
+        >
+          <div 
+            className="bg-white max-w-2xl w-full rounded-3xl overflow-hidden shadow-2xl border border-[#EBE5D9] max-h-[90vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-neutral-900 shrink-0">
+              <img 
+                src={activeModalLandmark.img} 
+                alt={activeModalLandmark.title} 
+                decoding="async"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+              <button
+                onClick={() => setActiveModalLandmark(null)}
+                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer border border-white/20 z-10"
+              >
+                ✕
+              </button>
+              <div className="absolute bottom-4 left-6 right-6 z-10 text-left">
+                <span className="px-2.5 py-0.5 rounded-sm bg-[#D4AF37] text-white text-[10px] font-bold uppercase tracking-widest mb-1.5 inline-block">
+                  {activeModalLandmark.categoryLabel} · {activeModalLandmark.state}
+                </span>
+                <h3 className="font-serif font-bold text-2xl sm:text-3xl text-white">
+                  {activeModalLandmark.title}
+                </h3>
+                <p className="text-xs text-white/80 font-sans mt-0.5">
+                  📍 {activeModalLandmark.location}
+                </p>
+              </div>
+            </div>
+
+            <div className="p-6 overflow-y-auto space-y-5 text-left custom-scrollbar">
+              <div>
+                <h4 className="font-serif font-bold text-xs uppercase tracking-widest text-[#C4762A] mb-1.5">
+                  Landmark Overview
+                </h4>
+                <p className="text-sm font-serif text-[#1E2A4F]/90 leading-relaxed italic">
+                  {activeModalLandmark.desc}
+                </p>
+              </div>
+
+              {activeModalLandmark.highlights && (
+                <div>
+                  <h4 className="font-serif font-bold text-xs uppercase tracking-widest text-[#C4762A] mb-2">
+                    Key Highlights
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {activeModalLandmark.highlights.map((h, i) => (
+                      <span key={i} className="text-xs px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-[#EBE5D9] text-[#1E2A4F] font-medium">
+                        ✦ {h}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-[#FAF7F0]">
+                {activeModalLandmark.bestTime && (
+                  <div className="p-3 rounded-xl bg-[#FAF7F0] border border-[#EBE5D9]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block">Best Season</span>
+                    <span className="text-xs font-semibold text-[#1E2A4F]">{activeModalLandmark.bestTime}</span>
+                  </div>
+                )}
+                {activeModalLandmark.airport && (
+                  <div className="p-3 rounded-xl bg-[#FAF7F0] border border-[#EBE5D9]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block">Gateway Airport</span>
+                    <span className="text-xs font-semibold text-[#1E2A4F] truncate block">{activeModalLandmark.airport}</span>
+                  </div>
+                )}
+              </div>
+
+              {activeModalLandmark.travelTip && (
+                <div className="p-4 rounded-xl bg-[#FAF7F0] border-l-4 border-[#D4AF37] text-xs text-[#1E2A4F]/85 italic font-serif">
+                  <strong className="text-[#1E2A4F] not-italic block font-sans font-bold text-[10px] uppercase tracking-wider mb-1">
+                    Curator's Travel Note:
+                  </strong>
+                  "{activeModalLandmark.travelTip}"
+                </div>
+              )}
+            </div>
+
+            <div className="p-4 bg-[#FAF7F0] border-t border-[#EBE5D9] flex flex-wrap items-center justify-between gap-3 shrink-0">
+              <Link
+                to={activeModalLandmark.guideUrl || '/unesco-sites'}
+                className="py-2.5 px-4 rounded-xl bg-[#1E2A4F] hover:bg-[#162040] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-xs"
+              >
+                Read Dedicated Guide →
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveModalLandmark(null);
+                  setActiveStateId(activeModalLandmark.stateId);
+                }}
+                className="py-2.5 px-4 rounded-xl border border-[#D4AF37] bg-white text-[#1E2A4F] hover:bg-[#FAF7F0] text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                View {activeModalLandmark.state} Circuit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div 
-        className={`lg:hidden fixed inset-0 bg-black/40 z-[90] transition-opacity duration-500 ${activeStateId ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} 
+        className={`lg:hidden fixed inset-0 bg-black/50 z-[90] transition-opacity duration-500 ${activeStateId ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} 
         onClick={() => setActiveStateId(null)}
       />
 
-      {/* MOBILE BOTTOM SHEET */}
       <div 
         className={`lg:hidden fixed inset-x-0 bottom-0 z-[100] bg-[#FAF7F0] rounded-t-3xl shadow-[0_-20px_50px_rgba(0,0,0,0.3)] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col ${activeStateId ? 'translate-y-0' : 'translate-y-full'}`} 
         style={{ maxHeight: '85vh', minHeight: '50vh' }}
       >
-        {/* Handle bar for swipe indication */}
         <div 
           className="w-full flex justify-center pt-4 pb-2 cursor-pointer" 
           onClick={() => setActiveStateId(null)}
         >
           <div className="w-12 h-1.5 bg-[#1E2A4F]/20 rounded-full" />
         </div>
-        
-        {/* Header */}
         <div className="px-6 pb-4 border-b border-[#D4AF37]/20 flex justify-between items-center shrink-0">
           <h2 className="font-serif font-bold text-2xl text-[#1E2A4F]">
             {activeStateId ? (stateDescriptions[activeStateId]?.name || STATE_NAMES[activeStateId] || 'Selected Region') : 'Selected Region'}
           </h2>
           <button 
             onClick={() => setActiveStateId(null)} 
-            className="p-2 rounded-full bg-[#1E2A4F]/5 text-[#1E2A4F] hover:bg-[#1E2A4F]/10 transition-colors"
+            className="p-2 rounded-full bg-[#1E2A4F]/5 text-[#1E2A4F] hover:bg-[#1E2A4F]/10 transition-colors cursor-pointer"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
-        
-        {/* Scrollable Content */}
-        <div className="p-6 overflow-y-auto flex-1 overscroll-contain">
+        <div className="p-6 overflow-y-auto flex-1 overscroll-contain text-left">
           {activeStateId && (
-            <div className="mb-6 text-center text-[#1E2A4F]/80 text-[0.95rem] leading-relaxed border-b border-[#D4AF37]/10 pb-6">
+            <div className="mb-6 text-[#1E2A4F]/80 text-[0.95rem] leading-relaxed border-b border-[#D4AF37]/10 pb-6">
               {stateDescriptions[activeStateId]?.desc || 'Experience the unique culture, rich heritage, and stunning landscapes of this beautiful region.'}
             </div>
           )}
-          {activeStateId && displayedDestinations.length === 0 ? (
-            <ComingSoon />
-          ) : (
-            <DestinationsGrid dests={displayedDestinations} />
+          {stateLandmarks.length > 0 && (
+            <div className="mb-6">
+              <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-[#C4762A] block mb-3">
+                Key Pinpoint Landmarks ({stateLandmarks.length})
+              </span>
+              <div className="space-y-3">
+                {stateLandmarks.map(lm => (
+                  <div
+                    key={lm.id}
+                    onClick={() => setActiveModalLandmark(lm)}
+                    className="p-3 bg-white rounded-xl border border-[#EBE5D9] flex items-center justify-between gap-3 shadow-2xs cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <img src={lm.img} alt={lm.title} loading="lazy" decoding="async" className="w-12 h-12 rounded-lg object-cover shrink-0" />
+                      <div className="min-w-0">
+                        <h4 className="font-serif font-bold text-xs text-[#1E2A4F] truncate">{lm.title}</h4>
+                        <span className="text-[10px] text-gray-500 block truncate">{lm.categoryLabel}</span>
+                      </div>
+                    </div>
+                    <span className="text-xs text-[#D4AF37] font-bold shrink-0">Explore →</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {displayedDestinations.length > 0 && (
+            <div>
+              <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-[#1E2A4F]/70 block mb-3">
+                Regional Towns & Experiences
+              </span>
+              <DestinationsGrid dests={displayedDestinations} />
+            </div>
           )}
         </div>
       </div>
-      
     </div>
   );
 }

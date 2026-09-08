@@ -13,6 +13,8 @@ const SPIRITUAL_SITES = [
     img: '/Places/Varanasi.jpg',
     aspect: 'aspect-[3/4]',
     altitude: '80m',
+    mapX: 310,
+    mapY: 280,
     bestTime: 'October to March (Dawn Boat Journeys)',
     desc: 'Ancient stone ghats on the curve of the holy Ganga. Thousand-year-old brass lamps lifted in devotion at evening prayer as river waters reflect the fire.',
     highlights: ['Dashashwamedh Evening Aarti', 'Ancient Kashi Vishwanath Temple', 'Dawn Rowing on the Ganga', 'Sarnath Sacred Deer Park'],
@@ -28,6 +30,8 @@ const SPIRITUAL_SITES = [
     img: '/Places/Punjab.jpg',
     aspect: 'aspect-[4/5]',
     altitude: '230m',
+    mapX: 140,
+    mapY: 165,
     bestTime: 'October to March',
     desc: 'A gilded sanctum resting serenely in the center of the holy Amrit Sarovar. Four open doorways welcoming all travelers to community kitchen langar meals.',
     highlights: ['Gilded Sanctum on Water', 'Free Community Kitchen (Langar)', 'Sacred Amrit Sarovar Pool', 'Continuous Gurbani Chants'],
@@ -43,6 +47,8 @@ const SPIRITUAL_SITES = [
     img: '/Places/Tamil_Nadu.jpg',
     aspect: 'aspect-[3/4]',
     altitude: '136m',
+    mapX: 220,
+    mapY: 630,
     bestTime: 'November to February',
     desc: 'Fourteen monumental stone gopuram towers rising over Madurai with thousands of carved and painted deities, sacred musical halls, and ancient oil lamps.',
     highlights: ['14 Towering Sculpted Gopurams', 'Hall of a Thousand Pillars', 'Living Classical Temple Rituals', 'Golden Lotus Sacred Tank'],
@@ -58,6 +64,8 @@ const SPIRITUAL_SITES = [
     img: '/Chamoli.jpg',
     aspect: 'aspect-[3/4]',
     altitude: '372m',
+    mapX: 215,
+    mapY: 190,
     bestTime: 'September to April',
     desc: 'Where the emerald mountain Ganga enters the plains from the Himalayan foothills. Quiet river ashrams, evening fire prayers at Har Ki Pauri, and mountain meditation.',
     highlights: ['Har Ki Pauri Evening Aarti', 'Himalayan Yoga Ashrams', 'Triveni Ghat River Prayers', 'Gateway to the Garhwal Hills'],
@@ -73,6 +81,8 @@ const SPIRITUAL_SITES = [
     img: '/Sun_Temple.webp',
     aspect: 'aspect-[4/5]',
     altitude: '10m',
+    mapX: 375,
+    mapY: 415,
     bestTime: 'October to March',
     desc: 'One of the four cardinal Char Dham sanctuaries of India by the Bay of Bengal, celebrated for monumental stone temple vimanas and chariot heritage.',
     highlights: ['Puri Jagannath Grand Temple', 'Ananda Bazar Sacred Kitchen', 'Konark Sun Temple Coast', 'Chariot Festival Heritage'],
@@ -88,6 +98,8 @@ const SPIRITUAL_SITES = [
     img: '/Places/Ladakh.jpg',
     aspect: 'aspect-[3/4]',
     altitude: '3,500m',
+    mapX: 180,
+    mapY: 80,
     bestTime: 'May to September (Festival Season)',
     desc: 'Monasteries resting upon rocky cliff tops overlooking the Indus and Nubra valleys, preserving Sanskrit-Tibetan manuscripts, giant Buddha statues, and prayer flags.',
     highlights: ['Cliffside Thiksey Gompa', 'Maitreya Buddha at Diskit', 'Sacred Cham Mask Dances', 'Hemis Ancient Treasury'],
@@ -103,6 +115,8 @@ const SPIRITUAL_SITES = [
     img: '/Places/Rajasthan.jpg',
     aspect: 'aspect-[3/4]',
     altitude: '1,220m',
+    mapX: 110,
+    mapY: 280,
     bestTime: 'October to March',
     desc: 'White marble temples in the hills of Mount Abu with ceilings and pillars carved with such delicacy that solid stone resembles translucent lace and filigree.',
     highlights: ['Carved Marble Filigree Ceilings', 'Luna Vasahi & Vimal Vasahi', 'Mount Abu Mountain Sanctuary', 'Pillared Marble Corridors'],
@@ -131,14 +145,26 @@ export default function SpiritualHeritage() {
   return (
     <div className="w-full bg-[#FAF7F0] min-h-screen py-16 px-4 sm:px-6 font-sans">
       <div className="max-w-6xl mx-auto">
-        {/* Navigation Breadcrumb */}
-        <div className="mb-8 flex items-center gap-2 text-xs uppercase tracking-widest text-[#1E2A4F]/60">
-          <Link to="/" className="hover:text-[#1E2A4F]">Home</Link>
-          <span>/</span>
-          <span className="text-[#C4762A] font-bold">Sacred & Spiritual Heritage</span>
+        {/* Navigation Breadcrumb & Map Action */}
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#1E2A4F]/60">
+            <Link to="/" className="hover:text-[#1E2A4F]">Home</Link>
+            <span>/</span>
+            <Link to="/tourism" className="hover:text-[#1E2A4F]">Tourism</Link>
+            <span>/</span>
+            <span className="text-[#C4762A] font-bold">Spiritual Heritage</span>
+          </div>
+          <Link
+            to="/tourism"
+            className="inline-flex items-center gap-2 self-start sm:self-auto px-4 py-1.5 rounded-xl bg-white border border-[#D4AF37]/40 text-[#1E2A4F] hover:bg-[#1E2A4F] hover:text-white text-xs font-sans font-bold uppercase tracking-wider transition-colors shadow-2xs"
+          >
+            <span>🗺 Interactive State Map</span>
+            <span className="text-[#D4AF37]">→</span>
+          </Link>
         </div>
+
         {/* Hero Section */}
-        <div className="text-center mb-12 max-w-2xl mx-auto">
+        <div className="text-center mb-10 max-w-3xl mx-auto">
           <span className="text-[11px] font-sans font-bold uppercase tracking-[0.25em] text-[#C4762A] block mb-2">
             Sacred Circuits & Living Faith
           </span>
@@ -146,9 +172,34 @@ export default function SpiritualHeritage() {
             Spiritual Heritage of India
           </h1>
           <div className="w-12 h-0.5 bg-[#D4AF37] mx-auto mb-4" />
-          <p className="text-sm sm:text-base font-serif italic text-[#1E2A4F]/80 leading-relaxed">
+          <p className="text-sm sm:text-base font-serif italic text-[#1E2A4F]/80 leading-relaxed mb-6">
             Sacred river ghats, gilded waters, cliffside Buddhist gompas, and ancient temple corridors.
           </p>
+
+          {/* Minimal Thematic Guide Switcher */}
+          <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-white/70 backdrop-blur-xs rounded-2xl border border-[#D4AF37]/30 shadow-2xs max-w-fit mx-auto">
+            <Link
+              to="/unesco-sites"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              Heritage Sites
+            </Link>
+            <Link
+              to="/national-parks"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              National Parks
+            </Link>
+            <Link
+              to="/natural-wonders"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              Natural Wonders
+            </Link>
+            <span className="px-3.5 py-1.5 rounded-xl bg-[#1E2A4F] text-white text-xs font-sans font-semibold uppercase tracking-wider shadow-2xs">
+              Spiritual Heritage
+            </span>
+          </div>
         </div>
 
         {/* View Mode Toggle */}
@@ -223,10 +274,37 @@ export default function SpiritualHeritage() {
                       stroke-width: 2px !important;
                     }
                   `}</style>
-                  <IndiaSvgMap onStateClick={handleStateClick} />
+                  <IndiaSvgMap onStateClick={handleStateClick}>
+                    <g className="spiritual-pins-layer" style={{ pointerEvents: 'auto' }}>
+                      {SPIRITUAL_SITES.map((site) => {
+                        const isSelected = selectedStateId === site.stateId;
+                        return (
+                          <g
+                            key={site.id}
+                            transform={`translate(${site.mapX || 200}, ${site.mapY || 200})`}
+                            className="cursor-pointer group"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedStateId(site.stateId);
+                              setActiveModalSite(site);
+                            }}
+                          >
+                            <circle
+                              r={isSelected ? "6.5" : "5"}
+                              fill="#C2410C"
+                              stroke="#FFFFFF"
+                              strokeWidth={isSelected ? "2" : "1.6"}
+                              className="drop-shadow-md group-hover:scale-125 transition-transform duration-200"
+                            />
+                            <circle r="1.8" fill="#FFFFFF" />
+                          </g>
+                        );
+                      })}
+                    </g>
+                  </IndiaSvgMap>
                 </div>
                 <p className="text-[11px] text-[#1E2A4F]/60 mt-3 text-center">
-                  Click highlighted states on the map to view sacred pilgrimage circuits.
+                  Click highlighted states or sacred circuit pin dots to view pilgrimage sites.
                 </p>
               </div>
 
@@ -255,7 +333,7 @@ export default function SpiritualHeritage() {
                       className="p-3 bg-[#FAF7F0] hover:bg-white rounded-xl border border-[#EBE5D9] hover:border-[#D97706] transition-all cursor-pointer flex items-center justify-between gap-3 shadow-2xs"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <img src={s.img} alt={s.title} className="w-12 h-12 rounded-lg object-cover shrink-0" />
+                        <img src={s.img} alt={s.title} loading="lazy" decoding="async" className="w-12 h-12 rounded-lg object-cover shrink-0" />
                         <div className="min-w-0">
                           <h4 className="font-serif font-bold text-xs text-[#1E2A4F] truncate">{s.title}</h4>
                           <span className="text-[10px] text-gray-500 block truncate">{s.tradition} · {s.state}</span>
@@ -288,6 +366,7 @@ export default function SpiritualHeritage() {
                     alt={site.title}
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
@@ -378,6 +457,7 @@ export default function SpiritualHeritage() {
                 <img 
                   src={activeModalSite.img} 
                   alt={activeModalSite.title} 
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -467,6 +547,28 @@ export default function SpiritualHeritage() {
             </div>
           </div>
         )}
+
+        {/* Interactive Map Discovery Callout Banner */}
+        <div className="mt-16 bg-white rounded-2xl border border-[#E6DFD3] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs">
+          <div className="text-left">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#D97706] block mb-1">
+              Pilgrimage & Sacred Circuits
+            </span>
+            <h3 className="font-serif font-bold text-xl sm:text-2xl text-[#1E2A4F] mb-1.5">
+              Explore All 28 States on the Interactive Map
+            </h3>
+            <p className="text-xs sm:text-sm font-serif text-[#1E2A4F]/70 max-w-xl">
+              Discover temple towns, riverside ghats, and high altitude monasteries across every Indian state on our interactive map.
+            </p>
+          </div>
+          <Link
+            to="/tourism"
+            className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1E2A4F] text-white hover:bg-[#141D36] text-xs font-sans font-bold uppercase tracking-widest transition-all shadow-sm hover:shadow-md cursor-pointer"
+          >
+            <span>Open Interactive Map</span>
+            <span className="text-[#D4AF37]">→</span>
+          </Link>
+        </div>
 
       </div>
     </div>

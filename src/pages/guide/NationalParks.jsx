@@ -248,15 +248,26 @@ export default function NationalParks() {
   return (
     <div className="w-full bg-[#FAF7F0] min-h-screen py-16 px-4 sm:px-6 font-sans">
       <div className="max-w-6xl mx-auto">
-        {/* Navigation Breadcrumb */}
-        <div className="mb-8 flex items-center gap-2 text-xs uppercase tracking-widest text-[#1E2A4F]/60">
-          <Link to="/" className="hover:text-[#1E2A4F]">Home</Link>
-          <span>/</span>
-          <span className="text-[#C4762A] font-bold">National Parks & Wild Sanctuaries</span>
+        {/* Navigation Breadcrumb & Map Action */}
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#1E2A4F]/60">
+            <Link to="/" className="hover:text-[#1E2A4F]">Home</Link>
+            <span>/</span>
+            <Link to="/tourism" className="hover:text-[#1E2A4F]">Tourism</Link>
+            <span>/</span>
+            <span className="text-[#2E7D32] font-bold">National Parks & Wilds</span>
+          </div>
+          <Link
+            to="/tourism"
+            className="inline-flex items-center gap-2 self-start sm:self-auto px-4 py-1.5 rounded-xl bg-white border border-[#2E7D32]/40 text-[#1E2A4F] hover:bg-[#1E2A4F] hover:text-white text-xs font-sans font-bold uppercase tracking-wider transition-colors shadow-2xs"
+          >
+            <span>🗺 Interactive State Map</span>
+            <span className="text-[#D4AF37]">→</span>
+          </Link>
         </div>
 
         {/* Hero Section */}
-        <div className="text-center mb-12 max-w-2xl mx-auto">
+        <div className="text-center mb-10 max-w-3xl mx-auto">
           <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-[#2E7D32] mb-2 block">
             Protected Sanctuaries
           </span>
@@ -264,9 +275,34 @@ export default function NationalParks() {
             National Parks of India
           </h1>
           <div className="w-12 h-0.5 bg-[#2E7D32] mx-auto mb-4" />
-          <p className="text-sm sm:text-base font-serif italic text-[#1E2A4F]/80 leading-relaxed">
+          <p className="text-sm sm:text-base font-serif italic text-[#1E2A4F]/80 leading-relaxed mb-6">
             From the quiet gaze of the tiger in ancient banyans to lions of Gir, elephant river trails, and high snow leopard passes.
           </p>
+
+          {/* Minimal Thematic Guide Switcher */}
+          <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-white/70 backdrop-blur-xs rounded-2xl border border-[#D4AF37]/30 shadow-2xs max-w-fit mx-auto">
+            <Link
+              to="/unesco-sites"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              Heritage Sites
+            </Link>
+            <span className="px-3.5 py-1.5 rounded-xl bg-[#1E2A4F] text-white text-xs font-sans font-semibold uppercase tracking-wider shadow-2xs">
+              National Parks
+            </span>
+            <Link
+              to="/natural-wonders"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              Natural Wonders
+            </Link>
+            <Link
+              to="/spiritual-heritage"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              Spiritual Heritage
+            </Link>
+          </div>
         </div>
 
         {/* View Switcher & Filters */}
@@ -362,34 +398,22 @@ export default function NationalParks() {
                             onMouseEnter={() => setHoveredPinPark(park)}
                             onMouseLeave={() => setHoveredPinPark(null)}
                           >
-                            {/* Pulse radar ring for active / all pins */}
-                            {isHighlighted && (
-                              <circle
-                                cx={park.mapX}
-                                cy={park.mapY}
-                                r={isHovered ? 14 : 9}
-                                fill="#2E7D32"
-                                opacity="0.3"
-                                className="animate-pulse"
-                              />
-                            )}
-
                             {/* Outer dot ring */}
                             <circle
                               cx={park.mapX}
                               cy={park.mapY}
-                              r={isHovered ? 8 : 5.5}
+                              r={isHovered ? 7 : 5}
                               fill={isHighlighted ? '#2E7D32' : '#8D9B87'}
                               stroke="#FFFFFF"
-                              strokeWidth={isHovered ? 2.5 : 1.5}
-                              className="transition-all duration-200"
+                              strokeWidth={isHovered ? 2 : 1.5}
+                              className="drop-shadow-md transition-all duration-200"
                             />
 
                             {/* Inner dot center */}
                             <circle
                               cx={park.mapX}
                               cy={park.mapY}
-                              r={isHovered ? 3.5 : 2}
+                              r={isHovered ? 3 : 1.8}
                               fill={isHovered ? '#D4AF37' : '#FFFFFF'}
                               className="transition-all duration-200"
                             />
@@ -455,7 +479,7 @@ export default function NationalParks() {
                       className="p-3 bg-[#FAF7F0] hover:bg-white rounded-xl border border-[#EBE5D9] hover:border-[#2E7D32] transition-all cursor-pointer flex items-center justify-between gap-3 shadow-2xs"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <img src={p.img} alt={p.title} className="w-12 h-12 rounded-lg object-cover shrink-0" />
+                        <img src={p.img} alt={p.title} loading="lazy" decoding="async" className="w-12 h-12 rounded-lg object-cover shrink-0" />
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5 mb-0.5">
                             <span className="text-[9px] px-1.5 py-0.2 rounded-sm bg-[#2E7D32]/15 text-[#2E7D32] font-bold">
@@ -493,6 +517,7 @@ export default function NationalParks() {
                     alt={park.title}
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
@@ -676,6 +701,28 @@ export default function NationalParks() {
             </div>
           </div>
         )}
+
+        {/* Interactive Map Discovery Callout Banner */}
+        <div className="mt-16 bg-white rounded-2xl border border-[#E6DFD3] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs">
+          <div className="text-left">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#2E7D32] block mb-1">
+              Protected Reserves & Habitats
+            </span>
+            <h3 className="font-serif font-bold text-xl sm:text-2xl text-[#1E2A4F] mb-1.5">
+              Explore All 28 States on the Interactive Map
+            </h3>
+            <p className="text-xs sm:text-sm font-serif text-[#1E2A4F]/70 max-w-xl">
+              Locate tiger reserves, elephant corridors, and pristine bird sanctuaries across India with live route details.
+            </p>
+          </div>
+          <Link
+            to="/tourism"
+            className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1E2A4F] text-white hover:bg-[#141D36] text-xs font-sans font-bold uppercase tracking-widest transition-all shadow-sm hover:shadow-md cursor-pointer"
+          >
+            <span>Open Interactive Map</span>
+            <span className="text-[#D4AF37]">→</span>
+          </Link>
+        </div>
 
       </div>
     </div>

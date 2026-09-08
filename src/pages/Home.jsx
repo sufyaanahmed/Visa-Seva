@@ -58,7 +58,7 @@ function shouldRevealHero() {
 function TigerIllustration({ className = '' }) {
   return (
     <div className={`overflow-hidden rounded-xl shadow-md ${className}`}>
-      <img src="/Kanha.jpg" alt="Royal Bengal Tiger" className="w-full h-auto" />
+      <img src="/Kanha.jpg" alt="Royal Bengal Tiger" loading="lazy" decoding="async" className="w-full h-auto" />
     </div>
   );
 }
@@ -67,7 +67,7 @@ function TigerIllustration({ className = '' }) {
 function PeacockIllustration({ className = '' }) {
   return (
     <div className={`overflow-hidden rounded-xl shadow-md ${className}`}>
-      <img src="/peacock.jpg" alt="Peacock" className="w-full h-auto" />
+      <img src="/peacock.jpg" alt="Peacock" loading="lazy" decoding="async" className="w-full h-auto" />
     </div>
   );
 }
@@ -76,7 +76,7 @@ function PeacockIllustration({ className = '' }) {
 function ElephantIllustration({ className = '' }) {
   return (
     <div className={`overflow-hidden rounded-xl shadow-md ${className}`}>
-      <img src="/Periyar_Elephants.avif" alt="Elephant" className="w-full h-auto" />
+      <img src="/Periyar_Elephants.avif" alt="Elephant" loading="lazy" decoding="async" className="w-full h-auto" />
     </div>
   );
 }
@@ -203,8 +203,8 @@ export default function Home() {
             }}
           >
             <g className="hero-chakra-rotor">
-              <circle className="hero-chakra-ring hero-chakra-ring-outer" cx="200" cy="200" r="185" fill="none" stroke="currentColor" strokeWidth="12" pathLength="1" transform="rotate(-35 200 200)" />
-              <circle className="hero-chakra-ring hero-chakra-ring-inner" cx="200" cy="200" r="172" fill="none" stroke="currentColor" strokeWidth="3" pathLength="1" transform="rotate(-35 200 200)" />
+              <circle className="hero-chakra-ring hero-chakra-ring-outer" cx="200" cy="200" r="185" fill="none" stroke="currentColor" strokeWidth="12" strokeLinecap="round" pathLength="1" transform="rotate(-35 200 200)" />
+              <circle className="hero-chakra-ring hero-chakra-ring-inner" cx="200" cy="200" r="172" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" pathLength="1" transform="rotate(-35 200 200)" />
 
               {Array.from({ length: 24 }, (_, i) => (
                 <g key={`spoke-${i}`} transform={`rotate(${i * 15} 200 200)`}>
@@ -339,14 +339,18 @@ export default function Home() {
                 <span className="hidden sm:inline opacity-60 font-bold mr-1">Direct Routes:</span>
                 <Link to="/flow/voa" className="hover:text-[#D4AF37] transition-colors flex items-center gap-1.5">
                   <div className="flex gap-1">
-                    <img src="https://flagcdn.com/w40/jp.png" className="w-4 rounded-sm opacity-90" alt="Japan"/>
-                    <img src="https://flagcdn.com/w40/kr.png" className="w-4 rounded-sm opacity-90" alt="South Korea"/>
-                    <img src="https://flagcdn.com/w40/ae.png" className="w-4 rounded-sm opacity-90" alt="UAE"/>
+                    <img src="https://flagcdn.com/w40/jp.png" loading="lazy" decoding="async" className="w-4 rounded-sm opacity-90" alt="Japan"/>
+                    <img src="https://flagcdn.com/w40/kr.png" loading="lazy" decoding="async" className="w-4 rounded-sm opacity-90" alt="South Korea"/>
+                    <img src="https://flagcdn.com/w40/ae.png" loading="lazy" decoding="async" className="w-4 rounded-sm opacity-90" alt="UAE"/>
                   </div>
                   On Arrival
                 </Link>
                 <span className="opacity-30">·</span>
-                <Link to="/flow/afghan" className="hover:text-[#D4AF37] transition-colors flex items-center gap-1.5"><img src="https://flagcdn.com/w20/af.png" className="w-4 rounded-sm opacity-90" alt=""/> Afghan</Link>
+                <Link to="/flow/afghan" className="hover:text-[#D4AF37] transition-colors flex items-center gap-1.5"><img src="https://flagcdn.com/w20/af.png" loading="lazy" decoding="async" className="w-4 rounded-sm opacity-90" alt=""/> Afghan</Link>
+                <span className="opacity-30">·</span>
+                <Link to="/guide/oci" className="hover:text-[#D4AF37] text-[#D4AF37]/90 transition-colors flex items-center gap-1.5">
+                  <span className="font-serif italic text-xs">Diaspora:</span> OCI Card
+                </Link>
               </div>
             </div>
           </div>
@@ -419,6 +423,49 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── DEDICATED DIASPORA & OCI REGISTRATION SECTION ── */}
+      <section className="bg-[#FAF7F0] py-20 px-6 relative z-20 border-b border-[#EBE5D9]">
+        <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-[#E6DFD3] shadow-sm p-8 sm:p-12 relative overflow-hidden">
+          {/* Subtle Top Tricolor Line */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF9933] via-white to-[#138808]" />
+          
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+            <div className="max-w-2xl text-left">
+              <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-[#C4762A] mb-2 block">
+                Indian Diaspora & Lineage
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#1E2A4F] mb-3 leading-snug">
+                Overseas Citizen of India (OCI) Registration
+              </h2>
+              <p className="text-sm font-serif text-[#1E2A4F]/75 leading-relaxed mb-4">
+                Former Indian citizens, children and grandchildren of Indian nationals, and foreign spouses are eligible for lifetime multi-purpose, visa-free travel to India with parity in economic and property rights.
+              </p>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-sans text-[#1E2A4F]/65">
+                <span className="flex items-center gap-1.5 font-medium">✓ Lifelong Visa-Free Entry</span>
+                <span className="flex items-center gap-1.5 font-medium">✓ No Police / FRRO Registration</span>
+                <span className="flex items-center gap-1.5 font-medium">✓ Full Economic & Financial Parity</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row lg:flex-col shrink-0 gap-3 w-full sm:w-auto">
+              <Link
+                to="/guide/oci"
+                className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#1E2A4F] text-white hover:bg-[#141D36] text-xs font-sans font-bold uppercase tracking-widest transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer text-center"
+              >
+                <span>Check OCI Eligibility</span>
+                <span className="text-[#D4AF37]">→</span>
+              </Link>
+              <Link
+                to="/apply?route=oci"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-[#D4AF37]/50 bg-[#FAF7F0] hover:bg-white text-[#1E2A4F] text-xs font-sans font-semibold uppercase tracking-wider transition-colors text-center"
+              >
+                <span>Start OCI Application</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── 3 THEMATIC CULTURAL & TRAVEL EXPLORATIONS ── */}
       <section className="bg-[#FAF7F0] py-28 px-6 relative z-20 border-t border-[#EBE5D9]">
         <div className="max-w-6xl mx-auto">
@@ -447,6 +494,8 @@ export default function Home() {
                 <img 
                   src="/Taj_Mahal.jpg" 
                   alt="UNESCO World Heritage Sites" 
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" 
                 />
               </div>
@@ -478,6 +527,8 @@ export default function Home() {
                 <img 
                   src="/Tiger1.jpg" 
                   alt="National Parks and Wildlife" 
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" 
                 />
               </div>
@@ -509,6 +560,8 @@ export default function Home() {
                 <img 
                   src="/Himalaya.jpg" 
                   alt="Natural Wonders, Backwaters and Mountains" 
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" 
                 />
               </div>
