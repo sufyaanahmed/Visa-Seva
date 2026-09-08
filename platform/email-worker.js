@@ -14,6 +14,22 @@ export async function deliverEmails(
   const messages = unwrap(await db.rpc("claim_platform_emails"));
   for (const message of messages) {
     try {
+      const subject = message.subject.toLowerCase();
+      
+      let payload = {
+        from,
+        to: [message.recipient],
+        subject: message.subject,
+      };
+
+      if (subject.includes("waiting for information")) {
+        // Use the Resend template for this specific email type
+        payload.template_id = "visa-application-continue";
+      } else {
+        // Fallback to plain text for emails that don't have templates yet
+        payload.text = `${message.body}\n\nView your application securely: ${config.publicUrl}/applications/${message.application_id}`;
+      }
+
       const response = await fetcher("https://api.resend.com/emails", {
         method: "POST",
         signal: AbortSignal.timeout(15000),
@@ -22,12 +38,7 @@ export async function deliverEmails(
           "Content-Type": "application/json",
           "Idempotency-Key": `visa-notification-${message.id}`,
         },
-        body: JSON.stringify({
-          from,
-          to: [message.recipient],
-          subject: message.subject,
-          text: `${message.body}\n\nView your application securely: ${config.publicUrl}/applications/${message.application_id}`,
-        }),
+        body: JSON.stringify(payload),
       });
       if (!response.ok)
         throw new Error(`Email provider returned ${response.status}`);
