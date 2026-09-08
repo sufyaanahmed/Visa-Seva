@@ -125,7 +125,7 @@ export function createApp(db, config) {
       ),
     ),
   );
-  installAssistant(app);
+  installAssistant(app, { db });
   app.use("/api/platform", human);
   app.get("/api/platform/me", async (req, res) =>
     res.json({ id: req.actor.id, role: await service.role(req.actor) }),

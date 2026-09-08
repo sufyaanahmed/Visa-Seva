@@ -1,3 +1,5 @@
+import { createClient } from "@supabase/supabase-js";
+import { createBudgetFetch, MAX_OUTPUT_TOKENS } from "./budget.js";
 import { ChatOpenAI } from "@langchain/openai";
 import {
   SystemMessage,
@@ -27,7 +29,7 @@ export function normalizeAssistantText(value) {
     .trim();
 }
 
-export function createAzureModel(env = process.env) {
+export function createAzureModel(env = process.env, { db } = {}) {
   if (
     !env.AZURE_OPENAI_API_KEY ||
     !env.AZURE_OPENAI_ENDPOINT ||
@@ -60,10 +62,16 @@ export function createAzureModel(env = process.env) {
     configuration: {
       baseURL: `${endpoint.origin}/openai/v1/`,
       defaultHeaders: { "api-key": env.AZURE_OPENAI_API_KEY },
+      fetch: createBudgetFetch(
+        db ||
+          createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+            auth: { persistSession: false },
+          }),
+      ),
     },
-    maxCompletionTokens: 1800,
+    maxCompletionTokens: MAX_OUTPUT_TOKENS,
     timeout: 25000,
-    maxRetries: 1,
+    maxRetries: 0,
   });
 }
 
@@ -99,9 +107,9 @@ export function createVisaGraph(model) {
 
 export async function runVisaAssistant(
   { messages, context },
-  { model, signal, onEvent = () => {} } = {},
+  { model, db, signal, onEvent = () => {} } = {},
 ) {
-  const graph = createVisaGraph(model || createAzureModel());
+  const graph = createVisaGraph(model || createAzureModel(process.env, { db }));
   const sources = new Map();
   const toolsUsed = new Set();
   const actions = new Map();
