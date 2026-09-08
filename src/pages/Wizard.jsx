@@ -184,7 +184,11 @@ function WizardForm() {
 
         if (platformEnabled && typeof File !== 'undefined') {
           try {
-            const dummyContent = new Uint8Array([0x25, 0x50, 0x44, 0x46]);
+            const pdfBytes = new Uint8Array([0x25, 0x50, 0x44, 0x46]);
+            // A minimal valid 1x1 square JPEG
+            const jpegBase64 = "/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=";
+            const jpegBytes = new Uint8Array(atob(jpegBase64).split('').map(c => c.charCodeAt(0)));
+            const dummyContent = isImage ? jpegBytes : pdfBytes;
             const mockFile = new File([dummyContent], `sample_${req.type}.${ext}`, { type: mime });
             selectedFiles.set(req.type, mockFile);
           } catch {

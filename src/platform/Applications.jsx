@@ -27,6 +27,175 @@ export const labels = {
 export const Badge = ({ value }) => (
   <span className={`platform-badge ${value}`}>{labels[value] || value}</span>
 );
+
+// --- Beautiful UI Components ---
+function MandalaCorner({ className = '' }) {
+  return (
+    <svg viewBox="0 0 60 60" className={`w-7 h-7 ${className}`} fill="none">
+      <path d="M2 2 L35 2 Q2 2 2 35 Z" fill="#D4AF37" fillOpacity="0.15" stroke="#D4AF37" strokeWidth="1" />
+      <path d="M2 2 L22 2 Q2 2 2 22 Z" fill="#1E2A4F" fillOpacity="0.1" />
+      <circle cx="10" cy="10" r="4" fill="#D4AF37" fillOpacity="0.5" />
+      <path d="M2 18 Q18 18 18 2" stroke="#D4AF37" strokeWidth="0.75" fill="none" />
+      <path d="M2 28 Q28 28 28 2" stroke="#1E2A4F" strokeWidth="0.75" strokeDasharray="1.5 1.5" fill="none" />
+    </svg>
+  );
+}
+
+function AshokaChakraWatermark() {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] overflow-hidden">
+      <svg viewBox="0 0 200 200" className="w-64 h-64 text-[#1E2A4F]">
+        <circle cx="100" cy="100" r="92" fill="none" stroke="currentColor" strokeWidth="4" />
+        <circle cx="100" cy="100" r="85" fill="none" stroke="currentColor" strokeWidth="1" />
+        <circle cx="100" cy="100" r="16" fill="none" stroke="currentColor" strokeWidth="4" />
+        <circle cx="100" cy="100" r="7" fill="currentColor" />
+        {[...Array(24)].map((_, i) => (
+          <line
+            key={i}
+            x1="100" y1="100" x2="100" y2="15"
+            stroke="currentColor" strokeWidth="1.5"
+            transform={`rotate(${i * 15} 100 100)`}
+          />
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+const AcceptedCard = ({ app }) => {
+  const applicantName = [app.answers.given_name, app.answers.surname].filter(Boolean).join(' ') || 'Not provided';
+  const visaCategory = app.answers.visa_category || 'e-Visa';
+  
+  return (
+    <div className="relative overflow-hidden bg-gradient-to-br from-[#1E2A4F] to-[#0d152b] rounded-xl border border-[#D4AF37]/40 shadow-xl p-6 text-white max-w-lg mx-auto transform transition hover:scale-[1.01]">
+      <div className="absolute -right-16 -top-16 opacity-10 pointer-events-none">
+         <svg viewBox="0 0 200 200" className="w-64 h-64 text-white"><circle cx="100" cy="100" r="92" fill="none" stroke="currentColor" strokeWidth="4" /><circle cx="100" cy="100" r="16" fill="none" stroke="currentColor" strokeWidth="4" />{[...Array(24)].map((_, i) => (<line key={i} x1="100" y1="100" x2="100" y2="15" stroke="currentColor" strokeWidth="1.5" transform={`rotate(${i * 15} 100 100)`} />))}</svg>
+      </div>
+      
+      <div className="flex justify-between items-start mb-6 border-b border-[#D4AF37]/20 pb-4 relative z-10">
+        <div className="flex items-center gap-3">
+          <img src="/emblem.svg" alt="Emblem" className="w-10 h-10 opacity-90" style={{ filter: 'brightness(0) invert(1)' }} />
+          <div>
+            <h3 className="font-serif font-bold text-[#D4AF37] uppercase tracking-widest text-[10px]">Republic of India</h3>
+            <h2 className="font-sans font-semibold text-lg tracking-wide">{visaCategory}</h2>
+          </div>
+        </div>
+        <div className="bg-[#176B45] text-white px-3 py-1 rounded text-xs font-bold shadow-sm uppercase tracking-wider">
+          {app.status === 'accepted' ? 'GRANTED' : app.status}
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-2 gap-4 relative z-10 text-sm">
+        <div>
+          <p className="text-gray-400 text-[10px] uppercase font-semibold">Applicant Name</p>
+          <p className="font-medium text-white uppercase">{applicantName}</p>
+        </div>
+        <div>
+          <p className="text-gray-400 text-[10px] uppercase font-semibold">Reference ID</p>
+          <p className="font-mono font-bold text-[#D4AF37] uppercase">{app.reference}</p>
+        </div>
+        <div>
+          <p className="text-gray-400 text-[10px] uppercase font-semibold">Nationality</p>
+          <p className="font-medium text-white uppercase">{app.answers.nationality || 'Not provided'}</p>
+        </div>
+        <div>
+          <p className="text-gray-400 text-[10px] uppercase font-semibold">Updated At</p>
+          <p className="font-medium text-white">{new Date(app.updated_at).toLocaleDateString()}</p>
+        </div>
+      </div>
+      
+      <div className="mt-6 pt-4 border-t border-[#D4AF37]/20 flex justify-between items-end relative z-10">
+        <p className="text-[9px] text-gray-400 max-w-[250px] leading-relaxed">
+          Present this authorized document along with your passport at the immigration checkpoint upon arrival.
+        </p>
+        <button className="bg-[#D4AF37] hover:bg-[#C9933A] text-[#1E2A4F] px-4 py-1.5 rounded text-xs font-bold transition focus:ring-2 focus:ring-white">
+          Download ETA
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const RejectedCard = ({ app }) => {
+  const rejectedHistory = [...(app.history || [])].reverse().find(h => h.to_status === 'rejected');
+  const reason = rejectedHistory?.reason || 'Your application did not meet the necessary requirements.';
+
+  return (
+    <div className="relative overflow-hidden bg-white rounded-xl border border-red-200 shadow-md p-6 max-w-lg mx-auto">
+      <div className="flex justify-between items-start mb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-red-50 text-red-600 flex items-center justify-center">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </div>
+          <div>
+            <h3 className="font-serif font-bold text-gray-900 text-lg">Application Declined</h3>
+            <p className="text-xs text-gray-500 font-mono uppercase">{app.reference}</p>
+          </div>
+        </div>
+        <div className="border border-red-600 text-red-600 px-2.5 py-0.5 rounded text-[10px] font-bold uppercase">
+          {app.status}
+        </div>
+      </div>
+      <div className="bg-red-50/50 border-l-2 border-red-500 p-3 text-sm text-red-900 mb-4 rounded-r">
+        <strong>Reason provided by Consular Officer:</strong>
+        <p className="mt-1 opacity-90 text-xs">{reason}</p>
+      </div>
+      <div className="text-xs text-gray-600 flex justify-between items-center">
+        <p>Please review guidelines and apply again with valid documents.</p>
+        <Link to="/guide/visa-finder" className="text-[#1E2A4F] font-bold underline hover:text-blue-800">Start New Application</Link>
+      </div>
+    </div>
+  );
+};
+
+const ReviewCard = ({ app }) => {
+  const isPaid = app.payment_status === 'paid';
+
+  return (
+    <div className="relative overflow-hidden bg-[#FAF7F0] rounded-xl border border-[#D4AF37]/30 shadow-md p-6 max-w-lg mx-auto">
+      <MandalaCorner className="absolute top-0 left-0" />
+      <MandalaCorner className="absolute bottom-0 right-0 transform rotate-180" />
+      <AshokaChakraWatermark />
+      
+      <div className="relative z-10 flex flex-col items-center text-center">
+        <div className="w-12 h-12 rounded-full border-2 border-[#D4AF37] bg-white flex items-center justify-center mb-3 shadow-sm">
+          <svg className="w-6 h-6 text-[#1E2A4F] animate-[spin_4s_linear_infinite]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </div>
+        <div className="bg-[#1E2A4F]/10 text-[#1E2A4F] px-2 py-0.5 rounded text-[10px] font-bold uppercase mb-2">
+          {app.status.replace(/_/g, ' ')}
+        </div>
+        <h3 className="font-serif font-bold text-gray-900 text-lg mb-1">Dossier Processing</h3>
+        <p className="text-xs text-gray-600 max-w-xs mx-auto mb-5">
+          Your application <span className="font-mono font-semibold uppercase">{app.reference}</span> has been successfully submitted and is currently under consular evaluation.
+        </p>
+        
+        <div className="w-full bg-white border border-[#D4AF37]/40 shadow-xs rounded p-4 text-left">
+          <div className="flex justify-between items-center text-xs mb-3">
+            <span className="text-gray-500 uppercase font-bold text-[10px] tracking-wider">Payment Status</span>
+            {isPaid ? (
+              <span className="text-[#176B45] font-bold flex items-center gap-1.5">
+                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+                Fee Received
+              </span>
+            ) : (
+              <span className="text-[#C4762A] font-bold">Unpaid</span>
+            )}
+          </div>
+          <div className="w-full bg-[#E6DFD3] rounded-full h-1.5 overflow-hidden">
+            <div className="bg-gradient-to-r from-[#D4AF37] to-[#1E2A4F] h-1.5 w-2/3 animate-pulse"></div>
+          </div>
+          <div className="flex justify-between items-center mt-3">
+            <span className="text-[10px] text-gray-500">Processing Step 2 of 3</span>
+            <span className="text-[10px] font-semibold text-[#C4762A]">Estimated: 48-72 hours</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+// ------------------------------
 export async function signOut() {
   selectedFiles.clear();
   sessionStorage.removeItem("bharat-visa-session-draft-v3");
@@ -34,42 +203,59 @@ export async function signOut() {
   window.location.assign("/");
 }
 export function Details({ application }) {
-  const fields = getSteps(
+  const steps = getSteps(
     application.answers.application_type,
     application.answers,
-  )
-    .flatMap((s) => s.fields || [])
-    .filter((f) => !f.visible || f.visible(application.answers));
+  );
+
   return (
-    <dl className="platform-details">
-      {fields.map((f) => (
-        <div key={f.name}>
-          <dt>{f.label}</dt>
-          <dd>
-            {typeof application.answers[f.name] === "boolean"
-              ? application.answers[f.name]
-                ? "Yes"
-                : "No"
-              : String(application.answers[f.name] || "Not provided")}
-          </dd>
-        </div>
-      ))}
-    </dl>
+    <div className="flex flex-col gap-6 w-full max-w-4xl">
+      {steps.map((step, idx) => {
+        const fields = (step.fields || []).filter((f) => !f.visible || f.visible(application.answers));
+        if (fields.length === 0) return null;
+        
+        return (
+          <div key={step.name || idx} className="bg-white rounded-xl border border-[#E6DFD3] shadow-sm overflow-hidden">
+            <div className="bg-[#FAF7F0] border-b border-[#E6DFD3] px-5 py-3">
+              <h3 className="font-serif font-bold text-[#1E2A4F] text-[1.05rem]">{step.title || step.name}</h3>
+            </div>
+            <div className="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
+              {fields.map((f) => (
+                <div key={f.name} className="flex flex-col">
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-gray-500 mb-1">{f.label}</span>
+                  <span className="font-medium text-gray-900 text-[0.95rem]">
+                    {typeof application.answers[f.name] === "boolean"
+                      ? application.answers[f.name] ? "Yes" : "No"
+                      : String(application.answers[f.name] || "—")}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 }
+
 export function History({ items }) {
   return (
-    <ol className="platform-history">
+    <div className="relative border-l-2 border-[#D4AF37]/30 ml-4 space-y-6 max-w-2xl">
       {items.map((h) => (
-        <li key={h.id}>
-          <strong>{labels[h.to_status]}</strong>
-          <p>{h.reason}</p>
-          <time dateTime={h.created_at}>
+        <div key={h.id} className="relative pl-6">
+          <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-white border-2 border-[#D4AF37]"></div>
+          <strong className="block font-sans text-sm uppercase tracking-wider text-[#1E2A4F] mb-1">{labels[h.to_status]}</strong>
+          <time dateTime={h.created_at} className="block text-xs text-gray-500 mb-2">
             {new Date(h.created_at).toLocaleString()}
           </time>
-        </li>
+          {h.reason && (
+            <p className="bg-[#FAF7F0] p-3 rounded-lg text-sm text-gray-700 border border-[#E6DFD3] shadow-sm">
+              {h.reason}
+            </p>
+          )}
+        </div>
       ))}
-    </ol>
+    </div>
   );
 }
 function ApplicationList() {
@@ -278,15 +464,24 @@ function ApplicationView() {
     Date.parse(app.confirmed_at) > Date.now() - 86400000;
   return (
     <div className="platform-page">
-      <Link className="platform-link" to="/applications">
+      <Link className="platform-link mb-4 inline-block" to="/applications">
         ← My applications
       </Link>
-      <div className="platform-toolbar">
-        <div>
-          <p className="platform-kicker mt-6">{app.reference}</p>
-          <h1>Your application</h1>
-        </div>
-        <Badge value={app.status} />
+      
+      <div className="mb-10">
+        {app.status === 'accepted' && <AcceptedCard app={app} />}
+        {app.status === 'rejected' && <RejectedCard app={app} />}
+        {['submitted', 'under_review', 'processing', 'pending'].includes(app.status) && <ReviewCard app={app} />}
+        
+        {!['accepted', 'rejected', 'submitted', 'under_review', 'processing', 'pending'].includes(app.status) && (
+          <div className="flex justify-between items-center bg-white p-6 rounded-xl border border-[#E6DFD3] shadow-sm max-w-4xl">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#C4762A] mb-1">{app.reference}</p>
+              <h1 className="font-serif text-2xl text-[#1E2A4F] font-bold m-0">Your Application</h1>
+            </div>
+            <Badge value={app.status} />
+          </div>
+        )}
       </div>
       <div className="platform-card">
         <div className="platform-toolbar">
@@ -328,34 +523,37 @@ function ApplicationView() {
           ))}
         </ul>
       )}
-      <section className="platform-card">
-        <h2>Applicant details</h2>
+      <section className="mt-8">
+        <h2 className="text-xl font-serif font-bold text-[#1E2A4F] mb-6">Applicant details</h2>
         <Details application={app} />
       </section>
-      <section className="platform-card">
-        <h2>Documents</h2>
+
+      <section className="mt-12">
+        <h2 className="text-xl font-serif font-bold text-[#1E2A4F] mb-4">Documents</h2>
         {app.documents.length ? (
-          app.documents.map((d) => (
-            <div className="platform-toolbar" key={d.id}>
-              <span>{d.type.replaceAll("_", " ")}</span>
-              <button
-                className="platform-secondary"
-                disabled={busy}
-                onClick={() =>
-                  action(async () => {
-                    const r = await api(
-                      `/applications/${id}/documents/${d.id}`,
-                    );
-                    window.location.assign(r.signedUrl);
-                  })
-                }
-              >
-                Download
-              </button>
-            </div>
-          ))
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl">
+            {app.documents.map((d) => (
+              <div key={d.id} className="flex items-center justify-between bg-white p-4 rounded-xl border border-[#E6DFD3] shadow-sm">
+                <span className="font-medium text-gray-800 capitalize">{d.type.replaceAll("_", " ")}</span>
+                <button
+                  className="bg-[#FAF7F0] hover:bg-[#E6DFD3] text-[#1E2A4F] px-4 py-1.5 rounded text-xs font-bold transition focus:ring-2 focus:ring-[#D4AF37]"
+                  disabled={busy}
+                  onClick={() =>
+                    action(async () => {
+                      const r = await api(
+                        `/applications/${id}/documents/${d.id}`,
+                      );
+                      window.location.assign(r.signedUrl);
+                    })
+                  }
+                >
+                  Download
+                </button>
+              </div>
+            ))}
+          </div>
         ) : (
-          <p>No documents uploaded.</p>
+          <p className="text-gray-500 text-sm">No documents uploaded.</p>
         )}
       </section>
       {editable && (
@@ -441,8 +639,8 @@ function ApplicationView() {
         </section>
       )}
       {app.history.length > 0 && (
-        <section className="platform-card">
-          <h2>Application history</h2>
+        <section className="mt-12 mb-8">
+          <h2 className="text-xl font-serif font-bold text-[#1E2A4F] mb-6">Application history</h2>
           <History items={app.history} />
         </section>
       )}
