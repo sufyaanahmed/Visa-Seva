@@ -63,4 +63,4 @@ export function applicationFromFinder(state, answers, result) {
   };
 }
 
-export const flowPath = (type) => ({ evisa: '/flow/normal', regular: '/flow/regular', afghan: '/flow/afghan', voa: '/flow/voa' }[type] || '/guide/visa-finder');
+export const flowPath = (type) => ({ evisa: '/flow/normal', regular: '/flow/regular', afghan: '/flow/afghan', voa: '/flow/voa', oci: '/guide/oci' }[type] || '/guide/visa-finder');

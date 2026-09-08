@@ -13,7 +13,10 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Delhi (DEL) or Agra (AGR)',
     img: '/Taj_Mahal.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '171m',
+    mapX: 215,
+    mapY: 245,
     bestTime: 'October to March (Dawn and Full Moon nights)',
     desc: 'Luminous white Makrana marble rising by the sacred Yamuna. Built in memory of Mumtaz Mahal, where Persian symmetry meets fine Indian gemstone inlays.',
     highlights: ['Makrana White Marble', 'Pietra Dura Gem Inlay', 'Yamuna River Reflection', 'Charbagh Symmetry'],
@@ -29,7 +32,10 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Hubballi (HBX) or Bengaluru (BLR)',
     img: '/Hampi.avif',
+    aspect: 'aspect-[16/10]',
     altitude: '467m',
+    mapX: 185,
+    mapY: 495,
     bestTime: 'November to February',
     desc: 'Ancient stone city carved amidst wild granite boulders. Monolithic temple chariots and musical pillars standing quietly beside the Tungabhadra River.',
     highlights: ['Monolithic Stone Chariot', 'Musical Pillars of Vittala', 'Granite Boulder Hills', 'Tungabhadra River Temples'],
@@ -45,7 +51,10 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Aurangabad (IXU) or Mumbai (BOM)',
     img: '/Ellora_Caves.avif',
+    aspect: 'aspect-[16/10]',
     altitude: '570m',
+    mapX: 160,
+    mapY: 390,
     bestTime: 'October to March',
     desc: 'Thirty-four sanctuaries hewn directly into vertical basalt cliffs. Crowned by Kailasa, the largest single rock excavation on earth, carved top to bottom from a single cliff.',
     highlights: ['Monolithic Kailasa Cave 16', '34 Rock-Cut Sanctuaries', 'Basalt Cliff Architecture', 'Monsoon Mountain Streams'],
@@ -61,7 +70,10 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Aurangabad (IXU) or Jalgaon (JAG)',
     img: '/Ajanta_Caves.avif',
+    aspect: 'aspect-[16/10]',
     altitude: '495m',
+    mapX: 175,
+    mapY: 375,
     bestTime: 'September to March',
     desc: 'Thirty rock caves following the horseshoe curve of the Waghora River gorge. Renowned for ancient tempera frescoes painted in quiet lantern light two thousand years ago.',
     highlights: ['Ancient Fresco Murals', 'Horseshoe River Gorge', 'Chaitya Prayer Stupas', 'Bodhisattva Padmapani'],
@@ -77,7 +89,10 @@ const UNESCO_SITES = [
     category: 'cultural',
     airport: 'Khajuraho (HJR) or Jabalpur (JLR)',
     img: '/Khajuraho.avif',
+    aspect: 'aspect-[16/10]',
     altitude: '283m',
+    mapX: 265,
+    mapY: 285,
     bestTime: 'October to March',
     desc: 'Golden sandstone spires reaching toward the sky. Celebrated for intricate carvings celebrating human life, music, devotion, and sacred dance.',
     highlights: ['Kandariya Mahadeva Spire', 'Sandstone Architecture', 'Bas-Relief Sculptures', 'February Classical Dance Festival'],
@@ -93,7 +108,10 @@ const UNESCO_SITES = [
     category: 'natural',
     airport: 'Guwahati (GAU) or Jorhat (JRH)',
     img: '/Kaziranga_Rhino.avif',
+    aspect: 'aspect-[16/10]',
     altitude: '80m',
+    mapX: 495,
+    mapY: 245,
     bestTime: 'November to April',
     desc: 'Vast tall grass floodplains on the banks of the mighty Brahmaputra. The peaceful home to two-thirds of the world’s great Indian one-horned rhinoceroses.',
     highlights: ['One-Horned Rhinoceros', 'Brahmaputra Floodplains', 'Wild Water Buffalo', 'Elephant Corridors'],
@@ -108,8 +126,11 @@ const UNESCO_SITES = [
     stateId: 'IN-RJ',
     category: 'cultural',
     airport: 'Jaipur International Airport (JAI)',
-    img: '/Places/Jaipur.jpg',
+    img: '/Hawa_Mahal.avif',
+    aspect: 'aspect-[3/4]',
     altitude: '431m',
+    mapX: 165,
+    mapY: 235,
     bestTime: 'October to March',
     desc: 'Hilltop ramparts over Maota Lake and pink terracotta city streets planned according to ancient Vedic geometry.',
     highlights: ['Amber Fort Mirror Palace', 'Hawa Mahal Windows', 'Vedic Town Plan', 'Jantar Mantar Sundials'],
@@ -124,8 +145,11 @@ const UNESCO_SITES = [
     stateId: 'IN-OR',
     category: 'cultural',
     airport: 'Bhubaneswar (BBI)',
-    img: '/Places/Odisha.jpg',
+    img: '/Sun_Temple.webp',
+    aspect: 'aspect-[4/5]',
     altitude: '10m',
+    mapX: 380,
+    mapY: 405,
     bestTime: 'October to March',
     desc: 'A colossal stone chariot of the Sun God with twenty-four carved wheels drawn by seven horses at the edge of the Bay of Bengal.',
     highlights: ['24 Carved Stone Wheels', 'Ancient Solar Sundials', 'Kalinga Architecture', 'Bay of Bengal Coast'],
@@ -140,8 +164,11 @@ const UNESCO_SITES = [
     stateId: 'IN-DL',
     category: 'cultural',
     airport: 'Indira Gandhi International (DEL)',
-    img: '/Places/Delhi.jpg',
+    img: '/Qutub_minar.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '216m',
+    mapX: 188,
+    mapY: 208,
     bestTime: 'October to March',
     desc: 'Fluted red sandstone tower standing beside a rust-resistant iron pillar forged sixteen centuries ago.',
     highlights: ['72.5m Sandstone Minaret', 'Rustless Gupta Iron Pillar', 'Calligraphic Bands', 'Alai Darwaza Gateway'],
@@ -156,8 +183,11 @@ const UNESCO_SITES = [
     stateId: 'IN-MP',
     category: 'cultural',
     airport: 'Bhopal (BHO)',
-    img: '/Places/Bhopal.jpg',
+    img: '/Bhopal_statue.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '430m',
+    mapX: 215,
+    mapY: 320,
     bestTime: 'October to March',
     desc: 'India’s oldest stone structure commissioned by Emperor Ashoka. Four intricately carved stone gateways telling tales of peace, wisdom, and compassion.',
     highlights: ['Ashokan Great Stupa', 'Four Carved Torana Gates', 'Monastic Sanctuaries', 'Peaceful Hilltop Vistas'],
@@ -172,8 +202,11 @@ const UNESCO_SITES = [
     stateId: 'IN-GJ',
     category: 'cultural',
     airport: 'Ahmedabad (AMD)',
-    img: '/Places/Gujarat.jpg',
+    img: '/Stepwell.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '76m',
+    mapX: 105,
+    mapY: 310,
     bestTime: 'October to March',
     desc: 'An inverted subterranean temple honoring the sanctity of water, descending seven carved tiers with hundreds of fine sculptures.',
     highlights: ['Seven Underground Tiers', '500+ Stone Sculptures', 'Reclining Vishnu Carving', 'Maru-Gurjara Masonry'],
@@ -188,8 +221,11 @@ const UNESCO_SITES = [
     stateId: 'IN-TN',
     category: 'cultural',
     airport: 'Tiruchirappalli (TRZ) or Chennai (MAA)',
-    img: '/Places/Tamil_Nadu.jpg',
+    img: '/Chola_Temple.avif',
+    aspect: 'aspect-[3/4]',
     altitude: '59m',
+    mapX: 235,
+    mapY: 600,
     bestTime: 'November to February',
     desc: 'Towering granite temple vimanas where thousand-year-old temple rituals, sacred chants, and oil lamps still burn each evening.',
     highlights: ['66m Solid Granite Vimana', 'Living Thousand-Year Rituals', 'Classical Chola Bronzes', 'Temple Music & Lamps'],
@@ -205,7 +241,10 @@ const UNESCO_SITES = [
     category: 'mixed',
     airport: 'Pakyong (PYG) or Bagdogra (IXB)',
     img: '/Himalaya.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '1,220m to 8,586m',
+    mapX: 390,
+    mapY: 240,
     bestTime: 'March to May & October to December',
     desc: 'The sacred mountain home of the world’s third highest peak. Pristine glaciers, high alpine lakes, and forests of red pandas and orchids.',
     highlights: ['Mount Kanchenjunga (8,586m)', 'Sacred Beyul Monasteries', 'Zemu Glacial Lakes', 'Red Panda Habitat'],
@@ -220,8 +259,11 @@ const UNESCO_SITES = [
     stateId: 'IN-UT',
     category: 'natural',
     airport: 'Dehradun (DED)',
-    img: '/Places/Uttarakhand.jpg',
+    img: '/Chamoli.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '3,350m to 3,650m',
+    mapX: 220,
+    mapY: 175,
     bestTime: 'July to September (Monsoon Floral Season)',
     desc: 'A high Himalayan valley carpeted in hundreds of wild endemic alpine flowers, framed by snow peaks and glacial mountain brooks.',
     highlights: ['500+ Wild Alpine Blooms', 'Brahma Kamal & Blue Poppy', 'Pushpawati Glacial Stream', 'Nanda Devi Peaks'],
@@ -236,8 +278,11 @@ const UNESCO_SITES = [
     stateId: 'IN-GA',
     category: 'cultural',
     airport: 'Goa (GOX / GOI)',
-    img: '/Places/Goa.jpg',
+    img: '/Goa_church.jpg',
+    aspect: 'aspect-[3/4]',
     altitude: '15m',
+    mapX: 118,
+    mapY: 510,
     bestTime: 'November to February',
     desc: 'Historic laterite cathedrals with gilded altars and resonant bells standing quietly amidst coastal palm groves.',
     highlights: ['Basilica of Bom Jesus', 'Sé Cathedral Golden Bell', 'Gilded Baroque Altars', 'Laterite Stone Work'],
@@ -253,7 +298,10 @@ const UNESCO_SITES = [
     category: 'natural',
     airport: 'Cochin (COK) or Coimbatore (CJB)',
     img: '/Kerala_tea.avif',
+    aspect: 'aspect-[16/10]',
     altitude: '300m to 2,695m',
+    mapX: 195,
+    mapY: 595,
     bestTime: 'September to March',
     desc: 'Ancient green mountain chain older than the Himalayas. Mist-draped tea hills, cloud forests, and waterfalls that feed the rivers of the south.',
     highlights: ['Global Biodiversity Hotspot', 'Mist-Draped Cloud Forests', 'Nilgiri Tahr & Hornbills', 'Mountain Waterfalls'],
@@ -284,15 +332,26 @@ export default function UnescoSites() {
   return (
     <div className="w-full bg-[#FAF7F0] min-h-screen py-16 px-4 sm:px-6 font-sans">
       <div className="max-w-6xl mx-auto">
-        {/* Navigation Breadcrumb */}
-        <div className="mb-8 flex items-center gap-2 text-xs uppercase tracking-widest text-[#1E2A4F]/60">
-          <Link to="/" className="hover:text-[#1E2A4F]">Home</Link>
-          <span>/</span>
-          <span className="text-[#C4762A] font-bold">World Heritage of India</span>
+        {/* Navigation Breadcrumb & Map Action */}
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#1E2A4F]/60">
+            <Link to="/" className="hover:text-[#1E2A4F]">Home</Link>
+            <span>/</span>
+            <Link to="/tourism" className="hover:text-[#1E2A4F]">Tourism</Link>
+            <span>/</span>
+            <span className="text-[#C4762A] font-bold">World Heritage</span>
+          </div>
+          <Link
+            to="/tourism"
+            className="inline-flex items-center gap-2 self-start sm:self-auto px-4 py-1.5 rounded-xl bg-white border border-[#D4AF37]/40 text-[#1E2A4F] hover:bg-[#1E2A4F] hover:text-white text-xs font-sans font-bold uppercase tracking-wider transition-colors shadow-2xs"
+          >
+            <span>🗺 Interactive State Map</span>
+            <span className="text-[#D4AF37]">→</span>
+          </Link>
         </div>
 
         {/* Hero Section */}
-        <div className="text-center mb-12 max-w-2xl mx-auto">
+        <div className="text-center mb-10 max-w-3xl mx-auto">
           <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-[#C4762A] mb-2 block">
             Heritage Archive
           </span>
@@ -300,9 +359,34 @@ export default function UnescoSites() {
             UNESCO World Heritage
           </h1>
           <div className="w-12 h-0.5 bg-[#D4AF37] mx-auto mb-4" />
-          <p className="text-sm sm:text-base font-serif italic text-[#1E2A4F]/80 leading-relaxed">
+          <p className="text-sm sm:text-base font-serif italic text-[#1E2A4F]/80 leading-relaxed mb-6">
             Sacred stupas, rock sanctuaries, sun chariots, and mountain rainforests preserved across centuries.
           </p>
+
+          {/* Minimal Thematic Guide Switcher */}
+          <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-white/70 backdrop-blur-xs rounded-2xl border border-[#D4AF37]/30 shadow-2xs max-w-fit mx-auto">
+            <span className="px-3.5 py-1.5 rounded-xl bg-[#1E2A4F] text-white text-xs font-sans font-semibold uppercase tracking-wider shadow-2xs">
+              Heritage Sites
+            </span>
+            <Link
+              to="/national-parks"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              National Parks
+            </Link>
+            <Link
+              to="/natural-wonders"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              Natural Wonders
+            </Link>
+            <Link
+              to="/spiritual-heritage"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              Spiritual Heritage
+            </Link>
+          </div>
         </div>
 
         {/* View Switcher & Filters */}
@@ -401,10 +485,37 @@ export default function UnescoSites() {
                       stroke-width: 2px !important;
                     }
                   `}</style>
-                  <IndiaSvgMap onStateClick={handleStateClick} />
+                  <IndiaSvgMap onStateClick={handleStateClick}>
+                    <g className="unesco-pins-layer" style={{ pointerEvents: 'auto' }}>
+                      {UNESCO_SITES.map((site) => {
+                        const isSelected = selectedStateId === site.stateId;
+                        return (
+                          <g
+                            key={site.id}
+                            transform={`translate(${site.mapX || 200}, ${site.mapY || 200})`}
+                            className="cursor-pointer group"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedStateId(site.stateId);
+                              setActiveModalSite(site);
+                            }}
+                          >
+                            <circle
+                              r={isSelected ? "6.5" : "5"}
+                              fill="#B45309"
+                              stroke="#FFFFFF"
+                              strokeWidth={isSelected ? "2" : "1.6"}
+                              className="drop-shadow-md group-hover:scale-125 transition-transform duration-200"
+                            />
+                            <circle r="1.8" fill="#FFFFFF" />
+                          </g>
+                        );
+                      })}
+                    </g>
+                  </IndiaSvgMap>
                 </div>
                 <p className="text-[11px] text-[#1E2A4F]/60 mt-3 text-center">
-                  Click highlighted states on the map to view regional monuments.
+                  Click highlighted states or monument pin dots to explore regional UNESCO heritage.
                 </p>
               </div>
 
@@ -433,7 +544,7 @@ export default function UnescoSites() {
                       className="p-3 bg-[#FAF7F0] hover:bg-white rounded-xl border border-[#EBE5D9] hover:border-[#C4762A] transition-all cursor-pointer flex items-center justify-between gap-3 shadow-2xs"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <img src={s.img} alt={s.title} className="w-12 h-12 rounded-lg object-cover shrink-0" />
+                        <img src={s.img} alt={s.title} loading="lazy" decoding="async" className="w-12 h-12 rounded-lg object-cover shrink-0" />
                         <div className="min-w-0">
                           <h4 className="font-serif font-bold text-xs text-[#1E2A4F] truncate">{s.title}</h4>
                           <span className="text-[10px] text-gray-500 block truncate">{s.location}</span>
@@ -448,18 +559,17 @@ export default function UnescoSites() {
           </div>
         )}
 
-        {/* EDITORIAL HERITAGE SITES GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* EDITORIAL HERITAGE SITES MASONRY GRID */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 [column-fill:_balance]">
           {filteredSites.map((site) => (
             <div
               key={site.id}
-              className="group flex flex-col justify-between bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#1E2A4F]/30 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1 relative"
+              className="break-inside-avoid mb-8 w-full inline-block group bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#1E2A4F]/30 shadow-xs hover:shadow-xl transition-all duration-500 hover:-translate-y-1 relative"
             >
               <div>
-                {/* Image Container */}
-                {/* Image Container */}
+                {/* Image Container with Dynamic Aspect Ratio */}
                 <div 
-                  className="relative h-60 w-full overflow-hidden bg-neutral-900 cursor-pointer"
+                  className={`relative w-full overflow-hidden bg-neutral-900 cursor-pointer ${site.aspect || 'aspect-[16/10]'}`}
                   onClick={() => setActiveModalSite(site)}
                 >
                   <img
@@ -467,6 +577,7 @@ export default function UnescoSites() {
                     alt={site.title}
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
@@ -503,7 +614,7 @@ export default function UnescoSites() {
                     </span>
                   </div>
 
-                  <p className="text-xs font-serif italic text-[#1E2A4F]/85 leading-relaxed mb-4 line-clamp-3">
+                  <p className="text-xs font-serif italic text-[#1E2A4F]/85 leading-relaxed mb-4">
                     {site.desc}
                   </p>
 
@@ -654,6 +765,28 @@ export default function UnescoSites() {
             </div>
           </div>
         )}
+
+        {/* Interactive Map Discovery Callout Banner */}
+        <div className="mt-16 bg-white rounded-2xl border border-[#E6DFD3] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs">
+          <div className="text-left">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#C4762A] block mb-1">
+              National Geography & Circuits
+            </span>
+            <h3 className="font-serif font-bold text-xl sm:text-2xl text-[#1E2A4F] mb-1.5">
+              Explore All 28 States on the Interactive Map
+            </h3>
+            <p className="text-xs sm:text-sm font-serif text-[#1E2A4F]/70 max-w-xl">
+              Discover cultural landmarks, sanctuary routes, and local seasonal festivals by clicking directly on our interactive map of India.
+            </p>
+          </div>
+          <Link
+            to="/tourism"
+            className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1E2A4F] text-white hover:bg-[#141D36] text-xs font-sans font-bold uppercase tracking-widest transition-all shadow-sm hover:shadow-md cursor-pointer"
+          >
+            <span>Open Interactive Map</span>
+            <span className="text-[#D4AF37]">→</span>
+          </Link>
+        </div>
 
       </div>
     </div>

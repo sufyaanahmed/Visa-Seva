@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useStore } from '../../store';
 import { evaluateVisaRoute, getFinderQuestions } from '../../domain/visaEligibility.js';
 import { applyFinderAnswer, applicationFromFinder, firstUnansweredStep, isValidFinderAnswer } from '../../domain/finderSession.js';
 import { countryFlag, searchNationalities } from '../../domain/countries.js';
+import { getVisaFeeEstimate } from '../../domain/visaFees.js';
 import Disclosure from '../../components/Disclosure.jsx';
 
 const displayValue = (question, value) => question.options?.find((option) => option.value === value)?.label || value || '';
@@ -69,18 +70,39 @@ export default function VisaFinder() {
 
   if (result) {
     const isVoa = result.applicationType === 'voa';
+    const feeInfo = getVisaFeeEstimate(result.visaCategory || result.applicationType, answers.passport);
+
     return (
       <div className="min-h-screen bg-[#FAF7F0] px-4 py-10 sm:py-14">
         <div className="mx-auto max-w-2xl rounded-xl border border-border bg-white p-6 shadow-sm sm:p-10">
           <p className="mb-3 text-sm text-text-secondary"><span aria-hidden="true">{countryFlag(answers.passport)}</span> {answers.passport} · {answers.durationDays} days</p>
           <h1 ref={heading} tabIndex={-1} className="mb-3 font-serif text-3xl font-bold text-primary outline-none sm:text-4xl">{result.type}</h1>
           <p className="mb-6 leading-relaxed text-text-secondary">{result.description}</p>
-          {isVoa && (
-            <dl className="mb-6 flex flex-wrap gap-x-10 gap-y-3 border-y border-border py-4 text-sm">
-              <div><dt className="text-text-secondary">Stay</dt><dd className="mt-1 font-semibold text-primary">Up to 60 days · Double entry</dd></div>
-              <div><dt className="text-text-secondary">Fee at arrival</dt><dd className="mt-1 font-semibold text-primary">₹2,000 per person</dd></div>
-            </dl>
-          )}
+
+          {/* Official Government Fee & Validity Breakdown */}
+          <div className="mb-6 rounded-xl border border-[#E6DFD3] bg-slate-50/80 p-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-secondary-accent block mb-0.5">
+                  Official Government Fee
+                </span>
+                <span className="font-serif text-lg font-bold text-primary-dark block">
+                  {feeInfo.range}
+                </span>
+                <p className="text-xs text-text-secondary mt-1">{feeInfo.note}</p>
+              </div>
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-secondary-accent block mb-0.5">
+                  Validity &amp; Stay
+                </span>
+                <span className="font-semibold text-primary block">
+                  {feeInfo.validity}
+                </span>
+                <p className="text-xs text-text-secondary mt-1">Processing window: 24–72 hours online</p>
+              </div>
+            </div>
+          </div>
+
           {result.cautions.length > 0 && <p className="mb-6 text-sm leading-relaxed text-text-secondary">{result.cautions[0]}</p>}
           <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/70 pb-6">
             <div className="flex flex-wrap items-center gap-3">
@@ -92,6 +114,14 @@ export default function VisaFinder() {
                 <span>{result.actionLabel}</span>
                 <span aria-hidden="true">→</span>
               </button>
+              {result.applicationType === 'evisa' && (
+                <Link
+                  to="/flow/normal"
+                  className="rounded-lg border border-border bg-white px-4 py-3 text-sm font-medium text-primary hover:bg-[#FAF7F0] transition-colors"
+                >
+                  View Guide
+                </Link>
+              )}
               <button
                 type="button"
                 onClick={() => jumpToQuestion(0)}

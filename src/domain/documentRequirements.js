@@ -98,9 +98,79 @@ const afghanPurposeDocs = (data) => {
   return [];
 };
 
+const ociPhoto = {
+  type: 'photograph',
+  title: 'Applicant Photograph',
+  desc: 'Recent color photograph, front-facing, white background, square (2x2 inch / 51x51 mm).',
+  accepted: '.jpg,.jpeg,image/jpeg',
+  extensions: ['jpg', 'jpeg'],
+  mimeTypes: ['image/jpeg'],
+  minBytes: 10 * KB,
+  maxBytes: 500 * KB,
+  square: true,
+  rule: 'JPEG, 10 KB–500 KB, square.',
+};
+
+const ociSignature = {
+  type: 'signature',
+  title: 'Applicant Signature / Thumb Impression',
+  desc: 'Signature (or left thumb impression for minors/infants) in black or dark blue ink on plain white paper.',
+  accepted: '.jpg,.jpeg,image/jpeg',
+  extensions: ['jpg', 'jpeg'],
+  mimeTypes: ['image/jpeg'],
+  minBytes: 10 * KB,
+  maxBytes: 200 * KB,
+  square: false,
+  rule: 'JPEG, 10 KB–200 KB.',
+};
+
+const ociCategoryDocs = (data) => {
+  const category = data.oci_category || 'former-indian';
+  const docs = [
+    pdfDocument('passport', 'Current foreign passport', 'Clear copy of the foreign passport bio page with at least 6 months validity.'),
+    pdfDocument('address_proof', 'Proof of residence', 'Utility bill, driving licence, or state ID showing current residence.'),
+  ];
+
+  if (category === 'former-indian') {
+    docs.push(
+      pdfDocument('surrender_certificate', 'Indian passport surrender certificate', 'Surrender / Renunciation certificate issued by Indian authorities.'),
+      pdfDocument('cancelled_indian_passport', 'Cancelled Indian passport', 'Copy of cancelled Indian passport showing foreign nationality endorsement.'),
+      pdfDocument('naturalization_certificate', 'Foreign naturalization certificate', 'Certificate of naturalization/registration of foreign citizenship.'),
+    );
+  } else if (category === 'foreign-spouse') {
+    docs.push(
+      pdfDocument('marriage_certificate', 'Registered marriage certificate', 'Registered marriage certificate subsisting for at least 2 years.'),
+      pdfDocument('spouse_indian_proof', 'Spouse Indian passport or OCI card', 'Copy of Indian spouse’s valid Indian passport or foreign spouse’s OCI card.'),
+      pdfDocument('joint_declaration', 'Joint marriage declaration', 'Signed joint declaration confirming subsisting marriage.'),
+    );
+  } else {
+    // descendant-child or descendant-grandchild
+    docs.push(
+      pdfDocument('birth_certificate', 'Full birth certificate', 'Birth certificate showing applicant’s name and both parents’ names.'),
+      pdfDocument('ancestor_origin_proof', 'Parent / Grandparent Indian origin proof', 'Indian passport, Nativity Certificate, or OCI card of the parent or grandparent.'),
+      pdfDocument('parents_marriage_cert', 'Parents’ marriage certificate', 'Registered marriage certificate of the applicant’s parents.'),
+    );
+  }
+
+  if (data.is_minor === 'yes') {
+    docs.push(
+      pdfDocument('minor_consent', 'Parental authorization / consent', 'Signed consent from both parents authorizing the OCI application.'),
+    );
+  }
+
+  return docs;
+};
+
 export const getRequiredDocuments = (data = {}) => {
   const flow = data.application_type;
   if (flow === 'voa') return [];
+  if (flow === 'oci') {
+    return [
+      ociPhoto,
+      ociSignature,
+      ...ociCategoryDocs(data),
+    ];
+  }
   if (flow === 'afghan') {
     return [
       afghanPhoto,

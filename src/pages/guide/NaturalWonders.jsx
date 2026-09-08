@@ -11,10 +11,13 @@ const NATURAL_SPOTS = [
     state: 'Meghalaya',
     category: 'waterfalls',
     altitude: '1,430m',
+    mapX: 460,
+    mapY: 275,
     climate: 'Cloud Rainforest',
     bestSeason: 'October to April (Clear Streams) & June to September (Monsoon)',
     airport: 'Guwahati (GAU) 160 km or Shillong (SHL)',
     img: '/Living_Root_Bridge.avif',
+    aspect: 'aspect-[16/10]',
     desc: 'Ancient living tree roots guided across jungle rivers by the indigenous Khasi clans, forming suspension bridges that grow stronger with each passing monsoon.',
     highlights: ['Double Decker Root Bridge', 'Nohkalikai 340m Waterfall', 'Crystal Clear Dawki River', 'Mawsmai Limestone Caves'],
     travelTip: 'The stone steps down to Nongriat descend through emerald betel nut groves beside clear jungle pools.',
@@ -27,10 +30,13 @@ const NATURAL_SPOTS = [
     state: 'Ladakh',
     category: 'mountains',
     altitude: '4,225m',
+    mapX: 200,
+    mapY: 75,
     climate: 'High-Altitude Cold Desert',
     bestSeason: 'May to September (Clear Azure Water)',
     airport: 'Leh Kushok Bakula Rimpochee Airport (IXL) 150 km',
     img: '/Pangong_Tso.avif',
+    aspect: 'aspect-[16/10]',
     desc: 'A silent high-altitude lake extending past snow ridges into the horizon, shifting from morning turquoise to deep evening cobalt blue.',
     highlights: ['4,225m Altitude Waters', 'Chang La Pass (5,360m)', 'Starry Night Skies', 'Bar-Headed Geese'],
     travelTip: 'Warm woolens are essential even in mid-summer as mountain breezes cool rapidly at sunset.',
@@ -43,10 +49,13 @@ const NATURAL_SPOTS = [
     state: 'Maharashtra',
     category: 'mountains',
     altitude: '1,646m (Highest Peak in Maharashtra)',
+    mapX: 130,
+    mapY: 410,
     climate: 'Sahyadri Montane Ridge',
     bestSeason: 'June to September (Cloud Treks) & October to February (Clear Sunrise)',
     airport: 'Mumbai (BOM) 150 km or Nashik (ISK)',
     img: '/Kalsubai.avif',
+    aspect: 'aspect-[16/10]',
     desc: 'The highest summit in the Western Ghats of Maharashtra. Iron ladders climbing vertical basalt cliffs to a peaceful hilltop temple above a sea of clouds.',
     highlights: ['Highest Peak in Maharashtra', 'Basalt Rock Ladder Trails', 'Arthur Lake Mountain Vistas', 'Monsoon Cloud Meadows'],
     travelTip: 'Starting the trek in the quiet early morning brings you to the summit in time for sunrise across the valley of clouds.',
@@ -59,10 +68,13 @@ const NATURAL_SPOTS = [
     state: 'Jammu and Kashmir',
     category: 'lakes',
     altitude: '1,583m',
+    mapX: 140,
+    mapY: 100,
     climate: 'Alpine Valley',
     bestSeason: 'April to October (Garden Blooms) & December to February (Snow)',
     airport: 'Srinagar Sheikh ul-Alam Airport (SXR)',
     img: '/Dal_lake.jpg',
+    aspect: 'aspect-[3/4]',
     desc: 'Carved cedar shikara boats gliding across mirror waters reflecting the snow peaks of the Pir Panjal, past floating lotus beds and morning markets.',
     highlights: ['Dawn Shikara Lake Cruises', 'Carved Cedar Houseboats', 'Floating Lotus Gardens', 'Nigeen Lake Reflections'],
     travelTip: 'A quiet dawn ride at 05:30 AM reveals farmers gathering in wooden boats for the floating morning market.',
@@ -75,10 +87,13 @@ const NATURAL_SPOTS = [
     state: 'Kerala',
     category: 'backwaters',
     altitude: 'Sea Level',
+    mapX: 185,
+    mapY: 625,
     climate: 'Tropical Waterway',
     bestSeason: 'September to March (Gentle Breeze) & June to August (Monsoon)',
     airport: 'Cochin (COK) 75 km or Trivandrum (TRV)',
     img: '/Kerala_backwaters.avif',
+    aspect: 'aspect-[16/10]',
     desc: 'Canals and palm-fringed lagoons running parallel to the Arabian Sea. Handcrafted thatched houseboats drifting past paddy fields and village riverbanks.',
     highlights: ['Thatched Kettuvallam Boats', 'Vembanad Bird Sanctuary', 'August Snake Boat Races', 'Ayurvedic Herb Gardens'],
     travelTip: 'Anchoring in the peaceful Kumarakom waters at dusk brings cool lake breezes and golden sunset reflections.',
@@ -91,10 +106,13 @@ const NATURAL_SPOTS = [
     state: 'Kerala',
     category: 'mountains',
     altitude: '1,600m to 2,695m (Anamudi Peak)',
+    mapX: 195,
+    mapY: 595,
     climate: 'Highland Mountain Mist',
     bestSeason: 'September to March',
     airport: 'Cochin (COK) 110 km or Madurai (IXM)',
     img: '/Kerala_tea.avif',
+    aspect: 'aspect-[16/10]',
     desc: 'Rolling green tea plantations spread across high mountain ridges. Overlooked by Anamudi, the highest mountain summit in south India.',
     highlights: ['High-Altitude Tea Estates', 'Anamudi Summit (2,695m)', 'Nilgiri Tahr at Eravikulam', 'Top Station Cloud Views'],
     travelTip: 'Early morning walks through the tea trails offer cool mountain mist and panoramic views above the clouds.',
@@ -107,10 +125,13 @@ const NATURAL_SPOTS = [
     state: 'Goa',
     category: 'waterfalls',
     altitude: '310m Cascade',
+    mapX: 125,
+    mapY: 515,
     climate: 'Wet Evergreen Rainforest',
     bestSeason: 'June to December',
     airport: 'Goa (GOX / GOI) 70 km',
     img: '/Dudhsagar_Falls.avif',
+    aspect: 'aspect-[16/10]',
     desc: 'Four massive tiers of white mountain water plunging 310 meters down sheer jungle cliffs, crossed by a stone railway viaduct surrounded by deep rainforest.',
     highlights: ['310m Cascading Falls', 'Historic Railway Viaduct', 'Forest Sanctuary Safaris', 'Natural Plunge Pools'],
     travelTip: 'The scenic railway line passing in front of the waterfall spray provides an unforgettable window view of the white cascade.',
@@ -123,10 +144,13 @@ const NATURAL_SPOTS = [
     state: 'Andaman and Nicobar Islands',
     category: 'coastal',
     altitude: 'Sea Level',
+    mapX: 535,
+    mapY: 630,
     climate: 'Tropical Island Maritime',
     bestSeason: 'October to May',
     airport: 'Port Blair (IXZ) then Ferry to Havelock',
     img: '/Havelock_Radhanagar.webp',
+    aspect: 'aspect-[16/10]',
     desc: 'White coral sands bordered by virgin rainforest and turquoise ocean waters. Celebrated for pristine barrier reefs and peaceful sunset shores.',
     highlights: ['Powdery White Sand Coast', 'Coral Reef Snorkeling', 'Night Kayaking in Bioluminescence', 'Elephant Beach Waters'],
     travelTip: 'Radhanagar beach faces west, making sunset walks along the curved bay especially serene and colorful.',
@@ -139,10 +163,13 @@ const NATURAL_SPOTS = [
     state: 'Sikkim',
     category: 'mountains',
     altitude: '3,564m to 8,586m',
+    mapX: 395,
+    mapY: 235,
     climate: 'Himalayan Alpine Meadows',
     bestSeason: 'March to May (Rhododendron Season) & October to December',
     airport: 'Pakyong (PYG) 120 km or Bagdogra (IXB)',
     img: '/Himalaya.jpg',
+    aspect: 'aspect-[3/4]',
     desc: 'A high Himalayan valley framed by snow summits and natural sulphur springs, where twenty-four species of wild rhododendrons bloom in spring.',
     highlights: ['24 Rhododendron Species', 'Zero Point Glacial Plain', 'Natural Hot Springs', 'Kanchenjunga Mountain Views'],
     travelTip: 'Spring brings brilliant shades of red, rose, and purple blossoms across the entire valley floor.',
@@ -155,13 +182,35 @@ const NATURAL_SPOTS = [
     state: 'Jammu and Kashmir',
     category: 'mountains',
     altitude: '2,650m to 3,980m',
+    mapX: 135,
+    mapY: 95,
     climate: 'Alpine Meadow & Winter Snow',
     bestSeason: 'May to September (Wildflowers) & December to March (Snow)',
     airport: 'Srinagar Airport (SXR) 56 km',
     img: '/Places/Gulmarg.jpg',
+    aspect: 'aspect-[3/4]',
     desc: 'An open alpine bowl blanketed in wildflowers in summer, rising to 3,980 meters at Apharwat Peak via one of the highest cable cars in the world.',
     highlights: ['High Cable Car (3,980m)', 'Alpine Wildflower Meadows', 'Apharwat Mountain Lake', 'Winter Powder Slopes'],
     travelTip: 'The second stage of the cable car brings you directly to the alpine ridge with open views of distant Himalayan snow crests.',
+  },
+  {
+    id: 'mizoram-green-hills',
+    title: 'Lush Green Hills & Blue Mountains of Mizoram',
+    location: 'Phawngpui & Reiek, Mizoram',
+    stateId: 'IN-MZ',
+    state: 'Mizoram',
+    category: 'mountains',
+    altitude: '2,157m (Phawngpui Summit)',
+    mapX: 500,
+    mapY: 335,
+    climate: 'Subtropical Montane Rainforest & Evergreen Valleys',
+    bestSeason: 'October to April (Misty Horizons & Clear Mountain Skies)',
+    airport: 'Lengpui Airport (AJL) in Aizawl',
+    img: '/Places/Mizoram.jpg',
+    aspect: 'aspect-[16/10]',
+    desc: 'Rolling emerald hills blanketed in virgin bamboo forests and mountain wildflowers, where morning mists drift through tranquil valleys and silent hill peaks.',
+    highlights: ['Phawngpui Blue Mountain Sanctuary', 'Reiek Mountain Heritage Ridge', 'Misty Green Mountain Folds', 'Vantawng 229m Waterfall'],
+    travelTip: 'Early mornings along Reiek Ridge offer panoramic views across endless waves of green mountain peaks emerging from soft white cloud valleys.',
   }
 ];
 
@@ -172,7 +221,7 @@ export default function NaturalWonders() {
   const [activeModalSpot, setActiveModalSpot] = useState(null);
 
   const categories = [
-    { id: 'all', label: 'All Landscapes (10)' },
+    { id: 'all', label: 'All Landscapes (11)' },
     { id: 'mountains', label: 'Mountains & Treks' },
     { id: 'waterfalls', label: 'Waterfalls & Rainforests' },
     { id: 'backwaters', label: 'Backwaters & Lagoons' },
@@ -197,15 +246,26 @@ export default function NaturalWonders() {
   return (
     <div className="w-full bg-[#FAF7F0] min-h-screen py-16 px-4 sm:px-6 font-sans">
       <div className="max-w-6xl mx-auto">
-        {/* Navigation Breadcrumb */}
-        <div className="mb-8 flex items-center gap-2 text-xs uppercase tracking-widest text-[#1E2A4F]/60">
-          <Link to="/" className="hover:text-[#1E2A4F]">Home</Link>
-          <span>/</span>
-          <span className="text-[#C4762A] font-bold">Natural Wonders of India</span>
+        {/* Navigation Breadcrumb & Map Action */}
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#1E2A4F]/60">
+            <Link to="/" className="hover:text-[#1E2A4F]">Home</Link>
+            <span>/</span>
+            <Link to="/tourism" className="hover:text-[#1E2A4F]">Tourism</Link>
+            <span>/</span>
+            <span className="text-[#0284C7] font-bold">Natural Wonders</span>
+          </div>
+          <Link
+            to="/tourism"
+            className="inline-flex items-center gap-2 self-start sm:self-auto px-4 py-1.5 rounded-xl bg-white border border-[#0284C7]/40 text-[#1E2A4F] hover:bg-[#1E2A4F] hover:text-white text-xs font-sans font-bold uppercase tracking-wider transition-colors shadow-2xs"
+          >
+            <span>🗺 Interactive State Map</span>
+            <span className="text-[#D4AF37]">→</span>
+          </Link>
         </div>
 
         {/* Hero Section */}
-        <div className="text-center mb-12 max-w-2xl mx-auto">
+        <div className="text-center mb-10 max-w-3xl mx-auto">
           <span className="text-[11px] font-sans font-bold uppercase tracking-[0.25em] text-[#0284C7] block mb-2">
             Living Landscapes & Wilderness
           </span>
@@ -213,9 +273,34 @@ export default function NaturalWonders() {
             Natural Wonders of India
           </h1>
           <div className="w-12 h-0.5 bg-[#0284C7] mx-auto mb-4" />
-          <p className="text-sm sm:text-base font-serif italic text-[#1E2A4F]/80 leading-relaxed">
+          <p className="text-sm sm:text-base font-serif italic text-[#1E2A4F]/80 leading-relaxed mb-6">
             Silent backwaters beneath palm leaves, living root bridges, and mountain summits touching the clouds.
           </p>
+
+          {/* Minimal Thematic Guide Switcher */}
+          <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-white/70 backdrop-blur-xs rounded-2xl border border-[#D4AF37]/30 shadow-2xs max-w-fit mx-auto">
+            <Link
+              to="/unesco-sites"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              Heritage Sites
+            </Link>
+            <Link
+              to="/national-parks"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              National Parks
+            </Link>
+            <span className="px-3.5 py-1.5 rounded-xl bg-[#1E2A4F] text-white text-xs font-sans font-semibold uppercase tracking-wider shadow-2xs">
+              Natural Wonders
+            </span>
+            <Link
+              to="/spiritual-heritage"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              Spiritual Heritage
+            </Link>
+          </div>
         </div>
 
         {/* View Switcher & Filters */}
@@ -309,10 +394,37 @@ export default function NaturalWonders() {
                       stroke-width: 2px !important;
                     }
                   `}</style>
-                  <IndiaSvgMap onStateClick={handleStateClick} />
+                  <IndiaSvgMap onStateClick={handleStateClick}>
+                    <g className="nature-pins-layer" style={{ pointerEvents: 'auto' }}>
+                      {NATURAL_SPOTS.map((spot) => {
+                        const isSelected = selectedStateId === spot.stateId;
+                        return (
+                          <g
+                            key={spot.id}
+                            transform={`translate(${spot.mapX || 200}, ${spot.mapY || 200})`}
+                            className="cursor-pointer group"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedStateId(spot.stateId);
+                              setActiveModalSpot(spot);
+                            }}
+                          >
+                            <circle
+                              r={isSelected ? "6.5" : "5"}
+                              fill="#0284C7"
+                              stroke="#FFFFFF"
+                              strokeWidth={isSelected ? "2" : "1.6"}
+                              className="drop-shadow-md group-hover:scale-125 transition-transform duration-200"
+                            />
+                            <circle r="1.8" fill="#FFFFFF" />
+                          </g>
+                        );
+                      })}
+                    </g>
+                  </IndiaSvgMap>
                 </div>
                 <p className="text-[11px] text-[#1E2A4F]/60 mt-3 text-center">
-                  ✦ Click highlighted states on the map to view regional landscapes.
+                  ✦ Click highlighted states or landscape pin dots to view regional wonders.
                 </p>
               </div>
 
@@ -341,7 +453,7 @@ export default function NaturalWonders() {
                       className="p-3 bg-[#FAF7F0] hover:bg-white rounded-xl border border-[#EBE5D9] hover:border-[#0284C7] transition-all cursor-pointer flex items-center justify-between gap-3 shadow-2xs"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <img src={s.img} alt={s.title} className="w-12 h-12 rounded-lg object-cover shrink-0" />
+                        <img src={s.img} alt={s.title} loading="lazy" decoding="async" className="w-12 h-12 rounded-lg object-cover shrink-0" />
                         <div className="min-w-0">
                           <h4 className="font-serif font-bold text-xs text-[#1E2A4F] truncate">{s.title}</h4>
                           <span className="text-[10px] text-gray-500 block truncate">{s.altitude} · {s.location}</span>
@@ -356,17 +468,17 @@ export default function NaturalWonders() {
           </div>
         )}
 
-        {/* EDITORIAL SPOTS GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* EDITORIAL SPOTS MASONRY GRID */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 [column-fill:_balance]">
           {filteredSpots.map((spot) => (
             <div
               key={spot.id}
-              className="group flex flex-col justify-between bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#0284C7] shadow-xs hover:shadow-xl transition-all duration-500 hover:-translate-y-1 relative"
+              className="break-inside-avoid mb-8 w-full inline-block group bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#0284C7] shadow-xs hover:shadow-xl transition-all duration-500 hover:-translate-y-1 relative"
             >
               <div>
-                {/* Image Container */}
+                {/* Image Container with Dynamic Aspect Ratio */}
                 <div 
-                  className="relative h-60 w-full overflow-hidden bg-neutral-900 cursor-pointer"
+                  className={`relative w-full overflow-hidden bg-neutral-900 cursor-pointer ${spot.aspect || 'aspect-[16/10]'}`}
                   onClick={() => setActiveModalSpot(spot)}
                 >
                   <img
@@ -374,6 +486,7 @@ export default function NaturalWonders() {
                     alt={spot.title}
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
@@ -405,7 +518,7 @@ export default function NaturalWonders() {
                     {spot.climate}
                   </div>
 
-                  <p className="text-xs font-serif italic text-[#1E2A4F]/85 leading-relaxed mb-4 line-clamp-3">
+                  <p className="text-xs font-serif italic text-[#1E2A4F]/85 leading-relaxed mb-4">
                     {spot.desc}
                   </p>
 
@@ -556,6 +669,28 @@ export default function NaturalWonders() {
             </div>
           </div>
         )}
+
+        {/* Interactive Map Discovery Callout Banner */}
+        <div className="mt-16 bg-white rounded-2xl border border-[#E6DFD3] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs">
+          <div className="text-left">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#0284C7] block mb-1">
+              Geography & Natural Terrains
+            </span>
+            <h3 className="font-serif font-bold text-xl sm:text-2xl text-[#1E2A4F] mb-1.5">
+              Explore All 28 States on the Interactive Map
+            </h3>
+            <p className="text-xs sm:text-sm font-serif text-[#1E2A4F]/70 max-w-xl">
+              Locate high altitude passes, coastal lagoons, and mountain valleys across India on our interactive travel map.
+            </p>
+          </div>
+          <Link
+            to="/tourism"
+            className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1E2A4F] text-white hover:bg-[#141D36] text-xs font-sans font-bold uppercase tracking-widest transition-all shadow-sm hover:shadow-md cursor-pointer"
+          >
+            <span>Open Interactive Map</span>
+            <span className="text-[#D4AF37]">→</span>
+          </Link>
+        </div>
 
       </div>
     </div>

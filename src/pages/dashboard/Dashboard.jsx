@@ -57,6 +57,19 @@ const flowDetails = {
       ['review', 'Review & print handoff'],
     ],
   },
+  oci: {
+    label: 'Overseas Citizen of India (OCI) Registration',
+    steps: [
+      ['oci-category', 'Category & Jurisdiction'],
+      ['identity', 'Applicant Identity'],
+      ['passport', 'Passport & Foreign Citizenship'],
+      ['family', 'Family & Lineage'],
+      ['origin', 'Indian Origin & Renunciation'],
+      ['security', 'Security & Declarations'],
+      ['documents', 'Photo, Signature & Evidence'],
+      ['review', 'Review & MHA Application Dossier'],
+    ],
+  },
 };
 
 import { isMeaningfulDraft } from '../../store';
@@ -99,84 +112,69 @@ export default function Dashboard() {
     : state.identifiers?.finalDemoId || state.identifiers?.temporaryDemoId;
 
   return (
-    <div className="max-w-5xl mx-auto py-12 px-6">
+    <div className="max-w-4xl mx-auto py-12 px-6">
       <h1 className="text-3xl font-serif font-bold mb-2">Application Dashboard</h1>
       <p className="text-text-secondary mb-8">Your application progress and documents.</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 bg-white border border-border shadow-sm rounded overflow-hidden flex flex-col">
-          <div className="bg-[#0b2540] text-white p-6">
-            <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
-              <div>
-                <p className="text-[#f0cc91] text-xs font-bold uppercase tracking-widest mb-1">Service Category</p>
-                <h2 className="text-2xl font-bold">{flow.label}</h2>
-              </div>
-              <span className="bg-white/20 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">{statusLabel}</span>
+      <div className="bg-white border border-border shadow-sm rounded-xl overflow-hidden flex flex-col">
+        <div className="bg-[#0b2540] text-white p-6 md:p-8">
+          <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
+            <div>
+              <p className="text-[#f0cc91] text-xs font-bold uppercase tracking-widest mb-1">Service Category</p>
+              <h2 className="text-2xl font-bold">{flow.label}</h2>
             </div>
-
-            <div className="mt-6">
-              <div className="flex justify-between text-sm mb-2">
-                <span>{state.submitted ? 'Preparation complete' : `Step ${currentStep + 1} of ${flow.steps.length}`}</span>
-                <span className="font-bold">{progressPercent}%</span>
-              </div>
-              <div className="w-full bg-[#163a5f] h-2 rounded-full overflow-hidden" role="progressbar" aria-label="Application progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow={progressPercent}>
-                <div className="bg-[#f0cc91] h-full transition-all duration-500" style={{ width: `${progressPercent}%` }} />
-              </div>
-            </div>
+            <span className="bg-white/20 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">{statusLabel}</span>
           </div>
 
-          <div className="p-6 flex-1 flex flex-col">
-            <div className="mb-6 rounded border border-slate-200 bg-slate-50 p-4 text-sm">
-              <span className="block text-xs uppercase tracking-wider text-text-secondary mb-1">Application Reference ID</span>
-              <strong className="font-mono break-all">{formatReference(reference) || 'Available when you start'}</strong>
+          <div className="mt-6">
+            <div className="flex justify-between text-sm mb-2">
+              <span>{state.submitted ? 'Preparation complete' : `Step ${currentStep + 1} of ${flow.steps.length}`}</span>
+              <span className="font-bold">{progressPercent}%</span>
             </div>
-
-            <h3 className="font-bold text-lg mb-4">Application Milestones</h3>
-            <ol className="space-y-3 mb-8">
-              {flow.steps.map(([id, label], index) => {
-                const isDocumentStep = id === 'documents';
-                const complete = state.submitted || index < currentStep || (isDocumentStep && documentsComplete);
-                const warning = isDocumentStep && documentCheckReached && missingDocuments.length > 0;
-                return (
-                  <li key={id} className="flex items-start gap-3">
-                    <span aria-hidden="true" className={complete ? 'text-green-600 font-bold' : warning ? 'text-amber-600 font-bold' : 'text-gray-400'}>{complete ? '✓' : warning ? '⚠' : '○'}</span>
-                    <span className={complete ? 'text-gray-900' : warning ? 'text-amber-800 font-bold' : index === currentStep ? 'text-gray-900 font-bold' : 'text-gray-500'}>
-                      {label}{warning ? `: ${missingDocuments.length} required item${missingDocuments.length === 1 ? '' : 's'} missing` : ''}
-                    </span>
-                  </li>
-                );
-              })}
-            </ol>
-
-            <div className="mt-auto pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
-              {!state.submitted ? (
-                <div className="flex flex-col sm:flex-row items-center w-full gap-4">
-                  <Link to="/apply" className="btn-primary inline-flex items-center gap-2 mr-auto">{missingDocuments.length && documentCheckReached ? 'Continue document checks' : 'Continue application'} &rarr;</Link>
-                  <button type="button" onClick={eraseAndLeave} className="text-sm font-bold text-red-700 hover:text-red-900 transition-colors">Start Over (Discard Draft)</button>
-                </div>
-              ) : (
-                <div className="flex flex-col sm:flex-row items-center w-full gap-4">
-                  <div className="mr-auto">
-                    <p className="text-sm text-green-800 font-bold mb-3">{completionCopy}</p>
-                    <Link to="/apply" className="btn-secondary inline-block">View application &rarr;</Link>
-                  </div>
-                  <button type="button" onClick={eraseAndLeave} className="text-sm font-bold text-red-700 hover:text-red-900 transition-colors">Start New Application</button>
-                </div>
-              )}
+            <div className="w-full bg-[#163a5f] h-2 rounded-full overflow-hidden" role="progressbar" aria-label="Application progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow={progressPercent}>
+              <div className="bg-[#f0cc91] h-full transition-all duration-500" style={{ width: `${progressPercent}%` }} />
             </div>
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="bg-blue-50 border border-blue-100 p-5 rounded shadow-sm">
-            <h3 className="font-bold text-blue-900 mb-2">Need Guidance?</h3>
-            <p className="text-sm text-blue-800 mb-4">Review official instructions regarding route selection, document formats, and fee schedules.</p>
-            <Link to="/help" className="text-sm font-bold text-[#0b2540] hover:underline">Read Help & FAQ &rarr;</Link>
+        <div className="p-6 md:p-8 flex-1 flex flex-col">
+          <div className="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm">
+            <span className="block text-xs uppercase tracking-wider text-text-secondary mb-1">Application Reference ID</span>
+            <strong className="font-mono break-all text-base text-[#0b2540]">{formatReference(reference) || 'Available when you start'}</strong>
           </div>
-          <div className="bg-white border border-border p-5 rounded shadow-sm">
-            <h3 className="font-bold text-gray-900 mb-2">Check Status</h3>
-            <p className="text-sm text-gray-600 mb-4">View your application status and next steps.</p>
-            <Link to="/status" className="text-sm font-bold text-[#0b2540] hover:underline">Check Application Status &rarr;</Link>
+
+          <h3 className="font-bold text-lg mb-4 text-gray-900">Application Milestones</h3>
+          <ol className="space-y-3 mb-8">
+            {flow.steps.map(([id, label], index) => {
+              const isDocumentStep = id === 'documents';
+              const complete = state.submitted || index < currentStep || (isDocumentStep && documentsComplete);
+              const warning = isDocumentStep && documentCheckReached && missingDocuments.length > 0;
+              return (
+                <li key={id} className="flex items-start gap-3">
+                  <span aria-hidden="true" className={complete ? 'text-green-600 font-bold' : warning ? 'text-amber-600 font-bold' : 'text-gray-400'}>{complete ? '✓' : warning ? '⚠' : '○'}</span>
+                  <span className={complete ? 'text-gray-900' : warning ? 'text-amber-800 font-bold' : index === currentStep ? 'text-gray-900 font-bold' : 'text-gray-500'}>
+                    {label}{warning ? `: ${missingDocuments.length} required item${missingDocuments.length === 1 ? '' : 's'} missing` : ''}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
+
+          <div className="mt-auto pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
+            {!state.submitted ? (
+              <div className="flex flex-col sm:flex-row items-center w-full gap-4">
+                <Link to="/apply" className="btn-primary inline-flex items-center gap-2 mr-auto">{missingDocuments.length && documentCheckReached ? 'Continue document checks' : 'Continue application'} &rarr;</Link>
+                <button type="button" onClick={eraseAndLeave} className="text-sm font-bold text-red-700 hover:text-red-900 transition-colors cursor-pointer">Start Over (Discard Draft)</button>
+              </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row items-center w-full gap-4">
+                <div className="mr-auto">
+                  <p className="text-sm text-green-800 font-bold mb-3">{completionCopy}</p>
+                  <Link to="/apply" className="btn-secondary inline-block">View application &rarr;</Link>
+                </div>
+                <button type="button" onClick={eraseAndLeave} className="text-sm font-bold text-red-700 hover:text-red-900 transition-colors cursor-pointer">Start New Application</button>
+              </div>
+            )}
           </div>
         </div>
       </div>

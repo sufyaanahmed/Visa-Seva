@@ -161,3 +161,20 @@ test("calendar validation rejects impossible dates and accepts leap days", async
   );
   assert.equal(report.arrival_date, "Enter a valid calendar date.");
 });
+
+
+test("OCI drafts are accepted by the backend and use category-specific completeness", async () => {
+  const { demoFixture } = await import("../src/domain/demoFixtures.js");
+  const { getRequiredDocuments } = await import("../src/domain/documentRequirements.js");
+  for (const oci_category of ["former-indian", "descendant-child", "foreign-spouse"]) {
+    const answers = demoFixture("oci", { oci_category });
+    answers.review_accuracy = true;
+    answers.review_consent = true;
+    assert.equal(answerSchema.parse(answers).application_type, "oci");
+    const documents = getRequiredDocuments(answers).map(({ type }) => ({ type }));
+    const report = validateApplication(answers, documents);
+    assert.deepEqual(report.errors, {}, oci_category);
+    assert.equal(report.complete, true);
+    assert.ok(validateApplication(answers, []).missingDocuments.length > 0);
+  }
+});

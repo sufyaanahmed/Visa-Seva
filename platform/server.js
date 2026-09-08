@@ -400,7 +400,7 @@ export function configuration(env = process.env) {
     sandboxAmount,
   };
 }
-if (process.argv[1]?.endsWith("/platform/server.js")) {
+if (process.argv[1]?.replace(/\\/g, "/").endsWith("/platform/server.js")) {
   const config = configuration();
   const db = createClient(
     process.env.SUPABASE_URL,

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { getSteps, validateStep } from "../src/domain/applicationForm.js";
 import { getRequiredDocuments } from "../src/domain/documentRequirements.js";
 import { getEvisaWizardGate } from "../src/domain/visaEligibility.js";
-export const routes = ["evisa", "regular", "afghan", "voa"];
+export const routes = ["evisa", "regular", "afghan", "voa", "oci"];
 export const answerSchema = z
   .record(
     z.string().max(100),

@@ -12,6 +12,7 @@ import {
 } from "../src/domain/finderSession.js";
 import { getSteps } from "../src/domain/applicationForm.js";
 import { getRequiredDocuments } from "../src/domain/documentRequirements.js";
+import { routes } from "./rules.js";
 export function reference(topic = "overview", answers = {}) {
   answers = { application_type: "evisa", ...answers };
   const common = {
@@ -23,7 +24,7 @@ export function reference(topic = "overview", answers = {}) {
     return {
       ...common,
       categories: EVISA_CATEGORIES,
-      routes: ["evisa", "regular", "afghan", "voa"],
+      routes,
     };
   if (topic === "overview")
     return {

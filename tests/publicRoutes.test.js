@@ -27,6 +27,11 @@ test("public routes render and reference existing local images", async () => {
       "flows/AfghanFlow",
       "flows/VoaFlow",
       "guide/VisaFinder",
+      "guide/NationalParks",
+      "guide/UnescoSites",
+      "guide/NaturalWonders",
+      "guide/SpiritualHeritage",
+      "guide/OciGuidance",
     ]) {
       const { default: Page } = await server.ssrLoadModule(
         `/src/pages/${page}.jsx`,

@@ -92,6 +92,8 @@ export default function AIAssistants() {
                   <img
                     src={assistant.logo}
                     alt=""
+                    loading="lazy"
+                    decoding="async"
                     className="h-12 w-12 object-contain"
                   />
                 </span>

@@ -4,6 +4,78 @@ import IndiaSvgMap from '../../components/IndiaSvgMap';
 
 const NATIONAL_PARKS = [
   {
+    id: 'nagarhole',
+    title: 'Nagarhole & Bandipur Tiger Reserve',
+    state: 'Karnataka',
+    stateId: 'IN-KA',
+    keyFauna: 'Black Panther, Asian Elephant, Bengal Tiger, Dhole',
+    habitat: 'Moist Deciduous Woods & Nilgiri Biosphere Foothills',
+    season: 'October to May (Peak Sightings: February to May)',
+    airport: 'Mysore (MYQ) 75 km or Bangalore (BLR) 220 km',
+    img: '/Black_Panther.jpg',
+    aspect: 'aspect-[3/4]',
+    mapX: 185,
+    mapY: 550,
+    safariZones: 'Kabini River Boat Safari, Bandipur Core, Nagarhole Trail',
+    desc: 'Ancient teak woods where the Kabini River curves through dense jungle. Home to rare melanistic black panthers and the largest congregation of wild Asian elephants in Asia.',
+    highlights: ['Kabini River Boat Safari', 'Rare Black Panther Sightings', 'Asian Elephant Herds', 'Nilgiri Biosphere Corridors'],
+    travelTip: 'Afternoon boat safaris along the Kabini River offer serene glimpses of wild elephant herds gathering at the water line.',
+  },
+  {
+    id: 'tadoba',
+    title: 'Tadoba Andhari Tiger Reserve',
+    state: 'Maharashtra',
+    stateId: 'IN-MH',
+    keyFauna: 'Royal Bengal Tiger, Indian Leopard, Sloth Bear, Gaur',
+    habitat: 'Dry Deciduous Teak Forest, Bamboo Thickets & Irai Lake',
+    season: 'October to June (Peak Tiger Sightings: March to May)',
+    airport: 'Nagpur Dr. Babasaheb Ambedkar (NAG) 140 km',
+    img: '/Kanha.jpg',
+    aspect: 'aspect-[3/4]',
+    mapX: 265,
+    mapY: 410,
+    safariZones: 'Moharli, Kolara, Navegaon Core Ranges',
+    desc: 'The jewel of Vidarbha with deep bamboo thickets and red clay paths. Renowned as one of India’s most reliable landscapes for observing wild tiger families.',
+    highlights: ['High Tiger Density', 'Irai Lake Safari', 'Sloth Bear Sightings', 'Ancient Gond Forest Heritage'],
+    travelTip: 'Early morning drives near Moharli waterholes reveal tigers walking along the dust roads in golden morning sunlight.',
+  },
+  {
+    id: 'mudumalai',
+    title: 'Mudumalai & Nilgiri Biosphere',
+    state: 'Tamil Nadu',
+    stateId: 'IN-TN',
+    keyFauna: 'Asian Elephant, Royal Bengal Tiger, Nilgiri Tahr, Gaur',
+    habitat: 'Tropical Moist Deciduous & Shola Grassland Slopes',
+    season: 'September to May',
+    airport: 'Coimbatore (CJB) 160 km or Calicut (CCJ)',
+    img: '/Tahr.jpg',
+    aspect: 'aspect-[3/4]',
+    mapX: 202,
+    mapY: 578,
+    safariZones: 'Theppakadu, Kargudi, Masinagudi Elephant Corridor',
+    desc: 'Misty slopes where the Western Ghats meet the Eastern Ghats. Old elephant routes wind past giant teak trees and cool mountain streams.',
+    highlights: ['Historic Theppakadu Sanctuary', 'Nilgiri Biosphere Heart', 'Endemic Nilgiri Langur', 'Moyar River Gorge'],
+    travelTip: 'The buffer zone of Masinagudi at dusk provides rewarding views of elephant herds migrating toward forest watering holes.',
+  },
+  {
+    id: 'similipal',
+    title: 'Similipal & Bhitarkanika Sanctuaries',
+    state: 'Odisha',
+    stateId: 'IN-OR',
+    keyFauna: 'Melanistic Black Tiger, Giant Estuarine Crocodile, King Cobra, Asian Elephant',
+    habitat: 'Lush Sal Forests, Waterfalls & Mangrove Estuaries',
+    season: 'November to June (Bhitarkanika: October to April)',
+    airport: 'Bhubaneswar Biju Patnaik (BBI) 150 km',
+    img: '/Black_Tiger.jpg',
+    aspect: 'aspect-[4/5]',
+    mapX: 410,
+    mapY: 395,
+    safariZones: 'Baripada, Pithabata, Dangamal Mangrove Creek',
+    desc: 'Vast red-soil sal plateaus and mangrove waterways. The world’s unique home to wild melanistic tigers and pristine saltwater crocodile sanctuaries.',
+    highlights: ['Rare Melanistic Tiger Habitat', 'Bhitarkanika Giant Crocodile Haven', 'Barehipani & Joranda Waterfalls', 'Olive Ridley Nesting Coasts'],
+    travelTip: 'Creek cruises through Bhitarkanika at dawn offer peaceful views of sunning estuarine crocodiles in pristine tidal mangroves.',
+  },
+  {
     id: 'ranthambore',
     title: 'Ranthambore Tiger Reserve',
     state: 'Rajasthan',
@@ -13,6 +85,9 @@ const NATIONAL_PARKS = [
     season: 'October to June (Peak Sightings: March to May)',
     airport: 'Jaipur (JAI) 160 km or Delhi (DEL)',
     img: '/Tiger1.jpg',
+    aspect: 'aspect-[16/10]',
+    mapX: 180,
+    mapY: 275,
     safariZones: 'Zones 1 to 10 (Core Lake Zones 1 to 5)',
     desc: 'Golden scrub forests beneath the stone ramparts of the 10th-century fort. Tigers move quietly among ancient banyan roots and water lilies of Padam Talao.',
     highlights: ['Diurnal Tiger Tracking', 'Ancient 10th-Century Fortress', 'Padam Talao Lake Safaris', '300+ Forest Bird Species'],
@@ -28,6 +103,9 @@ const NATIONAL_PARKS = [
     season: 'December to April (Closed Mid-June to Mid-October)',
     airport: 'Rajkot (HSR) 160 km or Ahmedabad (AMD)',
     img: '/Gir_Lion.avif',
+    aspect: 'aspect-[16/10]',
+    mapX: 78,
+    mapY: 372,
     safariZones: 'Gir Jungle Trail & Devalia Park',
     desc: 'The only home on earth for the wild Asiatic lion. Rugged teak hills and dry streams shared with the pastoral Maldhari forest dwellers.',
     highlights: ['Sole Asiatic Lion Refuge', 'Maldhari Forest Culture', 'Four-Horned Chousingha', 'Hiran River Waterholes'],
@@ -43,6 +121,9 @@ const NATIONAL_PARKS = [
     season: 'November to April (Closed May to October)',
     airport: 'Guwahati (GAU) 217 km or Jorhat (JRH)',
     img: '/Kaziranga_Rhino.avif',
+    aspect: 'aspect-[16/10]',
+    mapX: 520,
+    mapY: 260,
     safariZones: 'Central (Kohora) & Western (Bagori) Ranges',
     desc: 'Vast grasslands along the floodplains of the Brahmaputra River. Two-thirds of the world’s one-horned rhinoceroses graze quietly among marsh waters.',
     highlights: ['2,400+ One-Horned Rhinos', 'Wild Water Buffalo Herds', 'Brahmaputra Flood Ecology', 'Waterfowl Colonies'],
@@ -58,6 +139,9 @@ const NATIONAL_PARKS = [
     season: 'December to March (Winter Snow Leopard Trails)',
     airport: 'Leh Kushok Bakula Rimpochee Airport (IXL)',
     img: '/Hemis_Leopard.avif',
+    aspect: 'aspect-[16/10]',
+    mapX: 195,
+    mapY: 90,
     safariZones: 'Rumbak Valley & Husing Nala',
     desc: 'The highest mountain sanctuary in the world. Silent snow ridges and stone gorges where the elusive snow leopard walks above ancient Buddhist monasteries.',
     highlights: ['Snow Leopard Habitat', 'Rumbak Mountain Valley', 'Blue Sheep & Golden Eagles', '17th-Century Hemis Gompa'],
@@ -72,7 +156,10 @@ const NATIONAL_PARKS = [
     habitat: 'Tropical Wet Evergreen Rainforest & Mountain Lake',
     season: 'September to May',
     airport: 'Cochin (COK) 140 km or Madurai (IXM)',
-    img: '/Periyar_Elephants.avif',
+    img: '/elephant2.jpg',
+    aspect: 'aspect-[16/10]',
+    mapX: 198,
+    mapY: 625,
     safariZones: 'Periyar Lake Boat Safaris & Bamboo Rafting',
     desc: 'Evergreen hills and spice slopes surrounding a peaceful mountain lake. Wild elephant herds arrive at dawn to drink and bathe along the water’s edge.',
     highlights: ['Quiet Water Safaris', 'Wild Asian Elephant Herds', 'Bamboo Raft Expeditions', 'Cardamom Hills Trails'],
@@ -88,6 +175,9 @@ const NATIONAL_PARKS = [
     season: 'Mid-November to Mid-June (Dhikala Zone)',
     airport: 'Dehradun (DED) 160 km or Delhi (DEL)',
     img: '/Gharial.jpg',
+    aspect: 'aspect-[16/10]',
+    mapX: 232,
+    mapY: 185,
     safariZones: 'Dhikala, Bijrani, Jhirna, Dhela',
     desc: 'Foothills where the Ramganga River winds through sal forests. Critically endangered long-snouted Gharials bask on sunlit river stones beside wild tiger tracks.',
     highlights: ['Endangered Gharial Haven', 'Ramganga River Valley', 'Dhikala Core Grasslands', 'Historic Forest Rest Houses'],
@@ -103,6 +193,9 @@ const NATIONAL_PARKS = [
     season: 'October to March',
     airport: 'Kolkata Netaji Subhash Chandra Bose (CCU)',
     img: '/peacock.jpg',
+    aspect: 'aspect-[3/4]',
+    mapX: 438,
+    mapY: 368,
     safariZones: 'Sajnekhali, Sudhanyakhali, Dobanki Walk',
     desc: 'The world’s largest mangrove forest spanning the Ganges delta. Home to tigers adapted to tidal rivers and quiet estuarine waterways.',
     highlights: ['World’s Largest Mangrove Delta', 'Swimming Bengal Tigers', 'Silent Boat-Only Safaris', 'High Canopy Walkways'],
@@ -118,6 +211,9 @@ const NATIONAL_PARKS = [
     season: 'October to June (Peak Sightings: February to May)',
     airport: 'Jabalpur (JLR) 160 km or Raipur (RPR)',
     img: '/Kanha.jpg',
+    aspect: 'aspect-[3/4]',
+    mapX: 295,
+    mapY: 345,
     safariZones: 'Mukki, Kanha, Sarhi & Tala (Bandhavgarh)',
     desc: 'Lush central Indian sal forests that inspired classic jungle lore. Open meadows where rescued swamp deer graze alongside dense tiger populations.',
     highlights: ['Central Sal Meadows', 'Highest Tiger Density at Tala', 'Barasingha Swamp Deer', 'Ancient Hilltop Fort Ruins'],
@@ -129,9 +225,10 @@ export default function NationalParks() {
   const [selectedState, setSelectedState] = useState('all');
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'map'
   const [activeModalPark, setActiveModalPark] = useState(null);
+  const [hoveredPinPark, setHoveredPinPark] = useState(null);
 
-  const states = ['all', 'Rajasthan', 'Gujarat', 'Assam', 'Ladakh', 'Kerala', 'Uttarakhand', 'West Bengal', 'Madhya Pradesh'];
   const parkStateIds = Array.from(new Set(NATIONAL_PARKS.map(p => p.stateId)));
+  const uniqueStates = ['all', ...Array.from(new Set(NATIONAL_PARKS.map(p => p.state)))];
 
   const filteredParks = selectedState === 'all'
     ? NATIONAL_PARKS
@@ -143,18 +240,34 @@ export default function NationalParks() {
     }
   };
 
+  const handlePinClick = (park, e) => {
+    e.stopPropagation();
+    setSelectedState(park.state);
+  };
+
   return (
     <div className="w-full bg-[#FAF7F0] min-h-screen py-16 px-4 sm:px-6 font-sans">
       <div className="max-w-6xl mx-auto">
-        {/* Navigation Breadcrumb */}
-        <div className="mb-8 flex items-center gap-2 text-xs uppercase tracking-widest text-[#1E2A4F]/60">
-          <Link to="/" className="hover:text-[#1E2A4F]">Home</Link>
-          <span>/</span>
-          <span className="text-[#C4762A] font-bold">National Parks & Wild Sanctuaries</span>
+        {/* Navigation Breadcrumb & Map Action */}
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#1E2A4F]/60">
+            <Link to="/" className="hover:text-[#1E2A4F]">Home</Link>
+            <span>/</span>
+            <Link to="/tourism" className="hover:text-[#1E2A4F]">Tourism</Link>
+            <span>/</span>
+            <span className="text-[#2E7D32] font-bold">National Parks & Wilds</span>
+          </div>
+          <Link
+            to="/tourism"
+            className="inline-flex items-center gap-2 self-start sm:self-auto px-4 py-1.5 rounded-xl bg-white border border-[#2E7D32]/40 text-[#1E2A4F] hover:bg-[#1E2A4F] hover:text-white text-xs font-sans font-bold uppercase tracking-wider transition-colors shadow-2xs"
+          >
+            <span>🗺 Interactive State Map</span>
+            <span className="text-[#D4AF37]">→</span>
+          </Link>
         </div>
 
         {/* Hero Section */}
-        <div className="text-center mb-12 max-w-2xl mx-auto">
+        <div className="text-center mb-10 max-w-3xl mx-auto">
           <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-[#2E7D32] mb-2 block">
             Protected Sanctuaries
           </span>
@@ -162,16 +275,41 @@ export default function NationalParks() {
             National Parks of India
           </h1>
           <div className="w-12 h-0.5 bg-[#2E7D32] mx-auto mb-4" />
-          <p className="text-sm sm:text-base font-serif italic text-[#1E2A4F]/80 leading-relaxed">
-            From the quiet gaze of the tiger in ancient banyans to lions of Gir and high snow leopard passes.
+          <p className="text-sm sm:text-base font-serif italic text-[#1E2A4F]/80 leading-relaxed mb-6">
+            From the quiet gaze of the tiger in ancient banyans to lions of Gir, elephant river trails, and high snow leopard passes.
           </p>
+
+          {/* Minimal Thematic Guide Switcher */}
+          <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-white/70 backdrop-blur-xs rounded-2xl border border-[#D4AF37]/30 shadow-2xs max-w-fit mx-auto">
+            <Link
+              to="/unesco-sites"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              Heritage Sites
+            </Link>
+            <span className="px-3.5 py-1.5 rounded-xl bg-[#1E2A4F] text-white text-xs font-sans font-semibold uppercase tracking-wider shadow-2xs">
+              National Parks
+            </span>
+            <Link
+              to="/natural-wonders"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              Natural Wonders
+            </Link>
+            <Link
+              to="/spiritual-heritage"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-[#FAF7F0] text-[#1E2A4F] border border-[#EBE5D9] text-xs font-sans font-semibold uppercase tracking-wider transition-colors"
+            >
+              Spiritual Heritage
+            </Link>
+          </div>
         </div>
 
         {/* View Switcher & Filters */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 bg-white p-3 sm:p-4 rounded-2xl border border-[#EBE5D9] shadow-xs">
           {/* State Filter Pills */}
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-            {states.map((st) => (
+            {uniqueStates.map((st) => (
               <button
                 key={st}
                 type="button"
@@ -182,7 +320,7 @@ export default function NationalParks() {
                     : 'bg-[#FAF7F0] text-[#162040]/80 hover:bg-[#EBE5D9]'
                 }`}
               >
-                {st === 'all' ? 'All Sanctuaries (8)' : st}
+                {st === 'all' ? `All Sanctuaries (${NATIONAL_PARKS.length})` : st}
               </button>
             ))}
           </div>
@@ -216,7 +354,7 @@ export default function NationalParks() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               {/* Map Column */}
               <div className="lg:col-span-6 flex flex-col items-center">
-                <div className="w-full max-w-[420px]">
+                <div className="w-full max-w-[440px] relative">
                   <style>{`
                     .india-map-container path {
                       fill: #F5EFE6 !important;
@@ -233,7 +371,7 @@ export default function NationalParks() {
                       }
                     `).join('')}
                     ${selectedState !== 'all' ? `
-                      .india-map-container path#${selectedState} {
+                      .india-map-container path#${NATIONAL_PARKS.find(p => p.state === selectedState || p.stateId === selectedState)?.stateId || selectedState} {
                         fill: #2E7D32 !important;
                         stroke: #162040 !important;
                         stroke-width: 2.5px !important;
@@ -245,10 +383,74 @@ export default function NationalParks() {
                       stroke-width: 2px !important;
                     }
                   `}</style>
-                  <IndiaSvgMap onStateClick={handleStateClick} />
+                  <IndiaSvgMap onStateClick={handleStateClick}>
+                    {/* Render pinpoint dots for each reserve */}
+                    <g className="sanctuary-pinpoints" style={{ pointerEvents: 'auto' }}>
+                      {NATIONAL_PARKS.map((park) => {
+                        const isHighlighted = selectedState === 'all' || selectedState === park.state || selectedState === park.stateId;
+                        const isHovered = hoveredPinPark?.id === park.id;
+                        
+                        return (
+                          <g
+                            key={park.id}
+                            className="cursor-pointer transition-transform duration-200"
+                            onClick={(e) => handlePinClick(park, e)}
+                            onMouseEnter={() => setHoveredPinPark(park)}
+                            onMouseLeave={() => setHoveredPinPark(null)}
+                          >
+                            {/* Outer dot ring */}
+                            <circle
+                              cx={park.mapX}
+                              cy={park.mapY}
+                              r={isHovered ? 7 : 5}
+                              fill={isHighlighted ? '#2E7D32' : '#8D9B87'}
+                              stroke="#FFFFFF"
+                              strokeWidth={isHovered ? 2 : 1.5}
+                              className="drop-shadow-md transition-all duration-200"
+                            />
+
+                            {/* Inner dot center */}
+                            <circle
+                              cx={park.mapX}
+                              cy={park.mapY}
+                              r={isHovered ? 3 : 1.8}
+                              fill={isHovered ? '#D4AF37' : '#FFFFFF'}
+                              className="transition-all duration-200"
+                            />
+
+                            {/* Interactive Pin Hover Label */}
+                            {isHovered && (
+                              <g transform={`translate(${park.mapX}, ${park.mapY - 14})`}>
+                                <rect
+                                  x="-55"
+                                  y="-20"
+                                  width="110"
+                                  height="20"
+                                  rx="4"
+                                  fill="#162040"
+                                  opacity="0.95"
+                                />
+                                <text
+                                  x="0"
+                                  y="-6"
+                                  textAnchor="middle"
+                                  fill="#FFFFFF"
+                                  fontSize="8.5"
+                                  fontWeight="bold"
+                                  fontFamily="sans-serif"
+                                >
+                                  {park.title.split(' ')[0]}
+                                </text>
+                              </g>
+                            )}
+                          </g>
+                        );
+                      })}
+                    </g>
+                  </IndiaSvgMap>
                 </div>
                 <p className="text-[11px] text-[#1E2A4F]/60 mt-3 text-center">
-                  Click highlighted states on the map to view regional sanctuaries.
+                  Click highlighted states or sanctuary pin dots to explore regional reserves.
                 </p>
               </div>
 
@@ -259,17 +461,17 @@ export default function NationalParks() {
                 </span>
                 <h3 className="text-2xl font-serif font-bold text-[#1E2A4F] mb-3">
                   {selectedState !== 'all' 
-                    ? `Sanctuaries in this Region (${filteredParks.length})` 
-                    : 'Select a highlighted sanctuary state'}
+                    ? `Sanctuaries in ${selectedState} (${filteredParks.length})` 
+                    : `India Protected Wildlife Reserves (${NATIONAL_PARKS.length})`}
                 </h3>
                 <p className="text-xs font-serif italic text-[#1E2A4F]/75 leading-relaxed mb-6">
                   {selectedState !== 'all' 
                     ? 'Protected wildlife reserves, key species, and visiting seasons in this state:'
-                    : 'India preserves protected tiger reserves, Asiatic lion forests, elephant corridors, and high-altitude snow leopard habitats.'}
+                    : 'Interactive pinpoint dots locate India’s premier protected tiger reserves, Asiatic lion forests, elephant corridors, and high-altitude snow leopard habitats.'}
                 </p>
 
                 {/* Mini list of parks for the state */}
-                <div className="space-y-2.5 max-h-[320px] overflow-y-auto pr-1">
+                <div className="space-y-2.5 max-h-[340px] overflow-y-auto pr-1">
                   {filteredParks.map(p => (
                     <div 
                       key={p.id} 
@@ -277,8 +479,13 @@ export default function NationalParks() {
                       className="p-3 bg-[#FAF7F0] hover:bg-white rounded-xl border border-[#EBE5D9] hover:border-[#2E7D32] transition-all cursor-pointer flex items-center justify-between gap-3 shadow-2xs"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <img src={p.img} alt={p.title} className="w-12 h-12 rounded-lg object-cover shrink-0" />
+                        <img src={p.img} alt={p.title} loading="lazy" decoding="async" className="w-12 h-12 rounded-lg object-cover shrink-0" />
                         <div className="min-w-0">
+                          <div className="flex items-center gap-1.5 mb-0.5">
+                            <span className="text-[9px] px-1.5 py-0.2 rounded-sm bg-[#2E7D32]/15 text-[#2E7D32] font-bold">
+                              {p.state}
+                            </span>
+                          </div>
                           <h4 className="font-serif font-bold text-xs text-[#1E2A4F] truncate">{p.title}</h4>
                           <span className="text-[10px] text-gray-500 block truncate">{p.keyFauna}</span>
                         </div>
@@ -292,17 +499,17 @@ export default function NationalParks() {
           </div>
         )}
 
-        {/* EDITORIAL PARKS GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* EDITORIAL PARKS MASONRY GRID */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 [column-fill:_balance]">
           {filteredParks.map((park) => (
             <div
               key={park.id}
-              className="group flex flex-col justify-between bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#1E2A4F]/30 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1 relative"
+              className="break-inside-avoid mb-8 w-full inline-block group bg-white rounded-2xl overflow-hidden border border-[#EBE5D9] hover:border-[#1E2A4F]/30 shadow-xs hover:shadow-xl transition-all duration-500 hover:-translate-y-1 relative"
             >
               <div>
-                {/* Image Container */}
+                {/* Image Container with Dynamic Aspect Ratio */}
                 <div 
-                  className="relative h-60 w-full overflow-hidden bg-neutral-900 cursor-pointer"
+                  className={`relative w-full overflow-hidden bg-neutral-900 cursor-pointer ${park.aspect || 'aspect-[16/10]'}`}
                   onClick={() => setActiveModalPark(park)}
                 >
                   <img
@@ -310,6 +517,7 @@ export default function NationalParks() {
                     alt={park.title}
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
@@ -343,7 +551,7 @@ export default function NationalParks() {
                     </p>
                   </div>
 
-                  <p className="text-xs font-serif italic text-[#1E2A4F]/85 leading-relaxed mb-4 line-clamp-3">
+                  <p className="text-xs font-serif italic text-[#1E2A4F]/85 leading-relaxed mb-4">
                     {park.desc}
                   </p>
 
@@ -493,6 +701,28 @@ export default function NationalParks() {
             </div>
           </div>
         )}
+
+        {/* Interactive Map Discovery Callout Banner */}
+        <div className="mt-16 bg-white rounded-2xl border border-[#E6DFD3] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs">
+          <div className="text-left">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#2E7D32] block mb-1">
+              Protected Reserves & Habitats
+            </span>
+            <h3 className="font-serif font-bold text-xl sm:text-2xl text-[#1E2A4F] mb-1.5">
+              Explore All 28 States on the Interactive Map
+            </h3>
+            <p className="text-xs sm:text-sm font-serif text-[#1E2A4F]/70 max-w-xl">
+              Locate tiger reserves, elephant corridors, and pristine bird sanctuaries across India with live route details.
+            </p>
+          </div>
+          <Link
+            to="/tourism"
+            className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1E2A4F] text-white hover:bg-[#141D36] text-xs font-sans font-bold uppercase tracking-widest transition-all shadow-sm hover:shadow-md cursor-pointer"
+          >
+            <span>Open Interactive Map</span>
+            <span className="text-[#D4AF37]">→</span>
+          </Link>
+        </div>
 
       </div>
     </div>

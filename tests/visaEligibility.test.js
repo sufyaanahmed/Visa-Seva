@@ -206,4 +206,50 @@ describe('visa route eligibility', () => {
     assert.equal(result.applicationType, 'regular');
     assert.match(result.description, /should not be guessed/);
   });
+
+  test('routes existing OCI cardholders to visa-free e-Arrival guidance', () => {
+    const resultByPurpose = evaluateVisaRoute({
+      ...readyTraveller,
+      passport: 'United Kingdom',
+      purpose: 'oci-holder',
+      durationDays: '90',
+    });
+    assert.equal(resultByPurpose.applicationType, 'oci_holder');
+    assert.equal(resultByPurpose.path, '/e-arrival');
+    assert.match(resultByPurpose.type, /OCI Cardholder/);
+
+    const resultByFlag = evaluateVisaRoute({
+      ...readyTraveller,
+      passport: 'United States',
+      hasOciCard: 'cardholder',
+      purpose: 'tourism',
+      durationDays: '30',
+    });
+    assert.equal(resultByFlag.applicationType, 'oci_holder');
+    assert.equal(resultByFlag.path, '/e-arrival');
+  });
+
+  test('routes new OCI applicants to official OCI guidance and checklist', () => {
+    const result = evaluateVisaRoute({
+      ...readyTraveller,
+      passport: 'Canada',
+      purpose: 'oci-apply',
+      durationDays: '30',
+    });
+    assert.equal(result.applicationType, 'oci_applicant');
+    assert.equal(result.path, '/guide/oci');
+    assert.match(result.actionLabel, /OCI Application Guide/);
+  });
+
+  test('excludes Pakistani-origin applicants from OCI registration under Section 7A', () => {
+    const result = evaluateVisaRoute({
+      ...readyTraveller,
+      passport: 'United States',
+      pakistanOrigin: 'yes',
+      purpose: 'oci-apply',
+      durationDays: '30',
+    });
+    assert.equal(result.applicationType, 'regular');
+    assert.match(result.description, /Section 7A/);
+  });
 });

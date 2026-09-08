@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/hero-reveal.css';
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -58,7 +58,7 @@ function shouldRevealHero() {
 function TigerIllustration({ className = '' }) {
   return (
     <div className={`overflow-hidden rounded-xl shadow-md ${className}`}>
-      <img src="/tiger.jpg" alt="Royal Bengal Tiger" className="w-full h-auto" />
+      <img src="/Kanha.jpg" alt="Royal Bengal Tiger" loading="lazy" decoding="async" className="w-full h-auto" />
     </div>
   );
 }
@@ -67,7 +67,7 @@ function TigerIllustration({ className = '' }) {
 function PeacockIllustration({ className = '' }) {
   return (
     <div className={`overflow-hidden rounded-xl shadow-md ${className}`}>
-      <img src="/peacock.jpg" alt="Peacock" className="w-full h-auto" />
+      <img src="/peacock.jpg" alt="Peacock" loading="lazy" decoding="async" className="w-full h-auto" />
     </div>
   );
 }
@@ -76,7 +76,7 @@ function PeacockIllustration({ className = '' }) {
 function ElephantIllustration({ className = '' }) {
   return (
     <div className={`overflow-hidden rounded-xl shadow-md ${className}`}>
-      <img src="/elephant.jpg" alt="Elephant" className="w-full h-auto" />
+      <img src="/Periyar_Elephants.avif" alt="Elephant" loading="lazy" decoding="async" className="w-full h-auto" />
     </div>
   );
 }
@@ -147,8 +147,19 @@ function TempleGopuram({ className = '' }) {
 ───────────────────────────────────────────────────────────────────────────── */
 
 export default function Home() {
+  const navigate = useNavigate();
   const [isRevealing, setIsRevealing] = useState(shouldRevealHero);
   const [isInteracting, setIsInteracting] = useState(false);
+  const [isAdminLoading, setIsAdminLoading] = useState(false);
+
+  const handleAdminClick = (e) => {
+    e.preventDefault();
+    if (isAdminLoading) return;
+    setIsAdminLoading(true);
+    setTimeout(() => {
+      navigate('/admin');
+    }, 700);
+  };
 
   useEffect(() => {
     // Returning through the router is instant. A fresh page load can play the
@@ -192,8 +203,8 @@ export default function Home() {
             }}
           >
             <g className="hero-chakra-rotor">
-              <circle className="hero-chakra-ring hero-chakra-ring-outer" cx="200" cy="200" r="185" fill="none" stroke="currentColor" strokeWidth="12" pathLength="1" transform="rotate(-35 200 200)" />
-              <circle className="hero-chakra-ring hero-chakra-ring-inner" cx="200" cy="200" r="172" fill="none" stroke="currentColor" strokeWidth="3" pathLength="1" transform="rotate(-35 200 200)" />
+              <circle className="hero-chakra-ring hero-chakra-ring-outer" cx="200" cy="200" r="185" fill="none" stroke="currentColor" strokeWidth="12" strokeLinecap="round" pathLength="1" transform="rotate(-35 200 200)" />
+              <circle className="hero-chakra-ring hero-chakra-ring-inner" cx="200" cy="200" r="172" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" pathLength="1" transform="rotate(-35 200 200)" />
 
               {Array.from({ length: 24 }, (_, i) => (
                 <g key={`spoke-${i}`} transform={`rotate(${i * 15} 200 200)`}>
@@ -328,14 +339,18 @@ export default function Home() {
                 <span className="hidden sm:inline opacity-60 font-bold mr-1">Direct Routes:</span>
                 <Link to="/flow/voa" className="hover:text-[#D4AF37] transition-colors flex items-center gap-1.5">
                   <div className="flex gap-1">
-                    <img src="https://flagcdn.com/w40/jp.png" className="w-4 rounded-sm opacity-90" alt="Japan"/>
-                    <img src="https://flagcdn.com/w40/kr.png" className="w-4 rounded-sm opacity-90" alt="South Korea"/>
-                    <img src="https://flagcdn.com/w40/ae.png" className="w-4 rounded-sm opacity-90" alt="UAE"/>
+                    <img src="https://flagcdn.com/w40/jp.png" loading="lazy" decoding="async" className="w-4 rounded-sm opacity-90" alt="Japan"/>
+                    <img src="https://flagcdn.com/w40/kr.png" loading="lazy" decoding="async" className="w-4 rounded-sm opacity-90" alt="South Korea"/>
+                    <img src="https://flagcdn.com/w40/ae.png" loading="lazy" decoding="async" className="w-4 rounded-sm opacity-90" alt="UAE"/>
                   </div>
                   On Arrival
                 </Link>
                 <span className="opacity-30">·</span>
-                <Link to="/flow/afghan" className="hover:text-[#D4AF37] transition-colors flex items-center gap-1.5"><img src="https://flagcdn.com/w20/af.png" className="w-4 rounded-sm opacity-90" alt=""/> Afghan</Link>
+                <Link to="/flow/afghan" className="hover:text-[#D4AF37] transition-colors flex items-center gap-1.5"><img src="https://flagcdn.com/w20/af.png" loading="lazy" decoding="async" className="w-4 rounded-sm opacity-90" alt=""/> Afghan</Link>
+                <span className="opacity-30">·</span>
+                <Link to="/guide/oci" className="hover:text-[#D4AF37] text-[#D4AF37]/90 transition-colors flex items-center gap-1.5">
+                  <span className="font-serif italic text-xs">Diaspora:</span> OCI Card
+                </Link>
               </div>
             </div>
           </div>
@@ -408,6 +423,49 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── DEDICATED DIASPORA & OCI REGISTRATION SECTION ── */}
+      <section className="bg-[#FAF7F0] py-20 px-6 relative z-20 border-b border-[#EBE5D9]">
+        <div className="max-w-5xl mx-auto bg-white rounded-2xl border border-[#E6DFD3] shadow-sm p-8 sm:p-12 relative overflow-hidden">
+          {/* Subtle Top Tricolor Line */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF9933] via-white to-[#138808]" />
+          
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+            <div className="max-w-2xl text-left">
+              <span className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-[#C4762A] mb-2 block">
+                Indian Diaspora & Lineage
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#1E2A4F] mb-3 leading-snug">
+                Overseas Citizen of India (OCI) Registration
+              </h2>
+              <p className="text-sm font-serif text-[#1E2A4F]/75 leading-relaxed mb-4">
+                Former Indian citizens, children and grandchildren of Indian nationals, and foreign spouses are eligible for lifetime multi-purpose, visa-free travel to India with parity in economic and property rights.
+              </p>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-sans text-[#1E2A4F]/65">
+                <span className="flex items-center gap-1.5 font-medium">✓ Lifelong Visa-Free Entry</span>
+                <span className="flex items-center gap-1.5 font-medium">✓ No Police / FRRO Registration</span>
+                <span className="flex items-center gap-1.5 font-medium">✓ Full Economic & Financial Parity</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row lg:flex-col shrink-0 gap-3 w-full sm:w-auto">
+              <Link
+                to="/guide/oci"
+                className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#1E2A4F] text-white hover:bg-[#141D36] text-xs font-sans font-bold uppercase tracking-widest transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer text-center"
+              >
+                <span>Check OCI Eligibility</span>
+                <span className="text-[#D4AF37]">→</span>
+              </Link>
+              <Link
+                to="/apply?route=oci"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-[#D4AF37]/50 bg-[#FAF7F0] hover:bg-white text-[#1E2A4F] text-xs font-sans font-semibold uppercase tracking-wider transition-colors text-center"
+              >
+                <span>Start OCI Application</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── 3 THEMATIC CULTURAL & TRAVEL EXPLORATIONS ── */}
       <section className="bg-[#FAF7F0] py-28 px-6 relative z-20 border-t border-[#EBE5D9]">
         <div className="max-w-6xl mx-auto">
@@ -436,7 +494,9 @@ export default function Home() {
                 <img 
                   src="/Taj_Mahal.jpg" 
                   alt="UNESCO World Heritage Sites" 
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" 
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" 
                 />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-85 group-hover:opacity-90 transition-opacity duration-500" />
@@ -461,13 +521,15 @@ export default function Home() {
             {/* Card 2: Top National Parks */}
             <Link 
               to="/national-parks" 
-              className="group block relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-700 h-[520px] cursor-pointer md:mt-6"
+              className="group block relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-700 h-[520px] cursor-pointer"
             >
               <div className="absolute inset-0 w-full h-full bg-neutral-900">
                 <img 
                   src="/Tiger1.jpg" 
                   alt="National Parks and Wildlife" 
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" 
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" 
                 />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-85 group-hover:opacity-90 transition-opacity duration-500" />
@@ -498,7 +560,9 @@ export default function Home() {
                 <img 
                   src="/Himalaya.jpg" 
                   alt="Natural Wonders, Backwaters and Mountains" 
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" 
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100" 
                 />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-85 group-hover:opacity-90 transition-opacity duration-500" />
@@ -531,6 +595,73 @@ export default function Home() {
               <span className="text-[#D4AF37]">→</span>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* ── OFFICIAL ADMINISTRATION CONSOLE ACCESS ── */}
+      <section className="bg-white py-20 px-6 border-t border-[#EBE5D9]">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-xs font-sans font-bold uppercase tracking-[0.25em] text-[#C4762A] mb-3">
+            Official Administration
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#1E2A4F] mb-4">
+            Consular & Immigration Console
+          </h2>
+          <div className="w-12 h-0.5 bg-[#D4AF37] mx-auto mb-6" />
+          <p className="text-sm sm:text-base font-serif text-[#1E2A4F]/75 max-w-2xl mx-auto leading-relaxed mb-8">
+            Restricted access for consular officers, FRRO staff, and immigration authorities to review pending e-Visa dossiers, adjudicate applications, and manage entry clearances.
+          </p>
+          <div className="flex flex-col items-center justify-center">
+            <button
+              type="button"
+              onClick={handleAdminClick}
+              disabled={isAdminLoading}
+              className="relative overflow-hidden group inline-flex items-center justify-center gap-3 px-9 py-4 rounded-xl bg-[#1E2A4F] text-white hover:bg-[#141D36] text-xs font-sans font-bold uppercase tracking-widest transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer min-w-[240px]"
+            >
+              {/* Left-to-right one sweep Indian Flag (Tiranga) overlay */}
+              {isAdminLoading && (
+                <div className="absolute inset-0 z-0 flex flex-col justify-between animate-flag-sweep pointer-events-none">
+                  {/* Saffron Band */}
+                  <div className="w-full h-1/3 bg-[#FF9933]" />
+                  {/* White Band with spinning Ashoka Chakra */}
+                  <div className="w-full h-1/3 bg-white relative flex items-center justify-center overflow-hidden">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-3.5 h-3.5 text-[#000080] animate-[spin_1.5s_linear_infinite]"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <circle cx="12" cy="12" r="10" strokeWidth="1.5" />
+                      <circle cx="12" cy="12" r="2" fill="currentColor" />
+                      {Array.from({ length: 24 }, (_, i) => (
+                        <line
+                          key={i}
+                          x1="12"
+                          y1="12"
+                          x2="12"
+                          y2="2"
+                          stroke="currentColor"
+                          strokeWidth="0.8"
+                          transform={`rotate(${i * 15} 12 12)`}
+                        />
+                      ))}
+                    </svg>
+                  </div>
+                  {/* Green Band */}
+                  <div className="w-full h-1/3 bg-[#138808]" />
+                </div>
+              )}
+
+              {/* Foreground Button Label */}
+              <span className={`relative z-10 flex items-center justify-center gap-2 transition-opacity duration-200 ${isAdminLoading ? 'opacity-0' : 'opacity-100'}`}>
+                <span>Access Admin Console</span>
+                <span className="text-[#D4AF37] group-hover:translate-x-0.5 transition-transform duration-300">→</span>
+              </span>
+            </button>
+          </div>
+          <p className="text-xs font-sans text-[#1E2A4F]/50 tracking-wider uppercase mt-6">
+            Authorized Personnel Only · Protected under the Information Technology Act
+          </p>
         </div>
       </section>
     </div>
