@@ -1,20 +1,20 @@
-# AI assistant 50-customer test — 6 September 2026
+# AI assistant 50-customer test - 6 September 2026
 
 ## Scope
 
 Fifty distinct customer prompts were sent to the live Azure `gpt-5.5` deployment through the compiled LangGraph agent with concurrency 3. The set covered all ten e-Visa document categories, fees and application steps, incomplete and complete eligibility journeys, regular/Afghan/VoA routes, five languages, unsupported routes, and adversarial wording.
 
-Every normal response was required to contain a substantive answer, invoke the expected structured tool, return HTTPS guidance sources, and avoid exposing the Azure credential.
+Every normal response was required to contain a substantive answer, invoke the expected structured tool, return HTTPS guidance sources, avoid exposing the Azure credential, and avoid repeating prototype or non-government disclaimers already communicated by the site header.
 
 ## Results
 
-- 49/50 prompts initially returned valid tool-backed answers.
-- One prompt-injection-style request was rejected by Azure with `content_filter`. No provider detail or credential reached the UI.
-- The filtered-message experience was improved to give a safe, actionable rephrase instruction. That exact live case was rerun and passed as a safe block.
-- Final disposition: 49 answered and 1 safely blocked; all 50 customer cases handled correctly.
-- Tool executions: 23 eligibility checks, 14 document checklists, and 15 reference lookups. A response can invoke more than one tool.
-- Initial live-run wall time: 94.81 seconds.
-- Per-customer latency: p50 5.238 seconds, p95 10.721 seconds, maximum 11.441 seconds.
+- A repeat audit exposed five common document questions that sometimes received generic answers without the checklist tool.
+- The first model turn now requires a tool call. The answer after a tool result remains natural and is not forced into another tool call.
+- Reference tools now return focused visa guidance without injecting sandbox or prototype disclaimers into customer answers.
+- The final rerun passed all 50 customer cases. One prompt-injection request was safely blocked by Azure without exposing provider details or credentials.
+- Tool-backed prompts: 23 eligibility checks, 14 document checklists, and 13 reference lookups. The safely blocked prompt did not invoke a tool.
+- Final live-run wall time: 79.174 seconds.
+- Per-customer latency: p50 3.993 seconds, p95 8.265 seconds, maximum 14.765 seconds.
 
 ## Browser journeys
 

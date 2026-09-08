@@ -4,6 +4,9 @@ import { finderSchema } from "./tools.js";
 import { runVisaAssistant } from "./graph.js";
 
 export function assistantErrorMessage(error, aborted = false) {
+  const budgetCode = error?.code || error?.cause?.code;
+  if (budgetCode === "AI_BUDGET_EXHAUSTED")
+    return "The AI assistant has reached its daily limit. Please try again after 00:00 UTC. You can still use the Visa Finder and your applications.";
   if (aborted) return "The assistant took too long. Please try again.";
   const providerCode =
     error?.code || error?.cause?.code || error?.error?.code || "";
@@ -36,7 +39,7 @@ export const chatRequestSchema = z
       ctx.addIssue({ code: "custom", message: "Invalid conversation." });
   });
 
-export function installAssistant(app, { run = runVisaAssistant } = {}) {
+export function installAssistant(app, { run = runVisaAssistant, db } = {}) {
   app.post(
     "/api/platform/chat",
     rateLimit({
@@ -75,6 +78,7 @@ export function installAssistant(app, { run = runVisaAssistant } = {}) {
       try {
         const reply = await run(parsed.data, {
           signal: controller.signal,
+          db,
           onEvent: emit,
         });
         emit({ type: "done", ...reply });

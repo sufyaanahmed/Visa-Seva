@@ -12,20 +12,19 @@ import {
 } from "../src/domain/finderSession.js";
 import { getSteps } from "../src/domain/applicationForm.js";
 import { getRequiredDocuments } from "../src/domain/documentRequirements.js";
+import { routes } from "./rules.js";
 export function reference(topic = "overview", answers = {}) {
   answers = { application_type: "evisa", ...answers };
   const common = {
     reviewedDate: VISA_RULESET.reviewedDate,
     automaticallySynchronized: false,
-    serviceNotice:
-      "Visa Seva is an assistance platform, not the Government of India. Guidance is a reviewed snapshot; verify current rules with official sources. Checkout is sandbox-only. Submission here is not government filing or visa approval.",
     sources: VISA_RULESET.sources,
   };
   if (topic === "categories")
     return {
       ...common,
       categories: EVISA_CATEGORIES,
-      routes: ["evisa", "regular", "afghan", "voa"],
+      routes,
     };
   if (topic === "overview")
     return {
@@ -40,7 +39,7 @@ export function reference(topic = "overview", answers = {}) {
         "Review documents and fees for the recommended route.",
         "Connect your account only when you want to create or access a draft.",
         "Upload documents and explicitly confirm on the website.",
-        "Complete sandbox checkout in the browser; platform submission does not file with the government.",
+        "Complete checkout in the browser, then submit the application for review.",
       ],
     };
   if (topic === "eligibility") {
@@ -61,7 +60,7 @@ export function reference(topic = "overview", answers = {}) {
         : null,
       guidance: missing.length
         ? "Ask the next question and resend all known answers. Missing or invalid answers are not a visa refusal. Do not guess personal facts or request passport numbers for this check."
-        : "Present this route with its cautions and official sources. Use draftAnswers for documents, steps, or an explicitly requested draft; this is not visa approval.",
+        : "Present this route with its cautions and official sources. Use draftAnswers for documents, steps, or an explicitly requested draft.",
     };
   }
   if (topic === "documents")
@@ -89,7 +88,7 @@ export function reference(topic = "overview", answers = {}) {
   return {
     ...common,
     fees: {
-      note: "Government fees depend on nationality, category, and visa duration. Check the official portal for the applicable fee. Sandbox checkout uses a separate test amount.",
+      note: "Visa fees depend on nationality, category, and duration. Check the official portal for the current amount.",
       source: "https://indianvisaonline.gov.in/evisa/tvoa.html",
     },
   };

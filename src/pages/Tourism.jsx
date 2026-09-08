@@ -162,16 +162,16 @@ const STATE_AIRPORTS = {
 const DestinationsGrid = ({ dests }) => (
   <div className="columns-1 md:columns-2 gap-6 pb-12 relative z-10">
     {dests.map((dest, i) => (
-      <div 
-        key={i} 
+      <div
+        key={i}
         className="break-inside-avoid mb-6 group flex flex-col bg-white overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(30,42,79,0.12)] cursor-pointer shadow-lg rounded-3xl border border-[#EBE5D9]/60"
       >
         <div className="w-full overflow-hidden relative bg-[#1E2A4F]">
-          <img 
-            src={dest.img} 
-            alt={dest.title} 
-            className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.21,0.83,0.26,1)]" 
-            loading="lazy" 
+          <img
+            src={dest.img}
+            alt={dest.title}
+            className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.21,0.83,0.26,1)]"
+            loading="lazy"
             decoding="async"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#1E2A4F]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10" />
@@ -191,9 +191,9 @@ const DestinationsGrid = ({ dests }) => (
 const StateHeader = ({ stateId }) => {
   const navigate = useNavigate();
   const { updateState } = useStore();
-  const info = stateDescriptions[stateId] || { 
-    name: STATE_NAMES[stateId] || 'Selected Region', 
-    desc: 'Experience the unique culture, rich heritage, and stunning landscapes of this beautiful region.' 
+  const info = stateDescriptions[stateId] || {
+    name: STATE_NAMES[stateId] || 'Selected Region',
+    desc: 'Experience the unique culture, rich heritage, and stunning landscapes of this beautiful region.'
   };
   const airport = STATE_AIRPORTS[stateId] || 'Major Indian International Entry Ports';
 
@@ -217,7 +217,7 @@ const StateHeader = ({ stateId }) => {
     <div className="mb-6 flex flex-col items-center text-center">
       <h2 className="text-3xl font-serif font-bold text-[#1E2A4F] mb-2">{info.name}</h2>
       <p className="text-[#1E2A4F]/80 text-[0.95rem] max-w-lg leading-relaxed mb-4">{info.desc}</p>
-      
+
       <div className="w-full max-w-md bg-white border border-[#D4AF37]/50 rounded-xl p-4 shadow-sm text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-2">
         <div>
           <span className="text-[9px] font-sans font-bold uppercase tracking-widest text-[#C4762A] block">
@@ -325,18 +325,18 @@ export default function Tourism() {
               Map Layers:
             </span>
             {LANDMARK_CATEGORIES.map(cat => {
-              const count = cat.id === 'all' 
-                ? ALL_LANDMARKS.length 
+              const count = cat.id === 'all'
+                ? ALL_LANDMARKS.length
                 : ALL_LANDMARKS.filter(l => l.category === cat.id).length;
               const isActive = selectedCategory === cat.id;
-              
+
               return (
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-sans font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-1.5 cursor-pointer ${
-                    isActive 
-                      ? `${cat.badgeBg} text-white shadow-sm ring-2 ring-offset-1 ring-[#D4AF37]/40` 
+                    isActive
+                      ? `${cat.badgeBg} text-white shadow-sm ring-2 ring-offset-1 ring-[#D4AF37]/40`
                       : 'bg-[#FAF7F0] text-[#1E2A4F]/80 hover:bg-white border border-[#EBE5D9]'
                   }`}
                 >
@@ -365,10 +365,10 @@ export default function Tourism() {
         <div className="flex flex-col lg:flex-row gap-10 relative items-start">
           <div className="w-full lg:w-1/2 flex flex-col relative sticky top-28 z-20">
             <div className="flex justify-between items-center -ml-2 sm:-ml-6 lg:-ml-8 mb-1 z-30 pointer-events-none">
-              <img 
-                src="/Flag_art.png" 
-                alt="National Flag of India" 
-                className="w-28 sm:w-36 md:w-44 h-auto object-contain select-none drop-shadow-xs" 
+              <img
+                src="/Flag_art.png"
+                alt="National Flag of India"
+                className="w-28 sm:w-36 md:w-44 h-auto object-contain select-none drop-shadow-xs"
                 loading="eager"
                 decoding="async"
               />
@@ -410,7 +410,7 @@ export default function Tourism() {
                   }
                 ` : ''}
               `}</style>
-              
+
               <IndiaSvgMap onStateClick={handleStateClick}>
                 <g className="landmarks-pin-layer" style={{ pointerEvents: 'auto' }}>
                   {filteredLandmarks.map((lm) => {
@@ -418,9 +418,9 @@ export default function Tourism() {
                     const isHovered = hoveredPin?.id === lm.id;
                     const catConfig = LANDMARK_CATEGORIES.find(c => c.id === lm.category);
                     const pinColor = catConfig?.color || '#D4AF37';
-                    
+
                     return (
-                      <g 
+                      <g
                         key={lm.id}
                         transform={`translate(${lm.mapX}, ${lm.mapY})`}
                         className="cursor-pointer group"
@@ -489,7 +489,8 @@ export default function Tourism() {
             </div>
           </div>
 
-          <div className="w-full lg:w-1/2 flex flex-col relative z-10 lg:h-[calc(100vh-10rem)] lg:overflow-y-auto custom-scrollbar pr-2">
+          {/* RIGHT: Desktop Details & Mobile Fallback Content */}
+          <div className="w-full lg:w-1/2 flex flex-col relative z-10 lg:pr-2">
             {!activeStateId ? (
               <div className="flex-1 flex flex-col relative z-10">
                 <div className="mb-6 flex flex-col items-center text-center">
@@ -630,18 +631,18 @@ export default function Tourism() {
       </div>
 
       {activeModalLandmark && (
-        <div 
+        <div
           className="fixed inset-0 z-[110] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fade-in"
           onClick={() => setActiveModalLandmark(null)}
         >
-          <div 
+          <div
             className="bg-white max-w-2xl w-full rounded-3xl overflow-hidden shadow-2xl border border-[#EBE5D9] max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-neutral-900 shrink-0">
-              <img 
-                src={activeModalLandmark.img} 
-                alt={activeModalLandmark.title} 
+              <img
+                src={activeModalLandmark.img}
+                alt={activeModalLandmark.title}
                 decoding="async"
                 className="w-full h-full object-cover"
               />
@@ -737,17 +738,17 @@ export default function Tourism() {
         </div>
       )}
 
-      <div 
-        className={`lg:hidden fixed inset-0 bg-black/50 z-[90] transition-opacity duration-500 ${activeStateId ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} 
+      <div
+        className={`lg:hidden fixed inset-0 bg-black/50 z-[90] transition-opacity duration-500 ${activeStateId ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setActiveStateId(null)}
       />
 
-      <div 
-        className={`lg:hidden fixed inset-x-0 bottom-0 z-[100] bg-[#FAF7F0] rounded-t-3xl shadow-[0_-20px_50px_rgba(0,0,0,0.3)] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col ${activeStateId ? 'translate-y-0' : 'translate-y-full'}`} 
+      <div
+        className={`lg:hidden fixed inset-x-0 bottom-0 z-[100] bg-[#FAF7F0] rounded-t-3xl shadow-[0_-20px_50px_rgba(0,0,0,0.3)] transform transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col ${activeStateId ? 'translate-y-0' : 'translate-y-full'}`}
         style={{ maxHeight: '85vh', minHeight: '50vh' }}
       >
-        <div 
-          className="w-full flex justify-center pt-4 pb-2 cursor-pointer" 
+        <div
+          className="w-full flex justify-center pt-4 pb-2 cursor-pointer"
           onClick={() => setActiveStateId(null)}
         >
           <div className="w-12 h-1.5 bg-[#1E2A4F]/20 rounded-full" />
@@ -756,8 +757,8 @@ export default function Tourism() {
           <h2 className="font-serif font-bold text-2xl text-[#1E2A4F]">
             {activeStateId ? (stateDescriptions[activeStateId]?.name || STATE_NAMES[activeStateId] || 'Selected Region') : 'Selected Region'}
           </h2>
-          <button 
-            onClick={() => setActiveStateId(null)} 
+          <button
+            onClick={() => setActiveStateId(null)}
             className="p-2 rounded-full bg-[#1E2A4F]/5 text-[#1E2A4F] hover:bg-[#1E2A4F]/10 transition-colors cursor-pointer"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
