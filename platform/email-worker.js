@@ -23,8 +23,13 @@ export async function deliverEmails(
       };
 
       if (subject.includes("waiting for information")) {
-        // Use the Resend template for this specific email type
         payload.template_id = "visa-application-continue";
+      } else if (subject.includes("reject") || subject.includes("decline")) {
+        payload.template_id = "visa-application-rejected";
+      } else if (subject.includes("accept") || subject.includes("grant") || subject.includes("approv")) {
+        payload.template_id = "visa-application-accepted";
+      } else if (subject.includes("submit") || subject.includes("receiv")) {
+        payload.template_id = "visa-application-submitted";
       } else {
         // Fallback to plain text for emails that don't have templates yet
         payload.text = `${message.body}\n\nView your application securely: ${config.publicUrl}/applications/${message.application_id}`;
