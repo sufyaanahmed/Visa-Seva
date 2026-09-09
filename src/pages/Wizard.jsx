@@ -8,7 +8,7 @@ import { field, getSteps, validateStep, isVisible, isRequired, afghanPurposes } 
 import { getEvisaWizardGate } from '../domain/visaEligibility';
 import { useStore, formatReference } from '../store';
 import Auth from '../platform/Auth';
-import { platformEnabled, saveApplication, selectedFiles, supabase, APPLICATION_ACCESS_UNAVAILABLE } from '../platform/client';
+import { platformEnabled, saveApplication, supabase, APPLICATION_ACCESS_UNAVAILABLE } from '../platform/client';
 
 import { demoFixture } from '../domain/demoFixtures.js';
 
@@ -97,6 +97,12 @@ function WizardForm() {
     return <OfficialApplicationDossier state={state} />;
   }
 
+  const saveCurrentApplication = () => saveApplication(
+    state,
+    (cloud, docs) => updateState({ cloud, ...(docs ? { docs } : {}) }),
+    { syncDocuments: step.id === 'documents' || step.id === 'review' },
+  );
+
   const handleNext = async (event) => {
     event.preventDefault();
     const found = validateStep(step, state.data, state.docs);
@@ -108,7 +114,7 @@ function WizardForm() {
     if (platformEnabled && (await supabase.auth.getSession()).data.session && stepIndex < steps.length - 1) {
       setBackendSync({ status: 'saving', message: 'Saving your draft…' });
       try {
-        await saveApplication(state, (cloud, docs) => updateState({ cloud, ...(docs ? { docs } : {}) }));
+        await saveCurrentApplication();
         setBackendSync({ status: 'saved', message: 'Your progress is saved.' });
       } catch (error) {
         setBackendSync({ status: 'error', message: error.message });
@@ -129,7 +135,7 @@ function WizardForm() {
           window.scrollTo({ top: 0, behavior: 'smooth' });
           return;
         }
-        const app = await saveApplication(state, (cloud, docs) => updateState({ cloud, ...(docs ? { docs } : {}) }));
+        const app = await saveCurrentApplication();
         navigate(`/applications/${app.id}`);
       } catch (error) {
         setBackendSync({
@@ -173,43 +179,8 @@ function WizardForm() {
     });
     Object.entries(merged).forEach(([name, value]) => updateData(name, value));
 
-    const requiredDocs = getRequiredDocuments(merged);
-    if (requiredDocs && requiredDocs.length > 0) {
-      const sampleDocs = requiredDocs.map((req) => {
-        const isImage = req.type === 'photograph' || req.type === 'signature';
-        const isPhoto = req.type === 'photograph';
-        const ext = isImage ? 'jpg' : 'pdf';
-        const mime = isImage ? 'image/jpeg' : 'application/pdf';
-        const size = isPhoto ? 145 * 1024 : req.type === 'signature' ? 45 * 1024 : 220 * 1024;
-
-        if (platformEnabled && typeof File !== 'undefined') {
-          try {
-            const pdfBytes = new Uint8Array([0x25, 0x50, 0x44, 0x46]);
-            // A minimal valid 1x1 square JPEG
-            const jpegBase64 = "/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=";
-            const jpegBytes = new Uint8Array(atob(jpegBase64).split('').map(c => c.charCodeAt(0)));
-            const dummyContent = isImage ? jpegBytes : pdfBytes;
-            const mockFile = new File([dummyContent], `sample_${req.type}.${ext}`, { type: mime });
-            selectedFiles.set(req.type, mockFile);
-          } catch {
-            // Ignore in environments without File constructor
-          }
-        }
-
-        return {
-          type: req.type,
-          status: 'selected-this-session',
-          extension: ext,
-          mimeType: mime,
-          size,
-          width: isPhoto ? 350 : undefined,
-          height: isPhoto ? 350 : undefined,
-          selectedAt: new Date().toISOString(),
-        };
-      });
-      updateState({ docs: sampleDocs });
-    }
-
+    // Autofill only supplies example answers. Documents must be selected by the
+    // applicant so their metadata always describes real, validated file bytes.
     setErrors({});
   };
 
@@ -454,9 +425,7 @@ function WizardForm() {
                     onClick={async () => {
                       setBackendSync({ status: 'saving', message: 'Saving your progress…' });
                       try {
-                        const app = await saveApplication(state, (cloud, docs) =>
-                          updateState({ cloud, ...(docs ? { docs } : {}) }),
-                        );
+                        const app = await saveCurrentApplication();
                         setAccessPrompt(false);
                         setBackendSync({ status: 'saved', message: 'Your progress is saved.' });
                         if (stepIndex === steps.length - 1) navigate(`/applications/${app.id}`);
@@ -483,7 +452,7 @@ function WizardForm() {
           {platformEnabled && <div className="mb-5 flex items-center justify-between gap-4"><button type="button" className="platform-secondary" disabled={backendSync.status === 'saving'} onClick={async () => {
             if (!(await supabase.auth.getSession()).data.session) { setAccessPrompt(true); return; }
             setBackendSync({ status: 'saving', message: 'Saving your draft…' });
-            try { await saveApplication(state, (cloud, docs) => updateState({ cloud, ...(docs ? { docs } : {}) })); setBackendSync({ status: 'saved', message: 'Your progress is saved.' }); }
+            try { await saveCurrentApplication(); setBackendSync({ status: 'saved', message: 'Your progress is saved.' }); }
             catch (error) { setBackendSync({ status: 'error', message: error.message }); }
           }}>Save my progress</button><button type="button" className="platform-link" onClick={() => navigate('/applications')}>My applications</button></div>}
           {platformEnabled && backendSync.status === 'saved' && <p role="status" className="mb-4 text-sm text-green-800">{backendSync.message}</p>}
@@ -491,7 +460,7 @@ function WizardForm() {
             <fieldset className="min-w-0" disabled={backendSync.status === 'saving'}>
             {backendSync.status === 'error' && (
               <div role="alert" className="mb-8 border-l-4 border-red-600 bg-red-50 p-5 text-red-950">
-                <strong className="block mb-1">We couldn’t finish preparing your application</strong>
+                <strong className="block mb-1">We couldn’t save this step</strong>
                 <p className="text-sm">{backendSync.message}</p>
               </div>
             )}

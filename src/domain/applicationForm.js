@@ -839,6 +839,7 @@ export const validateStep = (step, data, docs) => {
     });
 
   if (
+    (step.fields || []).some((item) => item.name === "confirm_email" && isVisible(item, data)) &&
     data.email &&
     data.confirm_email &&
     String(data.email).trim().toLowerCase() !==

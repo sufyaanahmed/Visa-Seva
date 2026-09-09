@@ -58,7 +58,7 @@ export const demoFixture = (type, current = {}) => {
     security_advocacy: current.security_advocacy || 'no',
     security_asylum: current.security_asylum || 'no',
     email: current.email || 'alex.morgan@example.invalid',
-    confirm_email: current.confirm_email || 'alex.morgan@example.invalid',
+    confirm_email: current.confirm_email || current.email || 'alex.morgan@example.invalid',
     expected_arrival_date: current.expected_arrival_date || futureDate(45),
     instructions_ready: current.instructions_ready !== undefined ? current.instructions_ready : true,
     resident_two_years: current.resident_two_years || 'yes',
