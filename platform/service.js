@@ -189,7 +189,7 @@ export function createService(db, config) {
         metadata.format !== "jpeg" ||
         (req.square && metadata.width !== metadata.height)
       )
-        throw new ApiError(400, "Choose a valid square JPEG photograph.");
+        throw new ApiError(400, req.square ? "Choose a valid square JPEG photograph." : "Choose a valid JPEG image.");
       mime = "image/jpeg";
     }
     const path = `${actor.id}/${id}/${randomUUID()}.${mime === "image/jpeg" ? "jpg" : "pdf"}`;

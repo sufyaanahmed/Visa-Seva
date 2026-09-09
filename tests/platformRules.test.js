@@ -41,7 +41,7 @@ test("email retry uses immutable content and stable provider idempotency key", a
           id: "mail-1",
           application_id: "app-1",
           recipient: "applicant@example.com",
-          subject: "Status changed",
+          subject: "Visa application submitted",
           body: "Your application is submitted.",
           attempts: 1,
         },

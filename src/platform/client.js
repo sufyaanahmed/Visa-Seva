@@ -53,7 +53,7 @@ export async function api(path, options = {}) {
 }
 // Actual file bytes stay in memory until explicitly saved to the applicant's account.
 export const selectedFiles = new Map();
-export async function saveApplication(state, onSaved) {
+export async function saveApplication(state, onSaved, { syncDocuments = true } = {}) {
   if (!supabase) throw new Error(APPLICATION_ACCESS_UNAVAILABLE);
   let app;
   if (state.cloud?.id) {
@@ -82,6 +82,7 @@ export async function saveApplication(state, onSaved) {
       });
   }
   onSaved({ id: app.id, version: app.version });
+  if (!syncDocuments) return app;
   const remote = await api(`/applications/${app.id}`);
   for (const doc of remote.documents)
     if (!state.docs.some((d) => d.type === doc.type)) {
@@ -94,10 +95,15 @@ export async function saveApplication(state, onSaved) {
   for (const doc of state.docs) {
     const file = selectedFiles.get(doc.type);
     if (!file) continue;
-    app = await api(
-      `/applications/${app.id}/documents/${doc.type}?version=${app.version}`,
-      { method: "POST", body: file },
-    );
+    try {
+      app = await api(
+        `/applications/${app.id}/documents/${doc.type}?version=${app.version}`,
+        { method: "POST", body: file },
+      );
+    } catch (error) {
+      error.message = `${doc.type.replaceAll('_', ' ')}: ${error.message}`;
+      throw error;
+    }
     selectedFiles.delete(doc.type);
     onSaved({ id: app.id, version: app.version });
   }

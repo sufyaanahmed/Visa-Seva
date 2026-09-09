@@ -14,26 +14,14 @@ export async function deliverEmails(
   const messages = unwrap(await db.rpc("claim_platform_emails"));
   for (const message of messages) {
     try {
-      const subject = message.subject.toLowerCase();
-      
-      let payload = {
+      // Every notification must carry its body and application link. Template
+      // aliases are not provisioned across deployment accounts.
+      const payload = {
         from,
         to: [message.recipient],
         subject: message.subject,
+        text: `${message.body}\n\nView your application securely: ${config.publicUrl}/applications/${message.application_id}`,
       };
-
-      if (subject.includes("waiting for information")) {
-        payload.template_id = "visa-application-continue";
-      } else if (subject.includes("reject") || subject.includes("decline")) {
-        payload.template_id = "visa-application-rejected";
-      } else if (subject.includes("accept") || subject.includes("grant") || subject.includes("approv")) {
-        payload.template_id = "visa-application-accepted";
-      } else if (subject.includes("submit") || subject.includes("receiv")) {
-        payload.template_id = "visa-application-submitted";
-      } else {
-        // Fallback to plain text for emails that don't have templates yet
-        payload.text = `${message.body}\n\nView your application securely: ${config.publicUrl}/applications/${message.application_id}`;
-      }
 
       const response = await fetcher("https://api.resend.com/emails", {
         method: "POST",
