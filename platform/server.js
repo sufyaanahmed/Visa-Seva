@@ -196,8 +196,39 @@ export function createApp(db, config) {
     ),
   );
   app.post(
-    "/api/platform/applications/:id/payments/:paymentId",
+    "/api/platform/applications/:id/payments/:paymentId/provider",
     async (req, res) =>
+      res.json(
+        await service.providerCheckout(
+          req.actor,
+          appId(req),
+          z.string().uuid().parse(req.params.paymentId),
+        ),
+      ),
+  );
+  app.post(
+    "/api/platform/applications/:id/payments/:paymentId/verify",
+    async (req, res) =>
+      res.json(
+        await service.verifyCheckout(
+          req.actor,
+          appId(req),
+          z.string().uuid().parse(req.params.paymentId),
+          z
+            .object({
+              razorpay_order_id: z.string().max(100),
+              razorpay_payment_id: z.string().max(100),
+              razorpay_signature: z.string().max(100),
+            })
+            .parse(req.body),
+        ),
+      ),
+  );
+  app.post(
+    "/api/platform/applications/:id/payments/:paymentId",
+    async (req, res) => {
+      if (config.paymentProvider === "razorpay")
+        throw new ApiError(403, "Payment must be verified by Razorpay.");
       res.json(
         await service.command(req.actor, appId(req), "payment", {
           payment_id: z.string().uuid().parse(req.params.paymentId),
@@ -205,7 +236,8 @@ export function createApp(db, config) {
             .enum(["processing", "paid", "failed", "cancelled", "pending"])
             .parse(req.body.outcome),
         }),
-      ),
+      );
+    },
   );
   app.post(
     "/api/platform/applications/:id/documents/:type",
@@ -320,7 +352,7 @@ export function createApp(db, config) {
     const emails = unwrap(
       await db
         .from("email_notifications")
-        .select("*")
+        .select("id,subject,status,attempts,created_at,last_error,provider_id")
         .eq("application_id", a.id)
         .order("created_at"),
     );
@@ -398,6 +430,9 @@ export function configuration(env = process.env) {
     adminUrl: urls[1].origin,
     apiUrl: urls[2].origin,
     sandboxAmount,
+    paymentProvider: env.PAYMENT_PROVIDER || "simulated",
+    razorpayKeyId: env.RAZORPAY_KEY_ID,
+    razorpaySecret: env.RAZORPAY_KEY_SECRET,
   };
 }
 if (process.argv[1]?.replace(/\\/g, "/").endsWith("/platform/server.js")) {

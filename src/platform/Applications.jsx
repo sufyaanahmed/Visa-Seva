@@ -1,4 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { loadRazorpay } from "./razorpay";
+import DocumentViewer from "./DocumentViewer";
+import { formatFee } from "../domain/applicationFees.js";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Link,
   useNavigate,
@@ -19,6 +22,7 @@ export const labels = {
   rejected: "Rejected",
   unpaid: "Unpaid",
   paid: "Paid",
+  external: "Pay at mission / arrival",
   pending: "Pending",
   processing: "Processing",
   failed: "Failed",
@@ -29,14 +33,31 @@ export const Badge = ({ value }) => (
 );
 
 // --- Beautiful UI Components ---
-function MandalaCorner({ className = '' }) {
+function MandalaCorner({ className = "" }) {
   return (
     <svg viewBox="0 0 60 60" className={`w-7 h-7 ${className}`} fill="none">
-      <path d="M2 2 L35 2 Q2 2 2 35 Z" fill="#D4AF37" fillOpacity="0.15" stroke="#D4AF37" strokeWidth="1" />
+      <path
+        d="M2 2 L35 2 Q2 2 2 35 Z"
+        fill="#D4AF37"
+        fillOpacity="0.15"
+        stroke="#D4AF37"
+        strokeWidth="1"
+      />
       <path d="M2 2 L22 2 Q2 2 2 22 Z" fill="#1E2A4F" fillOpacity="0.1" />
       <circle cx="10" cy="10" r="4" fill="#D4AF37" fillOpacity="0.5" />
-      <path d="M2 18 Q18 18 18 2" stroke="#D4AF37" strokeWidth="0.75" fill="none" />
-      <path d="M2 28 Q28 28 28 2" stroke="#1E2A4F" strokeWidth="0.75" strokeDasharray="1.5 1.5" fill="none" />
+      <path
+        d="M2 18 Q18 18 18 2"
+        stroke="#D4AF37"
+        strokeWidth="0.75"
+        fill="none"
+      />
+      <path
+        d="M2 28 Q28 28 28 2"
+        stroke="#1E2A4F"
+        strokeWidth="0.75"
+        strokeDasharray="1.5 1.5"
+        fill="none"
+      />
     </svg>
   );
 }
@@ -45,15 +66,40 @@ function AshokaChakraWatermark() {
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] overflow-hidden">
       <svg viewBox="0 0 200 200" className="w-64 h-64 text-[#1E2A4F]">
-        <circle cx="100" cy="100" r="92" fill="none" stroke="currentColor" strokeWidth="4" />
-        <circle cx="100" cy="100" r="85" fill="none" stroke="currentColor" strokeWidth="1" />
-        <circle cx="100" cy="100" r="16" fill="none" stroke="currentColor" strokeWidth="4" />
+        <circle
+          cx="100"
+          cy="100"
+          r="92"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="4"
+        />
+        <circle
+          cx="100"
+          cy="100"
+          r="85"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1"
+        />
+        <circle
+          cx="100"
+          cy="100"
+          r="16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="4"
+        />
         <circle cx="100" cy="100" r="7" fill="currentColor" />
         {[...Array(24)].map((_, i) => (
           <line
             key={i}
-            x1="100" y1="100" x2="100" y2="15"
-            stroke="currentColor" strokeWidth="1.5"
+            x1="100"
+            y1="100"
+            x2="100"
+            y2="15"
+            stroke="currentColor"
+            strokeWidth="1.5"
             transform={`rotate(${i * 15} 100 100)`}
           />
         ))}
@@ -63,50 +109,105 @@ function AshokaChakraWatermark() {
 }
 
 const AcceptedCard = ({ app }) => {
-  const applicantName = [app.answers.given_name, app.answers.surname].filter(Boolean).join(' ') || 'Not provided';
-  const visaCategory = app.answers.visa_category || 'e-Visa';
-  
+  const applicantName =
+    [app.answers.given_name, app.answers.surname].filter(Boolean).join(" ") ||
+    "Not provided";
+  const visaCategory = app.answers.visa_category || "e-Visa";
+
   return (
     <div className="relative overflow-hidden bg-gradient-to-br from-[#1E2A4F] to-[#0d152b] rounded-xl border border-[#D4AF37]/40 shadow-xl p-6 text-white max-w-lg mx-auto transform transition hover:scale-[1.01]">
       <div className="absolute -right-16 -top-16 opacity-10 pointer-events-none">
-         <svg viewBox="0 0 200 200" className="w-64 h-64 text-white"><circle cx="100" cy="100" r="92" fill="none" stroke="currentColor" strokeWidth="4" /><circle cx="100" cy="100" r="16" fill="none" stroke="currentColor" strokeWidth="4" />{[...Array(24)].map((_, i) => (<line key={i} x1="100" y1="100" x2="100" y2="15" stroke="currentColor" strokeWidth="1.5" transform={`rotate(${i * 15} 100 100)`} />))}</svg>
+        <svg viewBox="0 0 200 200" className="w-64 h-64 text-white">
+          <circle
+            cx="100"
+            cy="100"
+            r="92"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="4"
+          />
+          <circle
+            cx="100"
+            cy="100"
+            r="16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="4"
+          />
+          {[...Array(24)].map((_, i) => (
+            <line
+              key={i}
+              x1="100"
+              y1="100"
+              x2="100"
+              y2="15"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              transform={`rotate(${i * 15} 100 100)`}
+            />
+          ))}
+        </svg>
       </div>
-      
+
       <div className="flex justify-between items-start mb-6 border-b border-[#D4AF37]/20 pb-4 relative z-10">
         <div className="flex items-center gap-3">
-          <img src="/emblem.svg" alt="Emblem" className="w-10 h-10 opacity-90" style={{ filter: 'brightness(0) invert(1)' }} />
+          <img
+            src="/emblem.svg"
+            alt="Emblem"
+            className="w-10 h-10 opacity-90"
+            style={{ filter: "brightness(0) invert(1)" }}
+          />
           <div>
-            <h3 className="font-serif font-bold text-[#D4AF37] uppercase tracking-widest text-[10px]">Republic of India</h3>
-            <h2 className="font-sans font-semibold text-lg tracking-wide">{visaCategory}</h2>
+            <h3 className="font-serif font-bold text-[#D4AF37] uppercase tracking-widest text-[10px]">
+              Republic of India
+            </h3>
+            <h2 className="font-sans font-semibold text-lg tracking-wide">
+              {visaCategory}
+            </h2>
           </div>
         </div>
         <div className="bg-[#176B45] text-white px-3 py-1 rounded text-xs font-bold shadow-sm uppercase tracking-wider">
-          {app.status === 'accepted' ? 'GRANTED' : app.status}
+          {app.status === "accepted" ? "GRANTED" : app.status}
         </div>
       </div>
-      
+
       <div className="grid grid-cols-2 gap-4 relative z-10 text-sm">
         <div>
-          <p className="text-gray-400 text-[10px] uppercase font-semibold">Applicant Name</p>
+          <p className="text-gray-400 text-[10px] uppercase font-semibold">
+            Applicant Name
+          </p>
           <p className="font-medium text-white uppercase">{applicantName}</p>
         </div>
         <div>
-          <p className="text-gray-400 text-[10px] uppercase font-semibold">Reference ID</p>
-          <p className="font-mono font-bold text-[#D4AF37] uppercase">{app.reference}</p>
+          <p className="text-gray-400 text-[10px] uppercase font-semibold">
+            Reference ID
+          </p>
+          <p className="font-mono font-bold text-[#D4AF37] uppercase">
+            {app.reference}
+          </p>
         </div>
         <div>
-          <p className="text-gray-400 text-[10px] uppercase font-semibold">Nationality</p>
-          <p className="font-medium text-white uppercase">{app.answers.nationality || 'Not provided'}</p>
+          <p className="text-gray-400 text-[10px] uppercase font-semibold">
+            Nationality
+          </p>
+          <p className="font-medium text-white uppercase">
+            {app.answers.nationality || "Not provided"}
+          </p>
         </div>
         <div>
-          <p className="text-gray-400 text-[10px] uppercase font-semibold">Updated At</p>
-          <p className="font-medium text-white">{new Date(app.updated_at).toLocaleDateString()}</p>
+          <p className="text-gray-400 text-[10px] uppercase font-semibold">
+            Updated At
+          </p>
+          <p className="font-medium text-white">
+            {new Date(app.updated_at).toLocaleDateString()}
+          </p>
         </div>
       </div>
-      
+
       <div className="mt-6 pt-4 border-t border-[#D4AF37]/20 flex justify-between items-end relative z-10">
         <p className="text-[9px] text-gray-400 max-w-[250px] leading-relaxed">
-          Present this authorized document along with your passport at the immigration checkpoint upon arrival.
+          Present this authorized document along with your passport at the
+          immigration checkpoint upon arrival.
         </p>
         <button className="bg-[#D4AF37] hover:bg-[#C9933A] text-[#1E2A4F] px-4 py-1.5 rounded text-xs font-bold transition focus:ring-2 focus:ring-white">
           Download ETA
@@ -117,19 +218,39 @@ const AcceptedCard = ({ app }) => {
 };
 
 const RejectedCard = ({ app }) => {
-  const rejectedHistory = [...(app.history || [])].reverse().find(h => h.to_status === 'rejected');
-  const reason = rejectedHistory?.reason || 'Your application did not meet the necessary requirements.';
+  const rejectedHistory = [...(app.history || [])]
+    .reverse()
+    .find((h) => h.to_status === "rejected");
+  const reason =
+    rejectedHistory?.reason ||
+    "Your application did not meet the necessary requirements.";
 
   return (
     <div className="relative overflow-hidden bg-white rounded-xl border border-red-200 shadow-md p-6 max-w-lg mx-auto">
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-red-50 text-red-600 flex items-center justify-center">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </div>
           <div>
-            <h3 className="font-serif font-bold text-gray-900 text-lg">Application Declined</h3>
-            <p className="text-xs text-gray-500 font-mono uppercase">{app.reference}</p>
+            <h3 className="font-serif font-bold text-gray-900 text-lg">
+              Application Declined
+            </h3>
+            <p className="text-xs text-gray-500 font-mono uppercase">
+              {app.reference}
+            </p>
           </div>
         </div>
         <div className="border border-red-600 text-red-600 px-2.5 py-0.5 rounded text-[10px] font-bold uppercase">
@@ -142,53 +263,87 @@ const RejectedCard = ({ app }) => {
       </div>
       <div className="text-xs text-gray-600 flex justify-between items-center">
         <p>Please review guidelines and apply again with valid documents.</p>
-        <Link to="/guide/visa-finder" className="text-[#1E2A4F] font-bold underline hover:text-blue-800">Start New Application</Link>
+        <Link
+          to="/guide/visa-finder"
+          className="text-[#1E2A4F] font-bold underline hover:text-blue-800"
+        >
+          Start New Application
+        </Link>
       </div>
     </div>
   );
 };
 
 const ReviewCard = ({ app }) => {
-  const isPaid = app.payment_status === 'paid';
+  const isPaid = app.payment_status === "paid";
 
   return (
     <div className="relative overflow-hidden bg-[#FAF7F0] rounded-xl border border-[#D4AF37]/30 shadow-md p-6 max-w-lg mx-auto">
       <MandalaCorner className="absolute top-0 left-0" />
       <MandalaCorner className="absolute bottom-0 right-0 transform rotate-180" />
       <AshokaChakraWatermark />
-      
+
       <div className="relative z-10 flex flex-col items-center text-center">
         <div className="w-12 h-12 rounded-full border-2 border-[#D4AF37] bg-white flex items-center justify-center mb-3 shadow-sm">
-          <svg className="w-6 h-6 text-[#1E2A4F] animate-[spin_4s_linear_infinite]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          <svg
+            className="w-6 h-6 text-[#1E2A4F] animate-[spin_4s_linear_infinite]"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            />
           </svg>
         </div>
         <div className="bg-[#1E2A4F]/10 text-[#1E2A4F] px-2 py-0.5 rounded text-[10px] font-bold uppercase mb-2">
-          {app.status.replace(/_/g, ' ')}
+          {app.status.replace(/_/g, " ")}
         </div>
-        <h3 className="font-serif font-bold text-gray-900 text-lg mb-1">Dossier Processing</h3>
+        <h3 className="font-serif font-bold text-gray-900 text-lg mb-1">
+          {app.status === "submitted"
+            ? "Application submitted"
+            : "Application under review"}
+        </h3>
         <p className="text-xs text-gray-600 max-w-xs mx-auto mb-5">
-          Your application <span className="font-mono font-semibold uppercase">{app.reference}</span> has been successfully submitted and is currently under consular evaluation.
+          Your application{" "}
+          <span className="font-mono font-semibold uppercase">
+            {app.reference}
+          </span>{" "}
+          {app.status === "submitted"
+            ? "has been received. We’ll email you when its status changes."
+            : "is being reviewed. We’ll email you when its status changes."}
         </p>
-        
+
         <div className="w-full bg-white border border-[#D4AF37]/40 shadow-xs rounded p-4 text-left">
           <div className="flex justify-between items-center text-xs mb-3">
-            <span className="text-gray-500 uppercase font-bold text-[10px] tracking-wider">Payment Status</span>
+            <span className="text-gray-500 uppercase font-bold text-[10px] tracking-wider">
+              Payment Status
+            </span>
             {isPaid ? (
               <span className="text-[#176B45] font-bold flex items-center gap-1.5">
-                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
                 Fee Received
               </span>
             ) : (
-              <span className="text-[#C4762A] font-bold">Unpaid</span>
+              <span className="text-[#C4762A] font-bold">
+                {app.payment_status === "external"
+                  ? "Pay at mission / arrival"
+                  : "Unpaid"}
+              </span>
             )}
-          </div>
-          <div className="w-full bg-[#E6DFD3] rounded-full h-1.5 overflow-hidden">
-            <div className="bg-gradient-to-r from-[#D4AF37] to-[#1E2A4F] h-1.5 w-2/3 animate-pulse"></div>
-          </div>
-          <div className="flex justify-between items-center mt-3">
-            <span className="text-[10px] text-gray-500">Processing Step 2 of 3</span>
-            <span className="text-[10px] font-semibold text-[#C4762A]">Estimated: 48-72 hours</span>
           </div>
         </div>
       </div>
@@ -211,21 +366,32 @@ export function Details({ application }) {
   return (
     <div className="flex flex-col gap-6 w-full max-w-4xl">
       {steps.map((step, idx) => {
-        const fields = (step.fields || []).filter((f) => !f.visible || f.visible(application.answers));
+        const fields = (step.fields || []).filter(
+          (f) => !f.visible || f.visible(application.answers),
+        );
         if (fields.length === 0) return null;
-        
+
         return (
-          <div key={step.name || idx} className="bg-white rounded-xl border border-[#E6DFD3] shadow-sm overflow-hidden">
+          <div
+            key={step.name || idx}
+            className="bg-white rounded-xl border border-[#E6DFD3] shadow-sm overflow-hidden"
+          >
             <div className="bg-[#FAF7F0] border-b border-[#E6DFD3] px-5 py-3">
-              <h3 className="font-serif font-bold text-[#1E2A4F] text-[1.05rem]">{step.title || step.name}</h3>
+              <h3 className="font-serif font-bold text-[#1E2A4F] text-[1.05rem]">
+                {step.title || step.name}
+              </h3>
             </div>
             <div className="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
               {fields.map((f) => (
                 <div key={f.name} className="flex flex-col">
-                  <span className="text-[10px] uppercase tracking-widest font-bold text-gray-500 mb-1">{f.label}</span>
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-gray-500 mb-1">
+                    {f.label}
+                  </span>
                   <span className="font-medium text-gray-900 text-[0.95rem]">
                     {typeof application.answers[f.name] === "boolean"
-                      ? application.answers[f.name] ? "Yes" : "No"
+                      ? application.answers[f.name]
+                        ? "Yes"
+                        : "No"
                       : String(application.answers[f.name] || "—")}
                   </span>
                 </div>
@@ -244,8 +410,13 @@ export function History({ items }) {
       {items.map((h) => (
         <div key={h.id} className="relative pl-6">
           <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-white border-2 border-[#D4AF37]"></div>
-          <strong className="block font-sans text-sm uppercase tracking-wider text-[#1E2A4F] mb-1">{labels[h.to_status]}</strong>
-          <time dateTime={h.created_at} className="block text-xs text-gray-500 mb-2">
+          <strong className="block font-sans text-sm uppercase tracking-wider text-[#1E2A4F] mb-1">
+            {labels[h.to_status]}
+          </strong>
+          <time
+            dateTime={h.created_at}
+            className="block text-xs text-gray-500 mb-2"
+          >
             {new Date(h.created_at).toLocaleString()}
           </time>
           {h.reason && (
@@ -371,6 +542,7 @@ export default function Applications() {
   );
 }
 function ApplicationView() {
+  const [preview, setPreview] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
   const { updateState } = useStore();
@@ -427,10 +599,23 @@ function ApplicationView() {
     });
     navigate("/apply");
   }
-  async function checkout() {
+  async function continueToPayment() {
+    let current = app;
+    if (!currentConfirmation)
+      current = await api(`/applications/${id}/confirm`, {
+        method: "POST",
+        body: { version: app.version },
+      });
+    if (["paid", "external"].includes(current.payment_status)) {
+      const paid = app.payments.find((p) =>
+        ["paid", "external"].includes(p.status),
+      );
+      navigate(`/applications/${id}/checkout?session=${paid.id}`);
+      return;
+    }
     const p = await api(`/applications/${id}/checkout`, {
       method: "POST",
-      body: { version: app.version, request_key: crypto.randomUUID() },
+      body: { version: current.version, request_key: crypto.randomUUID() },
     });
     navigate(`/applications/${id}/checkout?session=${p.id}`);
   }
@@ -464,20 +649,36 @@ function ApplicationView() {
     Date.parse(app.confirmed_at) > Date.now() - 86400000;
   return (
     <div className="platform-page">
+      {preview && (
+        <DocumentViewer document={preview} onClose={() => setPreview(null)} />
+      )}
       <Link className="platform-link mb-4 inline-block" to="/applications">
         ← My applications
       </Link>
-      
+
       <div className="mb-10">
-        {app.status === 'accepted' && <AcceptedCard app={app} />}
-        {app.status === 'rejected' && <RejectedCard app={app} />}
-        {['submitted', 'under_review', 'processing', 'pending'].includes(app.status) && <ReviewCard app={app} />}
-        
-        {!['accepted', 'rejected', 'submitted', 'under_review', 'processing', 'pending'].includes(app.status) && (
+        {app.status === "accepted" && <AcceptedCard app={app} />}
+        {app.status === "rejected" && <RejectedCard app={app} />}
+        {["submitted", "under_review", "processing", "pending"].includes(
+          app.status,
+        ) && <ReviewCard app={app} />}
+
+        {![
+          "accepted",
+          "rejected",
+          "submitted",
+          "under_review",
+          "processing",
+          "pending",
+        ].includes(app.status) && (
           <div className="flex justify-between items-center bg-white p-6 rounded-xl border border-[#E6DFD3] shadow-sm max-w-4xl">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-[#C4762A] mb-1">{app.reference}</p>
-              <h1 className="font-serif text-2xl text-[#1E2A4F] font-bold m-0">Your Application</h1>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#C4762A] mb-1">
+                {app.reference}
+              </p>
+              <h1 className="font-serif text-2xl text-[#1E2A4F] font-bold m-0">
+                Your Application
+              </h1>
             </div>
             <Badge value={app.status} />
           </div>
@@ -488,9 +689,11 @@ function ApplicationView() {
           <h2>Payment</h2>
           <Badge value={app.payment_status} />
         </div>
-        {app.payment_status === "paid" ? (
+        {["paid", "external"].includes(app.payment_status) ? (
           <p>
-            Payment received.{" "}
+            {app.payment_status === "external"
+              ? "Pay the applicable fee through your mission or at arrival."
+              : "Payment received."}{" "}
             {editable ? "You can submit once your details are confirmed." : ""}
           </p>
         ) : (
@@ -524,17 +727,26 @@ function ApplicationView() {
         </ul>
       )}
       <section className="mt-8">
-        <h2 className="text-xl font-serif font-bold text-[#1E2A4F] mb-6">Applicant details</h2>
+        <h2 className="text-xl font-serif font-bold text-[#1E2A4F] mb-6">
+          Applicant details
+        </h2>
         <Details application={app} />
       </section>
 
       <section className="mt-12">
-        <h2 className="text-xl font-serif font-bold text-[#1E2A4F] mb-4">Documents</h2>
+        <h2 className="text-xl font-serif font-bold text-[#1E2A4F] mb-4">
+          Documents
+        </h2>
         {app.documents.length ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl">
             {app.documents.map((d) => (
-              <div key={d.id} className="flex items-center justify-between bg-white p-4 rounded-xl border border-[#E6DFD3] shadow-sm">
-                <span className="font-medium text-gray-800 capitalize">{d.type.replaceAll("_", " ")}</span>
+              <div
+                key={d.id}
+                className="flex items-center justify-between bg-white p-4 rounded-xl border border-[#E6DFD3] shadow-sm"
+              >
+                <span className="font-medium text-gray-800 capitalize">
+                  {d.type.replaceAll("_", " ")}
+                </span>
                 <button
                   className="bg-[#FAF7F0] hover:bg-[#E6DFD3] text-[#1E2A4F] px-4 py-1.5 rounded text-xs font-bold transition focus:ring-2 focus:ring-[#D4AF37]"
                   disabled={busy}
@@ -543,11 +755,11 @@ function ApplicationView() {
                       const r = await api(
                         `/applications/${id}/documents/${d.id}`,
                       );
-                      window.location.assign(r.signedUrl);
+                      setPreview({ ...d, signedUrl: r.signedUrl });
                     })
                   }
                 >
-                  Download
+                  View document
                 </button>
               </div>
             ))}
@@ -558,18 +770,21 @@ function ApplicationView() {
       </section>
       {editable && (
         <section className="platform-card">
-          <h2>Review and continue</h2>
-          <p>Check all answers and documents before confirming.</p>
-          <label>
-            <input
-              type="checkbox"
-              checked={confirmed}
-              onChange={(e) => setConfirmed(e.target.checked)}
-              className="mr-2"
-            />
-            I have reviewed these details and authorize submission of this
-            application.
-          </label>
+          <Journey stage={0} />
+          <h2>Review details</h2>
+          <FeeSummary fee={app.fee} />
+          {!currentConfirmation && (
+            <label>
+              <input
+                type="checkbox"
+                checked={confirmed}
+                onChange={(e) => setConfirmed(e.target.checked)}
+                className="mr-2"
+              />
+              I have reviewed these details and authorize submission of this
+              application.
+            </label>
+          )}
           <div className="platform-actions">
             <button
               className="platform-secondary"
@@ -579,68 +794,37 @@ function ApplicationView() {
               Edit application
             </button>
             <button
-              className="platform-secondary"
-              disabled={busy}
-              onClick={() =>
-                action(async () =>
-                  setValidation(
-                    await api(`/applications/${id}/validate`, {
-                      method: "POST",
-                    }),
-                  ),
-                )
+              className="platform-primary"
+              disabled={
+                busy ||
+                (!confirmed && !currentConfirmation) ||
+                (app.fee?.amount == null && app.fee?.collection !== "external")
               }
+              onClick={() => action(continueToPayment)}
             >
-              Check completeness
+              {busy
+                ? "Checking details…"
+                : ["paid", "external"].includes(app.payment_status)
+                  ? "Continue to final submission"
+                  : "Validate and continue to payment"}
             </button>
-            {!currentConfirmation && (
-              <button
-                className="platform-primary"
-                disabled={busy || !confirmed}
-                onClick={() =>
-                  action(async () => {
-                    await api(`/applications/${id}/confirm`, {
-                      method: "POST",
-                      body: { version: app.version },
-                    });
-                    setConfirmed(false);
-                  })
-                }
-              >
-                Confirm details
-              </button>
-            )}
-            {currentConfirmation && app.payment_status !== "paid" && (
-              <button
-                className="platform-primary"
-                disabled={busy}
-                onClick={() => action(checkout)}
-              >
-                Continue to checkout
-              </button>
-            )}
-            {currentConfirmation && app.payment_status === "paid" && (
-              <button
-                className="platform-primary"
-                disabled={busy}
-                onClick={() =>
-                  action(async () =>
-                    api(`/applications/${id}/submit`, {
-                      method: "POST",
-                      body: { version: app.version },
-                    }),
-                  )
-                }
-              >
-                Submit application
-              </button>
-            )}
           </div>
+          {validation && !validation.complete && (
+            <ul role="alert" className="platform-alert">
+              {Object.entries(validation.errors).map(([key, value]) => (
+                <li key={key}>
+                  {key.replaceAll("_", " ")}: {value}
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       )}
       {app.history.length > 0 && (
         <section className="mt-12 mb-8">
-          <h2 className="text-xl font-serif font-bold text-[#1E2A4F] mb-6">Application history</h2>
+          <h2 className="text-xl font-serif font-bold text-[#1E2A4F] mb-6">
+            Application history
+          </h2>
           <History items={app.history} />
         </section>
       )}
@@ -655,13 +839,16 @@ export function ApplicationDetail() {
   );
 }
 function CheckoutView() {
+  const preparing = useRef(null);
+  const navigate = useNavigate();
   const { id } = useParams();
   const [params] = useSearchParams();
   const paymentId = params.get("session");
   const [app, setApp] = useState(null),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
-    [outcome, setOutcome] = useState("paid");
+    [outcome, setOutcome] = useState("paid"),
+    [provider, setProvider] = useState(null);
   const load = useCallback(async () => {
     const a = await api(`/applications/${id}`);
     setApp(a);
@@ -670,6 +857,85 @@ function CheckoutView() {
   useEffect(() => {
     load().catch((e) => setError(e.message));
   }, [load]);
+  async function prepareProvider() {
+    if (preparing.current) return preparing.current;
+    preparing.current = (async () => {
+      const settings = await api(
+        `/applications/${id}/payments/${paymentId}/provider`,
+        { method: "POST" },
+      );
+      setProvider(settings);
+      await load();
+      return settings;
+    })();
+    try {
+      return await preparing.current;
+    } finally {
+      preparing.current = null;
+    }
+  }
+  useEffect(() => {
+    if (
+      app &&
+      !provider &&
+      app.payments.some(
+        (p) => p.id === paymentId && !["paid", "external"].includes(p.status),
+      )
+    ) {
+      setBusy(true);
+      prepareProvider()
+        .catch((e) => setError(e.message))
+        .finally(() => setBusy(false));
+    }
+  }, [app?.id, paymentId]);
+  async function openProvider() {
+    setBusy(true);
+    setError("");
+    try {
+      const settings = await prepareProvider();
+      if (settings.paid) return;
+      const Razorpay = await loadRazorpay();
+      const modal = new Razorpay({
+        ...settings,
+        theme: { color: "#1e2a4f" },
+        handler: async (response) => {
+          setBusy(true);
+          try {
+            const verified = await api(
+              `/applications/${id}/payments/${paymentId}/verify`,
+              { method: "POST", body: response },
+            );
+            if (!verified.paid)
+              throw new Error(
+                "Payment is pending. Retry verification shortly.",
+              );
+            await load();
+          } catch (e) {
+            setError(e.message);
+          } finally {
+            setBusy(false);
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            setBusy(false);
+            prepareProvider().catch((e) => setError(e.message));
+          },
+        },
+      });
+      modal.on("payment.failed", () => {
+        setError(
+          "Payment was declined. Your application is saved. You can retry securely.",
+        );
+        setBusy(false);
+      });
+      modal.open();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setBusy(false);
+    }
+  }
   async function pay(result) {
     setBusy(true);
     setError("");
@@ -700,10 +966,17 @@ function CheckoutView() {
           ← Back to application
         </Link>
         <div className="platform-card">
-          <p className="platform-kicker">Secure checkout · Sandbox</p>
+          <Journey
+            stage={["paid", "external"].includes(payment?.status) ? 2 : 1}
+          />
+          <p className="platform-kicker">Secure checkout · Test mode</p>
           <h1>
-            {payment?.status === "paid"
-              ? "Payment successful"
+            {["paid", "external"].includes(payment?.status)
+              ? payment?.status === "external"
+                ? "Payment arrangements"
+                : payment?.amount === 0
+                  ? "No fee required"
+                  : "Payment successful"
               : "Complete payment"}
           </h1>
           {error && (
@@ -720,19 +993,27 @@ function CheckoutView() {
           {payment && (
             <>
               <p className="platform-muted">{app.reference}</p>
-              <p className="text-3xl my-6 font-serif">
-                {new Intl.NumberFormat("en", {
-                  style: "currency",
-                  currency: payment.currency,
-                }).format(payment.amount / 100)}
-              </p>
-              <div className="flex gap-3 my-5">
-                <span className="platform-badge">VISA</span>
-                <span className="platform-badge">Mastercard</span>
-              </div>
-              <p className="platform-muted">
-                No money is charged. No card details are needed.
-              </p>
+              {app.fee?.collection !== "external" && (
+                <p className="text-3xl my-6 font-serif">
+                  {new Intl.NumberFormat("en", {
+                    style: "currency",
+                    currency: payment.currency,
+                  }).format(payment.amount / 100)}
+                </p>
+              )}
+              <FeeSummary fee={app.fee} />
+              {payment.amount > 0 && app.fee?.collection !== "external" && (
+                <>
+                  <div className="flex gap-3 my-5">
+                    <span className="platform-badge">VISA</span>
+                    <span className="platform-badge">Mastercard</span>
+                  </div>
+                  <p className="platform-muted">
+                    Test mode. Use test payment details only; no money is
+                    charged.
+                  </p>
+                </>
+              )}
               <div className="my-5">
                 <Badge value={payment.status} />
               </div>
@@ -742,45 +1023,75 @@ function CheckoutView() {
                   Processing payment…
                 </div>
               )}
-              {!busy && ["pending", "processing"].includes(payment.status) && (
-                <>
-                  {payment.status === "processing" && (
-                    <p className="platform-alert">
-                      Payment was interrupted. Continue with this session to
-                      avoid starting another payment.
-                    </p>
-                  )}
-                  <label>
-                    Test payment result
-                    <select
-                      value={outcome}
-                      onChange={(e) => setOutcome(e.target.value)}
-                    >
-                      <option value="paid">Successful</option>
-                      <option value="failed">Declined</option>
-                      <option value="pending">Pending</option>
-                    </select>
-                  </label>
+              {!busy &&
+                provider?.provider === "simulated" &&
+                ["pending", "processing"].includes(payment.status) && (
+                  <>
+                    {payment.status === "processing" && (
+                      <p className="platform-alert">
+                        Payment was interrupted. Continue with this session to
+                        avoid starting another payment.
+                      </p>
+                    )}
+                    <label>
+                      Test payment result
+                      <select
+                        value={outcome}
+                        onChange={(e) => setOutcome(e.target.value)}
+                      >
+                        <option value="paid">Successful</option>
+                        <option value="failed">Declined</option>
+                        <option value="pending">Pending</option>
+                      </select>
+                    </label>
+                    <div className="platform-actions">
+                      <button
+                        className="platform-primary"
+                        onClick={() => pay(outcome)}
+                      >
+                        Authorize payment
+                      </button>
+                      <button
+                        className="platform-secondary"
+                        onClick={() => pay("cancelled")}
+                      >
+                        Cancel payment
+                      </button>
+                    </div>
+                  </>
+                )}
+              {!["paid", "external"].includes(payment.status) &&
+                provider?.provider !== "simulated" && (
                   <div className="platform-actions">
                     <button
                       className="platform-primary"
-                      onClick={() => pay(outcome)}
+                      disabled={busy}
+                      onClick={openProvider}
                     >
-                      Authorize payment
+                      {busy
+                        ? "Verifying…"
+                        : payment.amount === 0
+                          ? "Confirm no fee required"
+                          : "Pay securely with Razorpay"}
                     </button>
                     <button
                       className="platform-secondary"
-                      onClick={() => pay("cancelled")}
+                      disabled={busy}
+                      onClick={() =>
+                        prepareProvider().catch((e) => setError(e.message))
+                      }
                     >
-                      Cancel payment
+                      Refresh payment status
                     </button>
                   </div>
-                </>
-              )}
-              {payment.status === "paid" && (
+                )}
+              {["paid", "external"].includes(payment.status) && (
                 <p>
-                  Your payment is recorded. Return to your application to submit
-                  it.
+                  {payment.status === "external"
+                    ? "Payment will be collected through the official filing process. Your application is ready for submission."
+                    : payment.amount === 0
+                      ? "No payment is required. Your application is ready for final submission."
+                      : "Payment received. Your application is ready for final submission."}
                 </p>
               )}
               {["failed", "cancelled"].includes(payment.status) && (
@@ -791,14 +1102,38 @@ function CheckoutView() {
                   Your application is saved. Return to it to retry checkout.
                 </p>
               )}
-              <Link
-                className="platform-secondary mt-6"
-                to={`/applications/${id}`}
-              >
-                {payment.status === "paid"
-                  ? "Continue to submission"
-                  : "Return to application"}
-              </Link>
+              {["paid", "external"].includes(payment.status) ? (
+                <button
+                  className="platform-primary mt-6"
+                  disabled={busy}
+                  onClick={async () => {
+                    setBusy(true);
+                    setError("");
+                    try {
+                      await api(`/applications/${id}/submit`, {
+                        method: "POST",
+                        body: { version: app.version },
+                      });
+                      navigate(`/applications/${id}?submitted=1`, {
+                        replace: true,
+                      });
+                    } catch (e) {
+                      setError(e.message);
+                    } finally {
+                      setBusy(false);
+                    }
+                  }}
+                >
+                  {busy ? "Submitting…" : "Submit application"}
+                </button>
+              ) : (
+                <Link
+                  className="platform-secondary mt-6"
+                  to={`/applications/${id}`}
+                >
+                  Return to application
+                </Link>
+              )}
             </>
           )}
         </div>
@@ -811,5 +1146,55 @@ export function Checkout() {
     <Auth>
       <CheckoutView />
     </Auth>
+  );
+}
+
+export function Journey({ stage }) {
+  return (
+    <ol className="platform-journey" aria-label="Submission progress">
+      {["Review details", "Payment", "Final submit", "Confirmation"].map(
+        (label, i) => (
+          <li key={label} aria-current={i === stage ? "step" : undefined}>
+            {i < stage ? "✓" : i + 1}. {label}
+            {i < 3 ? " →" : ""}
+          </li>
+        ),
+      )}
+    </ol>
+  );
+}
+export function FeeSummary({ fee }) {
+  return fee?.amount == null ? (
+    <p className="platform-alert">
+      {fee?.reason || "Fee unavailable. Please try again."}
+    </p>
+  ) : (
+    <div>
+      <p>{fee.label}</p>
+      <dl className="platform-fee-lines">
+        <dt>Application fee</dt>
+        <dd>{formatFee({ ...fee, amount: fee.baseAmount })}</dd>
+        {fee.bankCharge > 0 && (
+          <>
+            <dt>Bank charge (3%)</dt>
+            <dd>{formatFee({ ...fee, amount: fee.bankCharge })}</dd>
+          </>
+        )}
+        <dt>
+          <strong>Total</strong>
+        </dt>
+        <dd>
+          <strong>{formatFee(fee)}</strong>
+        </dd>
+      </dl>
+      <a
+        className="platform-link"
+        href={fee.source}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Official fee schedule
+      </a>
+    </div>
   );
 }

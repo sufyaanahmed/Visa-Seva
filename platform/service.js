@@ -1,3 +1,5 @@
+import { razorpayClient, verifyPaymentSignature } from "./razorpay.js";
+import { calculateApplicationFee } from "../src/domain/applicationFees.js";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 import sharp from "sharp";
 import { answerSchema, validateApplication } from "./rules.js";
@@ -46,12 +48,26 @@ export function createService(db, config) {
     );
     return {
       ...app,
+      fee: calculateApplicationFee(app.answers),
       documents: unwrap(documents),
       history: unwrap(history),
       payments: unwrap(payments),
     };
   }
   async function command(actor, id, action, payload = {}) {
+    if (action === "transition" && payload.status === "accepted") {
+      const application = await get(actor, id);
+      const report = validateApplication(
+        application.answers,
+        application.documents,
+      );
+      if (!report.complete)
+        throw new ApiError(
+          422,
+          "Resolve missing application details before accepting.",
+          report,
+        );
+    }
     return unwrap(
       await db.rpc("platform_command", {
         actor: actor.id,
@@ -86,7 +102,20 @@ export function createService(db, config) {
     });
   }
   async function update(actor, id, answers, version) {
-    await get(actor, id);
+    const previous = await get(actor, id);
+    if (previous.payment_status === "paid") {
+      const before = calculateApplicationFee(previous.answers),
+        after = calculateApplicationFee(answers);
+      if (
+        before.amount !== after.amount ||
+        before.currency !== after.currency ||
+        before.collection !== after.collection
+      )
+        throw new ApiError(
+          409,
+          "A paid application cannot change to a different fee. Start a separate application for that route.",
+        );
+    }
     return command(actor, id, "update", {
       answers: answerSchema.parse(answers),
       version,
@@ -127,12 +156,15 @@ export function createService(db, config) {
     return command(actor, id, "submit", { version });
   }
   async function checkout(actor, id, version, requestKey) {
-    await get(actor, id);
+    const application = await get(actor, id);
+    const fee = calculateApplicationFee(application.answers);
+    if (fee.amount == null && fee.collection !== "external")
+      throw new ApiError(422, fee.reason);
     await command(actor, id, "checkout", {
       version,
       request_key: requestKey,
-      amount: config.sandboxAmount,
-      currency: "USD",
+      amount: fee.collection === "external" ? 0 : fee.amount,
+      currency: fee.currency,
     });
     const a = await get(actor, id);
     const p =
@@ -142,6 +174,193 @@ export function createService(db, config) {
     return {
       ...p,
       checkout_url: `${config.publicUrl}/applications/${id}/checkout?session=${p.id}`,
+    };
+  }
+  async function providerCheckout(actor, id, paymentId) {
+    const app = await get(actor, id);
+    if (actor.kind !== "applicant")
+      throw new ApiError(403, "Open checkout on the website.");
+    let payment = app.payments.find((p) => p.id === paymentId);
+    if (!payment) throw new ApiError(404, "Payment session not found.");
+    if (["paid", "external"].includes(payment.status))
+      return { paid: true, external: payment.status === "external" };
+    const fee = calculateApplicationFee(app.answers);
+    if (fee.collection === "external") {
+      await command(actor, id, "payment", {
+        payment_id: paymentId,
+        outcome: "external",
+      });
+      unwrap(
+        await db
+          .from("payment_sessions")
+          .update({ provider: "external" })
+          .eq("id", paymentId),
+      );
+      return { paid: true, external: true };
+    }
+    if (
+      fee.amount != null &&
+      (fee.amount !== payment.amount || fee.currency !== payment.currency) &&
+      payment.provider === "sandbox"
+    ) {
+      const repriced = unwrap(
+        await db.rpc("reprice_legacy_payment", {
+          owner: app.owner_id,
+          app_id: id,
+          payment_id: paymentId,
+          fee_amount: fee.amount,
+          fee_currency: fee.currency,
+        }),
+      );
+      if (repriced)
+        payment = {
+          ...payment,
+          amount: fee.amount,
+          currency: fee.currency,
+          status: "pending",
+        };
+    }
+    if (fee.amount !== payment.amount || fee.currency !== payment.currency)
+      throw new ApiError(
+        409,
+        "The fee has changed. Return to your application to start a new checkout.",
+      );
+    if (payment.amount === 0) {
+      await command(actor, id, "payment", {
+        payment_id: paymentId,
+        outcome: "paid",
+      });
+      unwrap(
+        await db
+          .from("payment_sessions")
+          .update({
+            provider: "gratis",
+            transaction_reference: `GRATIS-${paymentId}`,
+          })
+          .eq("id", paymentId),
+      );
+      return { paid: true };
+    }
+    if (config.paymentProvider !== "razorpay") return { provider: "simulated" };
+    const request = razorpayClient(config);
+    if (!payment.provider_order_id) {
+      const claimed = unwrap(
+        await db.rpc("claim_payment_order", { payment_id: paymentId }),
+      );
+      if (!claimed) {
+        // Never create a second order after a timeout. Recover the first by its receipt.
+        const list = await request(
+          `/orders?receipt=${encodeURIComponent(paymentId)}&count=100`,
+        );
+        const existing = list.items?.find(
+          (o) =>
+            o.receipt === paymentId &&
+            o.amount === payment.amount &&
+            o.currency === payment.currency,
+        );
+        if (!existing)
+          throw new ApiError(
+            409,
+            "Checkout is being prepared. Please retry shortly; no second payment has been created.",
+          );
+        payment = { ...payment, provider_order_id: existing.id };
+      } else {
+        try {
+          const order = await request("/orders", {
+            amount: payment.amount,
+            currency: payment.currency,
+            receipt: paymentId,
+            notes: { application_id: id },
+          });
+          payment = { ...payment, provider_order_id: order.id };
+        } catch (error) {
+          // A definitive rejection cannot have created an order; permit a corrected retry.
+          if (error.providerStatus >= 400 && error.providerStatus < 500)
+            unwrap(
+              await db
+                .from("payment_sessions")
+                .update({ order_started_at: null })
+                .eq("id", paymentId),
+            );
+          throw error;
+        }
+      }
+      unwrap(
+        await db
+          .from("payment_sessions")
+          .update({
+            provider_order_id: payment.provider_order_id,
+            provider: "razorpay",
+          })
+          .eq("id", paymentId),
+      );
+    }
+    const paid = await reconcilePayment(actor, id, payment, request);
+    return {
+      provider: "razorpay",
+      paid,
+      key: config.razorpayKeyId,
+      order_id: payment.provider_order_id,
+      amount: payment.amount,
+      currency: payment.currency,
+      name: "Visa Seva",
+      description: app.reference,
+    };
+  }
+  async function reconcilePayment(actor, id, payment, request) {
+    const list = await request(`/orders/${payment.provider_order_id}/payments`);
+    let receipt = list.items?.find(
+      (p) =>
+        p.order_id === payment.provider_order_id &&
+        p.amount === payment.amount &&
+        p.currency === payment.currency &&
+        ["authorized", "captured"].includes(p.status),
+    );
+    if (!receipt) return false;
+    if (receipt.status === "authorized")
+      receipt = await request(`/payments/${receipt.id}/capture`, {
+        amount: payment.amount,
+        currency: payment.currency,
+      });
+    if (
+      receipt.status !== "captured" ||
+      receipt.amount !== payment.amount ||
+      receipt.currency !== payment.currency
+    )
+      throw new ApiError(
+        409,
+        "Payment has not been captured yet. Retry verification.",
+      );
+    await command(actor, id, "payment", {
+      payment_id: payment.id,
+      outcome: "paid",
+    });
+    unwrap(
+      await db
+        .from("payment_sessions")
+        .update({ transaction_reference: receipt.id })
+        .eq("id", payment.id),
+    );
+    return true;
+  }
+  async function verifyCheckout(actor, id, paymentId, body) {
+    const app = await get(actor, id);
+    const payment = app.payments.find((p) => p.id === paymentId);
+    if (
+      !payment?.provider_order_id ||
+      body.razorpay_order_id !== payment.provider_order_id ||
+      !verifyPaymentSignature(
+        payment.provider_order_id,
+        body.razorpay_payment_id,
+        body.razorpay_signature,
+        config.razorpaySecret,
+      )
+    )
+      throw new ApiError(400, "Payment signature could not be verified.");
+    if (actor.kind !== "applicant")
+      throw new ApiError(403, "Open checkout on the website.");
+    return {
+      paid: await reconcilePayment(actor, id, payment, razorpayClient(config)),
     };
   }
   async function upload(actor, id, type, buffer, version) {
@@ -172,7 +391,7 @@ export function createService(db, config) {
         !buffer.subarray(-2048).includes(Buffer.from("%%EOF"))
       )
         throw new ApiError(400, "Choose a valid PDF.");
-      // Reject active PDF content. Files are downloads, never embedded into the public origin.
+      // Reject active PDF content. Previews are served from the isolated storage origin.
       if (
         /\/(JavaScript|JS|Launch|EmbeddedFile|RichMedia)\b/.test(
           buffer.toString("latin1"),
@@ -187,9 +406,18 @@ export function createService(db, config) {
       if (
         !metadata ||
         metadata.format !== "jpeg" ||
+        (req.minDimension &&
+          Math.min(metadata.width, metadata.height) < req.minDimension) ||
+        (req.maxDimension &&
+          Math.max(metadata.width, metadata.height) > req.maxDimension) ||
         (req.square && metadata.width !== metadata.height)
       )
-        throw new ApiError(400, req.square ? "Choose a valid square JPEG photograph." : "Choose a valid JPEG image.");
+        throw new ApiError(
+          400,
+          req.square
+            ? "Choose a valid square JPEG photograph."
+            : "Choose a valid JPEG image.",
+        );
       mime = "image/jpeg";
     }
     const path = `${actor.id}/${id}/${randomUUID()}.${mime === "image/jpeg" ? "jpg" : "pdf"}`;
@@ -219,21 +447,17 @@ export function createService(db, config) {
     if (actor.kind === "agent")
       throw new ApiError(403, "Open documents on the website.");
     unwrap(
-      await db
-        .from("platform_audit")
-        .insert({
-          application_id: id,
-          actor_id: actor.id,
-          actor_kind: actor.kind,
-          action: "document_download",
-        }),
+      await db.from("platform_audit").insert({
+        application_id: id,
+        actor_id: actor.id,
+        actor_kind: actor.kind,
+        action: "document_download",
+      }),
     );
     return unwrap(
       await db.storage
         .from("application-documents")
-        .createSignedUrl(doc.path, 60, {
-          download: `${doc.type}.${doc.mime_type === "image/jpeg" ? "jpg" : "pdf"}`,
-        }),
+        .createSignedUrl(doc.path, 300),
     );
   }
   async function grant(actor, label, scopes) {
@@ -254,13 +478,11 @@ export function createService(db, config) {
         .single(),
     );
     unwrap(
-      await db
-        .from("platform_audit")
-        .insert({
-          actor_id: actor.id,
-          actor_kind: "applicant",
-          action: "agent_grant_created",
-        }),
+      await db.from("platform_audit").insert({
+        actor_id: actor.id,
+        actor_kind: "applicant",
+        action: "agent_grant_created",
+      }),
     );
     return { ...grant, token };
   }
@@ -273,6 +495,8 @@ export function createService(db, config) {
     confirm,
     submit,
     checkout,
+    providerCheckout,
+    verifyCheckout,
     upload,
     download,
     grant,

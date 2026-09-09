@@ -1,4 +1,5 @@
-import { mailpitFetcher } from './mailpit.js';
+import { notificationPayload } from "./email-templates.js";
+import { mailpitFetcher } from "./mailpit.js";
 import { createClient } from "@supabase/supabase-js";
 import { configuration } from "./server.js";
 import { unwrap } from "./service.js";
@@ -14,14 +15,19 @@ export async function deliverEmails(
   const messages = unwrap(await db.rpc("claim_platform_emails"));
   for (const message of messages) {
     try {
-      // Every notification must carry its body and application link. Template
-      // aliases are not provisioned across deployment accounts.
-      const payload = {
-        from,
-        to: [message.recipient],
-        subject: message.subject,
-        text: `${message.body}\n\nView your application securely: ${config.publicUrl}/applications/${message.application_id}`,
-      };
+      // Cache the exact payload before sending: retries must not invalidate links
+      // or change the content associated with a provider idempotency key.
+      const payload =
+        message.delivery_payload ||
+        (await notificationPayload(db, config, message, from));
+      if (!message.delivery_payload)
+        unwrap(
+          await db
+            .from("email_notifications")
+            .update({ delivery_payload: payload })
+            .eq("id", message.id)
+            .eq("attempts", message.attempts),
+        );
 
       const response = await fetcher("https://api.resend.com/emails", {
         method: "POST",
@@ -105,7 +111,9 @@ export async function deliverEmails(
   }
   return messages.length;
 }
-if (process.argv[1]?.replace(/\\/g, "/").endsWith("/platform/email-worker.js")) {
+if (
+  process.argv[1]?.replace(/\\/g, "/").endsWith("/platform/email-worker.js")
+) {
   const config = configuration();
   const db = createClient(
     process.env.SUPABASE_URL,
@@ -119,13 +127,26 @@ if (process.argv[1]?.replace(/\\/g, "/").endsWith("/platform/email-worker.js")) 
   do {
     try {
       await deliverEmails(db, config, {
-        apiKey: process.env.EMAIL_PROVIDER === "mailpit" ? "local-inbox" : process.env.RESEND_API_KEY,
-        ...(process.env.EMAIL_PROVIDER === "mailpit" ? { fetcher: mailpitFetcher(process.env.MAILPIT_URL || "http://127.0.0.1:54324") } : {}),
+        apiKey:
+          process.env.EMAIL_PROVIDER === "mailpit"
+            ? "local-inbox"
+            : process.env.RESEND_API_KEY,
+        ...(process.env.EMAIL_PROVIDER === "mailpit"
+          ? {
+              fetcher: mailpitFetcher(
+                process.env.MAILPIT_URL || "http://127.0.0.1:54324",
+              ),
+            }
+          : {}),
         from: process.env.EMAIL_FROM,
       });
     } catch (error) {
       console.error(error.message);
-      if (!process.env.RESEND_API_KEY && process.env.EMAIL_PROVIDER !== "mailpit") process.exitCode = 1;
+      if (
+        !process.env.RESEND_API_KEY &&
+        process.env.EMAIL_PROVIDER !== "mailpit"
+      )
+        process.exitCode = 1;
     }
     if (process.argv.includes("--once") || process.exitCode) break;
     await new Promise((resolve) => setTimeout(resolve, 10000));
