@@ -221,24 +221,56 @@ const Header = () => {
 };
 
 const Footer = () => (
-  <footer className="relative bg-[#111A31] pt-20 pb-12 text-[#FAF7F0] overflow-hidden border-t-4 border-[#D4AF37] print:hidden">
+  <footer className="relative bg-[#111A31] pt-16 pb-12 text-[#FAF7F0] overflow-hidden border-t-4 border-[#D4AF37] print:hidden">
     <div className="mx-auto max-w-6xl px-6 relative z-10">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8 mb-16">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-8 mb-12">
         
-        {/* Brand Section */}
-        <div className="md:col-span-5 lg:col-span-4 flex flex-col items-start">
-          <div className="flex items-center gap-3 mb-6">
+        {/* Brand & Attribution Section */}
+        <div className="md:col-span-6 lg:col-span-5 flex flex-col items-start">
+          <div className="flex items-center gap-3 mb-4">
             <img src="/emblem.svg" alt="" className="w-10 h-10 opacity-90 drop-shadow-[0_2px_8px_rgba(212,175,55,0.25)]" style={{ filter: 'brightness(0) saturate(100%) invert(88%) sepia(21%) saturate(1210%) hue-rotate(345deg) brightness(91%) contrast(85%)' }} />
             <div className="flex flex-col">
               <span className="font-serif text-xl font-bold tracking-wide text-white">India Visa Seva</span>
+              <span className="text-[0.65rem] uppercase tracking-[0.18em] text-[#D4AF37] font-semibold">Independent Prototype</span>
             </div>
+          </div>
+
+          <div className="mt-2 rounded-xl border border-white/10 bg-white/[0.04] p-4 text-xs leading-relaxed text-white/85 shadow-sm backdrop-blur-xs">
+            <p className="mb-2 text-white/90">
+              Created by{' '}
+              <a href="https://sufyaanahmed.com/" target="_blank" rel="noopener noreferrer" className="font-semibold text-[#D4AF37] hover:underline underline-offset-2">
+                Sufyaan Ahmed
+              </a>
+              {' '}and{' '}
+              <a href="https://www.nisarahmed.dev/" target="_blank" rel="noopener noreferrer" className="font-semibold text-[#D4AF37] hover:underline underline-offset-2">
+                Nisar Ahmed
+              </a>.
+            </p>
+            <p className="text-white/75 leading-normal">
+              Built for{' '}
+              <a href="https://buildwhatmovesindia.com/" target="_blank" rel="noopener noreferrer" className="font-medium text-white hover:text-[#D4AF37] transition-colors underline decoration-white/30 hover:decoration-[#D4AF37]">
+                Build What Moves India
+              </a>
+              {' '}— ranked{' '}
+              <span className="inline-flex items-center rounded-md bg-[#D4AF37]/20 px-1.5 py-0.5 font-bold text-[#D4AF37] border border-[#D4AF37]/30">
+                #114
+              </span>{' '}
+              out of nearly 14,000 teams, organized by{' '}
+              <a href="https://www.instagram.com/thevarunmayya/" target="_blank" rel="noopener noreferrer" className="font-medium text-white hover:underline underline-offset-2">
+                Varun Mayya
+              </a>
+              {' '}and{' '}
+              <a href="https://openai.com/" target="_blank" rel="noopener noreferrer" className="font-medium text-white hover:underline underline-offset-2">
+                OpenAI
+              </a>.
+            </p>
           </div>
         </div>
 
         {/* Links: Services */}
-        <div className="md:col-span-3 lg:col-span-2 lg:col-start-7">
+        <div className="md:col-span-3 lg:col-span-3 lg:col-start-7">
           <h3 className="mb-6 font-sans text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37]">Services</h3>
-          <ul className="flex flex-col gap-4 font-sans text-sm text-white/70">
+          <ul className="flex flex-col gap-3.5 font-sans text-sm text-white/70">
             <li><Link to="/guide/visa-finder" className="transition-all hover:text-white hover:translate-x-1 inline-block">Find Visa Route</Link></li>
             <li><Link to="/status" className="transition-all hover:text-white hover:translate-x-1 inline-block">Check Status</Link></li>
             <li><Link to="/e-arrival" className="transition-all hover:text-white hover:translate-x-1 inline-block">e-Arrival Guidance</Link></li>
@@ -247,9 +279,9 @@ const Footer = () => (
         </div>
 
         {/* Links: Resources */}
-        <div className="md:col-span-4 lg:col-span-2 lg:col-start-10">
+        <div className="md:col-span-3 lg:col-span-3 lg:col-start-10">
           <h3 className="mb-6 font-sans text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37]">Resources</h3>
-          <ul className="flex flex-col gap-4 font-sans text-sm text-white/70">
+          <ul className="flex flex-col gap-3.5 font-sans text-sm text-white/70">
             <li><Link to="/tourism" className="transition-all hover:text-white hover:translate-x-1 inline-block">Discover India</Link></li>
             <li><Link to="/help" className="transition-all hover:text-white hover:translate-x-1 inline-block">Help & FAQ</Link></li>
             <li><Link to="/reviews" className="transition-all hover:text-white hover:translate-x-1 inline-block">Public Reviews</Link></li>
@@ -260,7 +292,7 @@ const Footer = () => (
       </div>
 
       {/* Footer Bottom */}
-      <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 font-sans text-xs text-white/40">
+      <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 font-sans text-xs text-white/40">
         <p>&copy; {new Date().getFullYear()} India Visa Seva. All rights reserved.</p>
         <Link to="/admin" className="hover:text-white/80 transition-colors">Admin Portal</Link>
       </div>
