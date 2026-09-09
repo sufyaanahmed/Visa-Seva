@@ -198,6 +198,28 @@ export function createService(db, config) {
       );
       return { paid: true, external: true };
     }
+    if (
+      fee.amount != null &&
+      (fee.amount !== payment.amount || fee.currency !== payment.currency) &&
+      payment.provider === "sandbox"
+    ) {
+      const repriced = unwrap(
+        await db.rpc("reprice_legacy_payment", {
+          owner: app.owner_id,
+          app_id: id,
+          payment_id: paymentId,
+          fee_amount: fee.amount,
+          fee_currency: fee.currency,
+        }),
+      );
+      if (repriced)
+        payment = {
+          ...payment,
+          amount: fee.amount,
+          currency: fee.currency,
+          status: "pending",
+        };
+    }
     if (fee.amount !== payment.amount || fee.currency !== payment.currency)
       throw new ApiError(
         409,

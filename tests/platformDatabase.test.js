@@ -12,7 +12,12 @@ before(async () => {
   await db.exec(
     `create role anon; create role authenticated; create role service_role bypassrls; create schema auth; create table auth.users(id uuid primary key,email text); create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$; grant usage on schema public,auth to authenticated,anon,service_role; grant execute on function auth.uid() to public; insert into auth.users values('${owner}','owner@example.com'),('${other}','other@example.com'),('${reviewer}','reviewer@example.com'),('${decider}','decider@example.com');`,
   );
-  for (const f of ["202609050001_platform.sql", "202609050003_oauth.sql", "202609090001_application_flow.sql"])
+  for (const f of [
+    "202609050001_platform.sql",
+    "202609050003_oauth.sql",
+    "202609090001_application_flow.sql",
+    "202609090002_legacy_checkout.sql",
+  ])
     await db.exec(
       await readFile(
         new URL(`../supabase/migrations/${f}`, import.meta.url),
@@ -54,16 +59,24 @@ test("draft creation is idempotent per owner and inaccessible to another applica
 test("one applicant can retrieve multiple applications with independent persisted statuses", async () => {
   const first = await create("status-first");
   const second = await create("status-second");
-  await cmd(owner, "applicant", second.id, "confirm", { version: second.version });
+  await cmd(owner, "applicant", second.id, "confirm", {
+    version: second.version,
+  });
   assert.notEqual(first.reference, second.reference);
-  await db.exec(`set role authenticated;select set_config('request.jwt.claim.sub','${owner}',false);`);
+  await db.exec(
+    `set role authenticated;select set_config('request.jwt.claim.sub','${owner}',false);`,
+  );
   try {
     const { rows } = await db.query(
-      "select id,status from applications where id in ($1,$2)", [first.id, second.id],
+      "select id,status from applications where id in ($1,$2)",
+      [first.id, second.id],
     );
     assert.equal(rows.length, 2);
     assert.equal(rows.find((row) => row.id === first.id).status, "draft");
-    assert.equal(rows.find((row) => row.id === second.id).status, "awaiting_payment");
+    assert.equal(
+      rows.find((row) => row.id === second.id).status,
+      "awaiting_payment",
+    );
   } finally {
     await db.exec("reset role");
   }
@@ -332,20 +345,95 @@ test("OAuth authorization codes bind client, redirect, PKCE and audience and are
   await assert.rejects(redeem("challenge"), /invalid_grant/);
 });
 
-test('direct submitted decisions retain decision role and one immutable email event', async()=>{
-  for(const status of ['accepted','rejected']) {
-    let a=await create(`direct-${status}`);
-    await db.query("update applications set status='submitted',payment_status='paid' where id=$1",[a.id]);
-    await assert.rejects(cmd(reviewer,'admin',a.id,'transition',{version:a.version,status,reason:'Reviewed documents'}),/Decision role/);
-    const decided=await cmd(decider,'admin',a.id,'transition',{version:a.version,status,reason:'Reviewed documents'});
-    assert.equal(decided.status,status);
-    await assert.rejects(cmd(decider,'admin',a.id,'transition',{version:a.version,status,reason:'Duplicate'}),/Version conflict/);
-    const emails=await db.query('select * from email_notifications where application_id=$1',[a.id]);
-    assert.equal(emails.rows.length,1);
+test("direct submitted decisions retain decision role and one immutable email event", async () => {
+  for (const status of ["accepted", "rejected"]) {
+    let a = await create(`direct-${status}`);
+    await db.query(
+      "update applications set status='submitted',payment_status='paid' where id=$1",
+      [a.id],
+    );
+    await assert.rejects(
+      cmd(reviewer, "admin", a.id, "transition", {
+        version: a.version,
+        status,
+        reason: "Reviewed documents",
+      }),
+      /Decision role/,
+    );
+    const decided = await cmd(decider, "admin", a.id, "transition", {
+      version: a.version,
+      status,
+      reason: "Reviewed documents",
+    });
+    assert.equal(decided.status, status);
+    await assert.rejects(
+      cmd(decider, "admin", a.id, "transition", {
+        version: a.version,
+        status,
+        reason: "Duplicate",
+      }),
+      /Version conflict/,
+    );
+    const emails = await db.query(
+      "select * from email_notifications where application_id=$1",
+      [a.id],
+    );
+    assert.equal(emails.rows.length, 1);
   }
 });
-test('cached email authentication links cannot be read by authenticated staff',async()=>{
-  await db.exec(`set role authenticated;select set_config('request.jwt.claim.sub','${decider}',false);`);
-  try { await assert.rejects(db.query('select delivery_payload from email_notifications'),/permission denied/);await db.query('select subject,status from email_notifications'); }
-  finally {await db.exec('reset role');}
+test("cached email authentication links cannot be read by authenticated staff", async () => {
+  await db.exec(
+    `set role authenticated;select set_config('request.jwt.claim.sub','${decider}',false);`,
+  );
+  try {
+    await assert.rejects(
+      db.query("select delivery_payload from email_notifications"),
+      /permission denied/,
+    );
+    await db.query("select subject,status from email_notifications");
+  } finally {
+    await db.exec("reset role");
+  }
+});
+
+test("legacy $1 sandbox checkouts can be repriced but owner isolation and provider orders remain protected", async () => {
+  let a = await create("legacy-fee");
+  a = await cmd(owner, "applicant", a.id, "confirm", { version: a.version });
+  await cmd(owner, "applicant", a.id, "checkout", {
+    version: a.version,
+    request_key: "legacy-fee",
+    amount: 100,
+    currency: "USD",
+  });
+  const p = (
+    await db.query("select * from payment_sessions where application_id=$1", [
+      a.id,
+    ])
+  ).rows[0];
+  async function reprice(actor) {
+    return (
+      await db.query(
+        "select reprice_legacy_payment($1,$2,$3,27500,'USD') as changed",
+        [actor, a.id, p.id],
+      )
+    ).rows[0].changed;
+  }
+  assert.equal(await reprice(other), false);
+  assert.equal(await reprice(owner), true);
+  assert.equal(
+    (await db.query("select amount from payment_sessions where id=$1", [p.id]))
+      .rows[0].amount,
+    27500,
+  );
+  await db.query(
+    "update payment_sessions set provider='razorpay',provider_order_id='order_locked' where id=$1",
+    [p.id],
+  );
+  assert.equal(await reprice(owner), false);
+  await db.exec("set role authenticated");
+  try {
+    await assert.rejects(reprice(owner), /permission denied/);
+  } finally {
+    await db.exec("reset role");
+  }
 });

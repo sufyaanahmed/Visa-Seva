@@ -330,3 +330,23 @@ test("leaving a pending detail still allows retrying a queue failure", async () 
   await act(async () => pending.resolve(record()));
   assert.match(host.textContent, /Review queue/);
 });
+
+test("decision makers can accept or reject a submitted application on first view", async () => {
+  await render(backend(() => undefined, "decision_maker"));
+  await click("VS-one");
+  const options = [...host.querySelectorAll("form select option")].map(
+    (o) => o.value,
+  );
+  assert.ok(options.includes("accepted"));
+  assert.ok(options.includes("rejected"));
+});
+
+test("reviewers cannot make final decisions on first view", async () => {
+  await render(backend());
+  await click("VS-one");
+  const options = [...host.querySelectorAll("form select option")].map(
+    (o) => o.value,
+  );
+  assert.ok(!options.includes("accepted"));
+  assert.ok(!options.includes("rejected"));
+});

@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { supabase, platformEnabled, APPLICATION_ACCESS_UNAVAILABLE } from "./client";
+import {
+  supabase,
+  platformEnabled,
+  APPLICATION_ACCESS_UNAVAILABLE,
+} from "./client";
 import "./platform.css";
 
 export default function Auth({ children, admin = false, initialEmail = "" }) {
@@ -39,12 +43,22 @@ export default function Auth({ children, admin = false, initialEmail = "" }) {
               }}
             />
           </div>
-          <span className="platform-kicker">Government of India · Ministry of Home Affairs</span>
+          <span className="platform-kicker">
+            Government of India · Ministry of Home Affairs
+          </span>
           <h1>Application access unavailable</h1>
           <p role="alert">{APPLICATION_ACCESS_UNAVAILABLE}</p>
           <div className="platform-unavailable-note">
             <p className="text-xs text-text/70 mt-4">
-              Please verify that <code className="bg-amber-50 px-1 py-0.5 rounded text-amber-900 border border-amber-200">VITE_SUPABASE_URL</code> and <code className="bg-amber-50 px-1 py-0.5 rounded text-amber-900 border border-amber-200">VITE_SUPABASE_ANON_KEY</code> are configured in your environment.
+              Please verify that{" "}
+              <code className="bg-amber-50 px-1 py-0.5 rounded text-amber-900 border border-amber-200">
+                VITE_SUPABASE_URL
+              </code>{" "}
+              and{" "}
+              <code className="bg-amber-50 px-1 py-0.5 rounded text-amber-900 border border-amber-200">
+                VITE_SUPABASE_ANON_KEY
+              </code>{" "}
+              are configured in your environment.
             </p>
           </div>
         </div>
@@ -102,7 +116,7 @@ export default function Auth({ children, admin = false, initialEmail = "" }) {
     } catch (error) {
       if (error.message === "Failed to fetch" || error.name === "TypeError") {
         setMessage(
-          `Unable to connect to the authentication server (${import.meta.env.VITE_SUPABASE_URL || "backend"}). Please ensure your Supabase instance is running or update your .env configuration.`
+          `Unable to connect to the authentication server (${import.meta.env.VITE_SUPABASE_URL || "backend"}). Please ensure your Supabase instance is running or update your .env configuration.`,
         );
       } else {
         setMessage(error.message);
@@ -137,7 +151,9 @@ export default function Auth({ children, admin = false, initialEmail = "" }) {
               <div className="platform-gov-titles">
                 <div className="platform-gov-hindi">भारत सरकार</div>
                 <div className="platform-gov-eng">Government of India</div>
-                <div className="platform-gov-dept">Ministry of Home Affairs & Bureau of Immigration</div>
+                <div className="platform-gov-dept">
+                  Ministry of Home Affairs & Bureau of Immigration
+                </div>
               </div>
 
               <div className="platform-gov-divider" aria-hidden="true"></div>
@@ -145,13 +161,16 @@ export default function Auth({ children, admin = false, initialEmail = "" }) {
               <div className="platform-system-intro">
                 <h2>National Visa Administration System</h2>
                 <p>
-                  Not Official adjudication console for authorized Consular Officers, Foreigners Regional Registration Officers (FRRO), and Immigration Authorities.
+                  Not Official adjudication console for authorized Consular
+                  Officers, Foreigners Regional Registration Officers (FRRO),
+                  and Immigration Authorities.
                 </p>
               </div>
 
               <div className="platform-admin-left-footer">
                 <p className="platform-gov-warning-text">
-                  Restricted to authorized personnel only. Protected under the Official Secrets Act and Information Technology Act.
+                  Restricted to authorized personnel only. Protected under the
+                  Official Secrets Act and Information Technology Act.
                 </p>
                 <div className="platform-gov-nic">
                   National Informatics Centre (NIC)
@@ -201,26 +220,18 @@ export default function Auth({ children, admin = false, initialEmail = "" }) {
                   </p>
                 )}
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEmail("nisarvskp@gmail.com");
-                    setPassword("Vs!c3kYuSFhESF7nJwhX7qtSmjW");
-                    setMessage("");
-                  }}
-                  className="platform-demo-btn"
-                >
-                  Fill Demo Credentials
-                </button>
-
                 <div className="platform-form-action">
-                  <button className="platform-primary platform-admin-submit-btn" disabled={busy}>
+                  <button
+                    className="platform-primary platform-admin-submit-btn"
+                    disabled={busy}
+                  >
                     {busy ? "Signing in…" : "Sign in"}
                   </button>
                 </div>
 
                 <p className="platform-admin-help-text">
-                  For technical support, contact the NIC IVFRT Helpdesk at <span className="underline">support-ivfrt@nic.in</span>
+                  For technical support, contact the NIC IVFRT Helpdesk at{" "}
+                  <span className="underline">support-ivfrt@nic.in</span>
                 </p>
               </form>
             </div>
@@ -245,14 +256,11 @@ export default function Auth({ children, admin = false, initialEmail = "" }) {
             }}
           />
         </div>
-        <p className="platform-kicker">
-          Your application, one link away
-        </p>
-        <h1>
-          {sent ? "Check your email" : "Get a secure link"}
-        </h1>
+        <p className="platform-kicker">Your application, one link away</p>
+        <h1>{sent ? "Check your email" : "Get a secure link"}</h1>
         <p>
-          Enter your email to save your progress or reopen an application. No password needed.
+          Enter your email to save your progress or reopen an application. No
+          password needed.
         </p>
         <form onSubmit={submit}>
           <label>
@@ -313,4 +321,3 @@ export default function Auth({ children, admin = false, initialEmail = "" }) {
     </div>
   );
 }
-

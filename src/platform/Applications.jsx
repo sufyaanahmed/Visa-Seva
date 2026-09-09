@@ -275,7 +275,7 @@ const RejectedCard = ({ app }) => {
 };
 
 const ReviewCard = ({ app }) => {
-  const isPaid = ["paid", "external"].includes(app.payment_status);
+  const isPaid = app.payment_status === "paid";
 
   return (
     <div className="relative overflow-hidden bg-[#FAF7F0] rounded-xl border border-[#D4AF37]/30 shadow-md p-6 max-w-lg mx-auto">
@@ -303,15 +303,18 @@ const ReviewCard = ({ app }) => {
           {app.status.replace(/_/g, " ")}
         </div>
         <h3 className="font-serif font-bold text-gray-900 text-lg mb-1">
-          Dossier Processing
+          {app.status === "submitted"
+            ? "Application submitted"
+            : "Application under review"}
         </h3>
         <p className="text-xs text-gray-600 max-w-xs mx-auto mb-5">
           Your application{" "}
           <span className="font-mono font-semibold uppercase">
             {app.reference}
           </span>{" "}
-          has been successfully submitted and is currently under consular
-          evaluation.
+          {app.status === "submitted"
+            ? "has been received. We’ll email you when its status changes."
+            : "is being reviewed. We’ll email you when its status changes."}
         </p>
 
         <div className="w-full bg-white border border-[#D4AF37]/40 shadow-xs rounded p-4 text-left">
@@ -335,19 +338,12 @@ const ReviewCard = ({ app }) => {
                 Fee Received
               </span>
             ) : (
-              <span className="text-[#C4762A] font-bold">Unpaid</span>
+              <span className="text-[#C4762A] font-bold">
+                {app.payment_status === "external"
+                  ? "Pay at mission / arrival"
+                  : "Unpaid"}
+              </span>
             )}
-          </div>
-          <div className="w-full bg-[#E6DFD3] rounded-full h-1.5 overflow-hidden">
-            <div className="bg-gradient-to-r from-[#D4AF37] to-[#1E2A4F] h-1.5 w-2/3 animate-pulse"></div>
-          </div>
-          <div className="flex justify-between items-center mt-3">
-            <span className="text-[10px] text-gray-500">
-              Processing Step 2 of 3
-            </span>
-            <span className="text-[10px] font-semibold text-[#C4762A]">
-              Estimated: 48-72 hours
-            </span>
           </div>
         </div>
       </div>
@@ -695,7 +691,9 @@ function ApplicationView() {
         </div>
         {["paid", "external"].includes(app.payment_status) ? (
           <p>
-            Payment received.{" "}
+            {app.payment_status === "external"
+              ? "Pay the applicable fee through your mission or at arrival."
+              : "Payment received."}{" "}
             {editable ? "You can submit once your details are confirmed." : ""}
           </p>
         ) : (
@@ -867,7 +865,7 @@ function CheckoutView() {
         { method: "POST" },
       );
       setProvider(settings);
-      if (settings.paid) await load();
+      await load();
       return settings;
     })();
     try {
@@ -976,7 +974,9 @@ function CheckoutView() {
             {["paid", "external"].includes(payment?.status)
               ? payment?.status === "external"
                 ? "Payment arrangements"
-                : "Payment successful"
+                : payment?.amount === 0
+                  ? "No fee required"
+                  : "Payment successful"
               : "Complete payment"}
           </h1>
           {error && (
@@ -1002,13 +1002,18 @@ function CheckoutView() {
                 </p>
               )}
               <FeeSummary fee={app.fee} />
-              <div className="flex gap-3 my-5">
-                <span className="platform-badge">VISA</span>
-                <span className="platform-badge">Mastercard</span>
-              </div>
-              <p className="platform-muted">
-                Test mode. Use test payment details only; no money is charged.
-              </p>
+              {payment.amount > 0 && app.fee?.collection !== "external" && (
+                <>
+                  <div className="flex gap-3 my-5">
+                    <span className="platform-badge">VISA</span>
+                    <span className="platform-badge">Mastercard</span>
+                  </div>
+                  <p className="platform-muted">
+                    Test mode. Use test payment details only; no money is
+                    charged.
+                  </p>
+                </>
+              )}
               <div className="my-5">
                 <Badge value={payment.status} />
               </div>
@@ -1084,7 +1089,9 @@ function CheckoutView() {
                 <p>
                   {payment.status === "external"
                     ? "Payment will be collected through the official filing process. Your application is ready for submission."
-                    : "Payment received. Your application is ready for final submission."}
+                    : payment.amount === 0
+                      ? "No payment is required. Your application is ready for final submission."
+                      : "Payment received. Your application is ready for final submission."}
                 </p>
               )}
               {["failed", "cancelled"].includes(payment.status) && (

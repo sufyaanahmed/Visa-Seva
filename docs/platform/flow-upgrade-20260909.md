@@ -58,3 +58,28 @@ modal served from Supabase's separate storage origin, using short-lived signed U
 Apply migration `202609090001_application_flow.sql` before deploying the API. It
 extends the existing provider/status constraints, adds durable order recovery and
 restricts email payload column access without changing existing application rows.
+
+Apply `202609090002_legacy_checkout.sql` as well. It allows the server to update an
+uncharged legacy sandbox checkout to the calculated fee, with owner and confirmation
+checks. A Razorpay order, started provider request, or terminal payment is never
+repriced. Both migrations were applied to the hosted project and registered in its
+migration history.
+
+## Verification
+
+- 137 automated tests pass, including direct submitted decisions, reviewer role
+  restrictions, legacy checkout repricing, payment signature binding, fee tiers,
+  conditional autofill, email templates, and safe deep links.
+- A synthetic OCI application with seven stored documents completed a USD 275
+  Razorpay test payment, production submission, inline PDF preview, and direct
+  acceptance. Its payment reference is `pay_TZtUQSjGp3m12h`.
+- A synthetic Afghan medical application with four stored documents completed
+  gratis submission, request for information, email-link access, resubmission
+  without a second payment, and direct rejection.
+- Actual submitted and continue email links were followed from signed-out browser
+  sessions and opened their specific authenticated application pages.
+- The public credential-autofill button was removed. The existing admin password
+  was retained at the user's explicit request.
+
+Production verification records: `VS-F880C5E918B047F5` (OCI) and
+`VS-E6117AD103DC4B1B` (Afghan). These contain synthetic application data only.
