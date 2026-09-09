@@ -44,6 +44,7 @@ test("email retry uses immutable content and stable provider idempotency key", a
           subject: "Visa application submitted",
           body: "Your application is submitted.",
           attempts: 1,
+          delivery_payload: {template:{id:"visa-application-submitted",variables:{TRACKING_LINK:"https://visa.example.com/auth/confirm?token_hash=one-time&next=%2Fapplications%2Fapp-1"}}},
         },
       ],
     }),
@@ -84,8 +85,8 @@ test("email retry uses immutable content and stable provider idempotency key", a
   assert.equal(requests[0].body, requests[1].body);
   assert.equal(updates[0].status, "sent");
   assert.match(
-    JSON.parse(requests[0].body).text,
-    /https:\/\/visa.example.com\/applications\/app-1/,
+    JSON.parse(requests[0].body).template.variables.TRACKING_LINK,
+    /https:\/\/visa.example.com\/auth\/confirm/,
   );
 });
 test("email failure remains retryable and missing credentials do not consume queued messages", async () => {
@@ -105,7 +106,7 @@ test("email failure remains retryable and missing credentials do not consume que
   assert.equal(called, false);
   const updates = [];
   const db = {
-    rpc: async () => ({ data: [{ id: "m", attempts: 2 }] }),
+    rpc: async () => ({ data: [{ id: "m", attempts: 2, delivery_payload: {template:{id:"visa-application-submitted"}} }] }),
     from() {
       return {
         update(v) {

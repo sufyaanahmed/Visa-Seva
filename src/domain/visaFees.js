@@ -1,140 +1,66 @@
-/**
- * Official Government of India e-Visa, VoA, and OCI Fee Guidelines
- * Reference snapshot: https://indianvisaonline.gov.in/evisa/
- */
-
-export const GRATIS_NATIONALITIES = new Set([
-  'Argentina',
-  'Cook Islands',
-  'Fiji',
-  'Indonesia',
-  'Jamaica',
-  'Kiribati',
-  'Marshall Islands',
-  'Mauritius',
-  'Micronesia',
-  'Myanmar',
-  'Nauru',
-  'Niue',
-  'Palau',
-  'Papua New Guinea',
-  'Samoa',
-  'Seychelles',
-  'Solomon Islands',
-  'South Africa',
-  'Tonga',
-  'Tuvalu',
-  'Vanuatu',
-]);
-
+import schedule from "../data/visaFeeSchedule.json" with { type: "json" };
+import { calculateApplicationFee } from "./applicationFees.js";
+export const GRATIS_NATIONALITIES = new Set(
+  Object.entries(schedule.tourist)
+    .filter(([, v]) => v.every((x) => x === 0))
+    .map(([name]) => name),
+);
 export function getVisaFeeEstimate(category, nationality) {
-  if (nationality && GRATIS_NATIONALITIES.has(nationality)) {
+  const route = ["oci", "voa", "afghan", "regular"].includes(category)
+    ? category
+    : "evisa";
+  const quote = calculateApplicationFee({
+    application_type: route,
+    visa_category: category,
+    nationality,
+    visa_validity: "30-days",
+    expected_arrival_date: "2026-10-01",
+  });
+  if (route === "voa")
     return {
-      usd: 0,
-      inr: 0,
-      range: '$0 USD (Gratis)',
-      isGratis: true,
-      validity: 'Standard Category Duration',
-      note: 'Visa fee is waived (Gratis) by reciprocal government bilateral agreement.',
-    };
-  }
-
-  const cat = (category || '').toLowerCase();
-
-  if (cat === 'voa') {
-    return {
-      usd: 24,
+      usd: null,
       inr: 2000,
-      range: '₹2,000 INR (~$24 USD)',
+      range: "₹2,000 INR at arrival",
       isGratis: false,
-      validity: 'Up to 60 days · Double entry',
-      note: 'Payable directly at the designated airport immigration counter upon arrival.',
+      validity: "Up to 60 days",
+      note: "Pay at the designated arrival airport.",
     };
-  }
-
-  if (cat === 'oci') {
+  if (quote.amount == null)
     return {
-      usd: 275,
-      inr: 23000,
-      range: '$275 USD',
+      usd: null,
+      inr: null,
+      range: "Check the official fee schedule",
       isGratis: false,
-      validity: 'Lifelong · Multiple entry',
-      note: 'Consular processing fee on ociservices.gov.in for new adult OCI registration.',
+      validity: "Category-specific",
+      note: quote.reason,
     };
-  }
-
-  if (cat === 'tourist') {
-    return {
-      usd: 25,
-      inr: 2100,
-      range: '$10 – $25 USD (30-Day) · $40 (1-Year) · $80 (5-Year)',
-      isGratis: false,
-      validity: '30 Days Double Entry / 1 Year Multiple Entry / 5 Years Multiple Entry',
-      note: '30-day tourist visa: $10 USD (April to June) · $25 USD (July to March). 1-year multiple entry is $40 USD.',
+  let range =
+    quote.baseAmount === 0
+      ? "$0 USD (Gratis)"
+      : `$${quote.baseAmount / 100} USD`;
+  if (category === "tourist") {
+    const a = {
+      application_type: "evisa",
+      visa_category: "tourist",
+      nationality,
+      expected_arrival_date: "2026-10-01",
     };
+    range = ["30-days", "1-year", "5-years"]
+      .map(
+        (visa_validity) =>
+          `$${calculateApplicationFee({ ...a, visa_validity }).baseAmount / 100} (${visa_validity.replaceAll("-", " ")})`,
+      )
+      .join(" · ");
   }
-
-  if (cat === 'business') {
-    return {
-      usd: 80,
-      inr: 6700,
-      range: '$80 USD',
-      isGratis: false,
-      validity: '1 Year Multiple Entry (up to 180 days continuous stay per visit)',
-      note: 'Standard fee for business meetings, negotiations, recruitments, and trade ventures.',
-    };
-  }
-
-  if (cat === 'conference') {
-    return {
-      usd: 80,
-      inr: 6700,
-      range: '$80 USD',
-      isGratis: false,
-      validity: '30 Days Single Entry',
-      note: 'Applicable for government/institutional seminars, workshops, and symposiums.',
-    };
-  }
-
-  if (['medical', 'medical-attendant', 'ayush'].includes(cat)) {
-    return {
-      usd: 80,
-      inr: 6700,
-      range: '$80 USD',
-      isGratis: false,
-      validity: '60 Days Triple Entry',
-      note: 'Covers medical patients and up to two eligible attendants.',
-    };
-  }
-
-  if (cat === 'student') {
-    return {
-      usd: 80,
-      inr: 6700,
-      range: '$80 USD',
-      isGratis: false,
-      validity: 'Duration of Course (up to 5 Years Multiple Entry)',
-      note: 'Available for recognised Study in India enrolled institutions.',
-    };
-  }
-
-  if (cat === 'transit') {
-    return {
-      usd: 20,
-      inr: 1650,
-      range: '$20 USD',
-      isGratis: false,
-      validity: 'Direct Transit (up to 72 hours)',
-      note: 'For passengers with confirmed onward international connection.',
-    };
-  }
-
   return {
-    usd: 80,
-    inr: 6700,
-    range: '$80 USD',
-    isGratis: false,
-    validity: 'Standard e-Visa Category Validity',
-    note: 'Official Government of India processing fee.',
+    usd: quote.baseAmount / 100,
+    inr: null,
+    range,
+    isGratis: quote.baseAmount === 0,
+    validity: category === "oci" ? "Lifelong" : "Depends on selected validity",
+    note:
+      route === "evisa"
+        ? "Nationality-specific fee. A 3% bank charge applies; 30-day tourist fees also depend on arrival season."
+        : "Registration fee. Check local filing and service charges with your mission.",
   };
 }

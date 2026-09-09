@@ -1,3 +1,4 @@
+import DocumentViewer from "./DocumentViewer";
 import React, { useEffect, useRef, useState } from "react";
 import { api } from "./client";
 import Auth from "./Auth";
@@ -22,6 +23,7 @@ export function AdminPortal({ request = api }) {
     [busy, setBusy] = useState(false),
     [refresh, setRefresh] = useState(0),
     [accessRefresh, setAccessRefresh] = useState(0);
+  const [preview, setPreview] = useState(null);
   const submitting = useRef(false);
   useEffect(() => {
     let active = true;
@@ -131,7 +133,13 @@ export function AdminPortal({ request = api }) {
   }
   const options =
     selected?.status === "submitted"
-      ? ["under_review", "waiting_for_information"]
+      ? [
+          "under_review",
+          "waiting_for_information",
+          ...(["decision_maker", "administrator"].includes(me?.role)
+            ? ["accepted", "rejected"]
+            : []),
+        ]
       : selected?.status === "under_review"
         ? [
             "waiting_for_information",
@@ -199,6 +207,9 @@ export function AdminPortal({ request = api }) {
   );
   return (
     <>
+      {preview && (
+        <DocumentViewer document={preview} onClose={() => setPreview(null)} />
+      )}
       <header className="platform-admin-header">
         <strong>Visa Seva · Administration</strong>
         <div className="platform-admin-account">
@@ -284,7 +295,10 @@ export function AdminPortal({ request = api }) {
                                 const result = await request(
                                   `/admin/applications/${selected.id}/documents/${d.id}`,
                                 );
-                                window.location.assign(result.signedUrl);
+                                setPreview({
+                                  ...d,
+                                  signedUrl: result.signedUrl,
+                                });
                               } catch (e) {
                                 setError({
                                   scope: "download",
@@ -293,7 +307,7 @@ export function AdminPortal({ request = api }) {
                               }
                             }}
                           >
-                            Download
+                            View document
                           </button>
                         </div>
                       ))}

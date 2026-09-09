@@ -340,6 +340,13 @@ const makeEvisaSteps = () => [
         readOnly: true,
       }),
       field(
+        "visa_validity",
+        "Tourist visa validity",
+        "select",
+        ["30-days", "1-year", "5-years"],
+        { visible: (data) => data.visa_category === "tourist" },
+      ),
+      field(
         "student_course_type",
         "e-Student course type",
         "select",
@@ -634,9 +641,15 @@ export const ociCategoryOptions = [
 ];
 
 const ociCategoryFields = [
-  field("oci_category", "OCI Qualifying Category", "select", ociCategoryOptions, {
-    help: "Choose whether you are applying as a former Indian citizen, descendant of Indian origin, or foreign spouse.",
-  }),
+  field(
+    "oci_category",
+    "OCI Qualifying Category",
+    "select",
+    ociCategoryOptions,
+    {
+      help: "Choose whether you are applying as a former Indian citizen, descendant of Indian origin, or foreign spouse.",
+    },
+  ),
   field("is_minor", "Is the applicant a minor child?", "select", yesNo),
   field("country_of_application", "Country / jurisdiction where applying"),
   field("application_center", "Nearest Indian Mission / VFS Consular Center"),
@@ -647,7 +660,12 @@ const ociCategoryFields = [
 const ociIdentityFields = [
   field("surname", "Surname / Family Name"),
   field("given_name", "Given Name(s)"),
-  field("previous_name_used", "Have you ever changed your name?", "select", yesNo),
+  field(
+    "previous_name_used",
+    "Have you ever changed your name?",
+    "select",
+    yesNo,
+  ),
   field("previous_name", "Previous Name / Maiden Name", "text", null, {
     visible: (data) => data.previous_name_used === "yes",
   }),
@@ -672,34 +690,59 @@ const ociPassportFields = [
   field("passport_issue_place", "Passport Place of Issue"),
   field("passport_issue_date", "Passport Issue Date", "date"),
   field("passport_expiry_date", "Passport Expiry Date", "date"),
-  field("foreign_citizenship_date", "Date Foreign Citizenship Acquired", "date"),
-  field("foreign_citizenship_mode", "Mode of Acquisition of Foreign Citizenship", "select", [
-    "birth",
-    "naturalization",
-    "registration",
-    "descent",
-  ]),
-  field("naturalization_cert_no", "Naturalization Certificate / Registration No."),
+  field(
+    "foreign_citizenship_date",
+    "Date Foreign Citizenship Acquired",
+    "date",
+  ),
+  field(
+    "foreign_citizenship_mode",
+    "Mode of Acquisition of Foreign Citizenship",
+    "select",
+    ["birth", "naturalization", "registration", "descent"],
+  ),
+  field(
+    "naturalization_cert_no",
+    "Naturalization Certificate / Registration No.",
+  ),
 ];
 
 const ociFamilyFields = [
   field("father_name", "Father's Full Name"),
   field("father_nationality", "Father's Current Nationality"),
-  field("father_former_indian", "Was father an Indian citizen / of Indian origin?", "select", yesNo),
+  field(
+    "father_former_indian",
+    "Was father an Indian citizen / of Indian origin?",
+    "select",
+    yesNo,
+  ),
   field("mother_name", "Mother's Full Name"),
   field("mother_nationality", "Mother's Current Nationality"),
-  field("mother_former_indian", "Was mother an Indian citizen / of Indian origin?", "select", yesNo),
+  field(
+    "mother_former_indian",
+    "Was mother an Indian citizen / of Indian origin?",
+    "select",
+    yesNo,
+  ),
   field("spouse_name", "Spouse's Full Name", "text", null, {
     visible: (data) => data.marital_status === "married",
   }),
   field("spouse_nationality", "Spouse's Nationality", "text", null, {
     visible: (data) => data.marital_status === "married",
   }),
-  field("spouse_oci_or_indian", "Is spouse an Indian Citizen or OCI cardholder?", "select", ["yes", "no", "na"], {
-    visible: (data) => data.marital_status === "married",
-  }),
+  field(
+    "spouse_oci_or_indian",
+    "Is spouse an Indian Citizen or OCI cardholder?",
+    "select",
+    ["yes", "no", "na"],
+    {
+      visible: (data) => data.marital_status === "married",
+    },
+  ),
   field("marriage_date", "Date of Marriage Registration", "date", null, {
-    visible: (data) => data.marital_status === "married" || data.oci_category === "foreign-spouse",
+    visible: (data) =>
+      data.marital_status === "married" ||
+      data.oci_category === "foreign-spouse",
   }),
 ];
 
@@ -712,41 +755,91 @@ const ociOriginFields = [
     "foreign-spouse-basis",
   ]),
   field("previous_indian_passport", "Previous Indian Passport Number (or NA)"),
-  field("surrender_cert_number", "Surrender Certificate Number (for former citizens)", "text", null, {
-    visible: (data) => data.oci_category === "former-indian" || data.basis_of_origin === "self-former-indian",
-  }),
-  field("ancestor_name_details", "Ancestor's Name & Indian Connection details", "textarea", null, {
-    visible: (data) => ["descendant-child", "descendant-grandchild"].includes(data.oci_category) || ["parent-origin", "grandparent-origin", "great-grandparent-origin"].includes(data.basis_of_origin),
-  }),
-  field("permanent_address", "Current Residential Address in Foreign Country", "textarea"),
+  field(
+    "surrender_cert_number",
+    "Surrender Certificate Number (for former citizens)",
+    "text",
+    null,
+    {
+      visible: (data) =>
+        data.oci_category === "former-indian" ||
+        data.basis_of_origin === "self-former-indian",
+    },
+  ),
+  field(
+    "ancestor_name_details",
+    "Ancestor's Name & Indian Connection details",
+    "textarea",
+    null,
+    {
+      visible: (data) =>
+        ["descendant-child", "descendant-grandchild"].includes(
+          data.oci_category,
+        ) ||
+        [
+          "parent-origin",
+          "grandparent-origin",
+          "great-grandparent-origin",
+        ].includes(data.basis_of_origin),
+    },
+  ),
+  field(
+    "permanent_address",
+    "Current Residential Address in Foreign Country",
+    "textarea",
+  ),
 ];
 
 const ociSecurityFields = [
-  field("pakistan_origin", "Were you, your parents or grandparents ever citizens of Pakistan or Bangladesh?", "select", yesNo),
-  field("military_service", "Have you ever served in military / police / security forces?", "select", yesNo),
-  field("military_details", "Organization, rank and service details", "textarea", null, {
-    visible: (data) => data.military_service === "yes",
-  }),
-  field("prior_criminal_offense", "Have you ever been convicted of a criminal offense?", "select", yesNo),
+  field(
+    "pakistan_origin",
+    "Were you, your parents or grandparents ever citizens of Pakistan or Bangladesh?",
+    "select",
+    yesNo,
+  ),
+  field(
+    "military_service",
+    "Have you ever served in military / police / security forces?",
+    "select",
+    yesNo,
+  ),
+  field(
+    "military_details",
+    "Organization, rank and service details",
+    "textarea",
+    null,
+    {
+      visible: (data) => data.military_service === "yes",
+    },
+  ),
+  field(
+    "prior_criminal_offense",
+    "Have you ever been convicted of a criminal offense?",
+    "select",
+    yesNo,
+  ),
 ];
 
 const makeOciSteps = (data = {}) => [
   {
     id: "oci-category",
     title: "OCI Registration & Category",
-    description: "Select your OCI qualifying category and consular jurisdiction.",
+    description:
+      "Select your OCI qualifying category and consular jurisdiction.",
     fields: ociCategoryFields,
   },
   {
     id: "identity",
     title: "Applicant Identity",
-    description: "Enter your personal details exactly as appearing on your passport.",
+    description:
+      "Enter your personal details exactly as appearing on your passport.",
     fields: ociIdentityFields,
   },
   {
     id: "passport",
     title: "Passport & Foreign Citizenship",
-    description: "Provide your current valid foreign passport and citizenship details.",
+    description:
+      "Provide your current valid foreign passport and citizenship details.",
     fields: ociPassportFields,
   },
   {
@@ -764,18 +857,21 @@ const makeOciSteps = (data = {}) => [
   {
     id: "security",
     title: "Security & Declarations",
-    description: "Mandatory statutory declarations under Section 7A of the Citizenship Act, 1955.",
+    description:
+      "Mandatory statutory declarations under Section 7A of the Citizenship Act, 1955.",
     fields: ociSecurityFields,
   },
   {
     id: "documents",
     title: "Photo, Signature & Evidence",
-    description: "Upload your photograph, signature / thumb impression, and required evidence PDFs.",
+    description:
+      "Upload your photograph, signature / thumb impression, and required evidence PDFs.",
   },
   {
     id: "review",
     title: "Review & MHA Application Dossier",
-    description: "Verify all Part-A and Part-B details before generating your submission package.",
+    description:
+      "Verify all Part-A and Part-B details before generating your submission package.",
   },
 ];
 
@@ -839,7 +935,9 @@ export const validateStep = (step, data, docs) => {
     });
 
   if (
-    (step.fields || []).some((item) => item.name === "confirm_email" && isVisible(item, data)) &&
+    (step.fields || []).some(
+      (item) => item.name === "confirm_email" && isVisible(item, data),
+    ) &&
     data.email &&
     data.confirm_email &&
     String(data.email).trim().toLowerCase() !==
@@ -912,7 +1010,7 @@ export const validateStep = (step, data, docs) => {
       "Pakistani-origin cases require the appropriate regular/paper visa route.";
   if (
     step.id === "security" &&
-    (data.application_type === "oci" || data.pakistan_origin === "yes") &&
+    data.application_type === "oci" &&
     data.pakistan_origin === "yes"
   ) {
     errors.pakistan_origin =

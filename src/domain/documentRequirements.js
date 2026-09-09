@@ -3,35 +3,35 @@ const MB = 1024 * KB;
 
 // https://indianvisaonline.gov.in/evisa/tvoa.html (checked 2026-09-05)
 const jpegPhoto = {
-  type: 'photograph',
-  title: 'Photograph',
-  desc: 'Front-facing, full face, open eyes, plain light/white background, no spectacles, borders, or shadows.',
-  accepted: '.jpg,.jpeg,image/jpeg',
-  extensions: ['jpg', 'jpeg'],
-  mimeTypes: ['image/jpeg'],
+  type: "photograph",
+  title: "Photograph",
+  desc: "Front-facing, full face, open eyes, plain light/white background, no spectacles, borders, or shadows.",
+  accepted: ".jpg,.jpeg,image/jpeg",
+  extensions: ["jpg", "jpeg"],
+  mimeTypes: ["image/jpeg"],
   minBytes: 10 * KB,
   maxBytes: MB,
   square: true,
-  rule: 'JPEG, 10 KB–1 MB, square.',
+  rule: "JPEG, 10 KB–1 MB, square.",
 };
 
 // https://www.indianvisaonline.gov.in/visa/instruction.html (checked 2026-09-05)
 const regularPhoto = {
   ...jpegPhoto,
   maxBytes: 300 * KB,
-  rule: 'JPEG, 10–300 KB, square.',
+  rule: "JPEG, 10–300 KB, square.",
 };
 
 const pdfDocument = (type, title, desc) => ({
   type,
   title,
   desc,
-  accepted: '.pdf,application/pdf',
-  extensions: ['pdf'],
-  mimeTypes: ['application/pdf'],
+  accepted: ".pdf,application/pdf",
+  extensions: ["pdf"],
+  mimeTypes: ["application/pdf"],
   minBytes: 10 * KB,
   maxBytes: 300 * KB,
-  rule: 'PDF, 10–300 KB. Supporting documents must be in English.',
+  rule: "PDF, 10–300 KB. Supporting documents must be in English.",
 });
 
 const afghanPhoto = {
@@ -39,122 +39,320 @@ const afghanPhoto = {
   minBytes: null,
   maxBytes: null,
   square: false,
-  rule: 'JPEG.',
+  rule: "JPEG.",
 };
 
 const afghanPdf = (type, title, desc) => ({
   ...pdfDocument(type, title, desc),
   minBytes: null,
   maxBytes: null,
-  rule: 'PDF.',
+  rule: "PDF.",
 });
 
 const evisaPurposeDocs = {
-  business: [pdfDocument('business_card', 'Business card', 'Applicant business card showing business identity and contact details.')],
-  medical: [pdfDocument('hospital_letter', 'Indian hospital letter', 'Letter on the Indian hospital letterhead stating the treatment sought.')],
-  'medical-attendant': [pdfDocument('hospital_letter', 'Patient hospital letter', 'Hospital letter linking the attendant to the principal patient.')],
+  business: [
+    pdfDocument(
+      "business_card",
+      "Business card",
+      "Applicant business card showing business identity and contact details.",
+    ),
+  ],
+  medical: [
+    pdfDocument(
+      "hospital_letter",
+      "Indian hospital letter",
+      "Letter on the Indian hospital letterhead stating the treatment sought.",
+    ),
+  ],
+  "medical-attendant": [
+    pdfDocument(
+      "hospital_letter",
+      "Patient hospital letter",
+      "Hospital letter linking the attendant to the principal patient.",
+    ),
+  ],
   conference: [
-    pdfDocument('conference_invitation', 'Conference invitation', 'Invitation from the conference organiser.'),
-    pdfDocument('conference_clearance', 'Conference clearances', 'Applicable political/event clearances required for the selected conference.'),
+    pdfDocument(
+      "conference_invitation",
+      "Conference invitation",
+      "Invitation from the conference organiser.",
+    ),
+    pdfDocument(
+      "conference_clearance",
+      "Conference clearances",
+      "Applicable political/event clearances required for the selected conference.",
+    ),
   ],
   student: [
-    pdfDocument('admission_letter', 'Admission letter', 'Admission evidence for the eligible e-Student course/institution.'),
-    pdfDocument('financial_guardian_support', 'Financial / guardian support evidence', 'Evidence of financial support and, where applicable, the parent or guardian undertaking for the student.'),
+    pdfDocument(
+      "admission_letter",
+      "Admission letter",
+      "Admission evidence for the eligible e-Student course/institution.",
+    ),
+    pdfDocument(
+      "financial_guardian_support",
+      "Financial / guardian support evidence",
+      "Evidence of financial support and, where applicable, the parent or guardian undertaking for the student.",
+    ),
   ],
-  family: [pdfDocument('relationship_evidence', 'Relationship evidence', 'Evidence supporting the selected family/dependant category.')],
-  transit: [pdfDocument('travel_itinerary', 'Confirmed onward itinerary', 'Travel evidence supporting the transit purpose.')],
-  film: [pdfDocument('film_clearance', 'Film/project documents', 'Official project, permission, and production documents for the selected film purpose.')],
-  'production-investment': [pdfDocument('production_investment_evidence', 'Production investment evidence', 'Project, investment, approval, and entity evidence required for the selected production-investment purpose.')],
-  ayush: [pdfDocument('ayush_letter', 'AYUSH institution/hospital letter', 'Admission or treatment evidence for the selected AYUSH purpose.')],
+  family: [
+    pdfDocument(
+      "relationship_evidence",
+      "Relationship evidence",
+      "Evidence supporting the selected family/dependant category.",
+    ),
+  ],
+  transit: [
+    pdfDocument(
+      "travel_itinerary",
+      "Confirmed onward itinerary",
+      "Travel evidence supporting the transit purpose.",
+    ),
+  ],
+  film: [
+    pdfDocument(
+      "film_clearance",
+      "Film/project documents",
+      "Official project, permission, and production documents for the selected film purpose.",
+    ),
+  ],
+  "production-investment": [
+    pdfDocument(
+      "production_investment_evidence",
+      "Production investment evidence",
+      "Project, investment, approval, and entity evidence required for the selected production-investment purpose.",
+    ),
+  ],
+  ayush: [
+    pdfDocument(
+      "ayush_letter",
+      "AYUSH institution/hospital letter",
+      "Admission or treatment evidence for the selected AYUSH purpose.",
+    ),
+  ],
 };
 
 const afghanPurposeDocs = (data) => {
   const category = data.visa_category;
   const purpose = data.afghan_purpose;
-  if (category === 'business') {
-    if (purpose === 'sports') return [
-      afghanPdf('sports_invitation', 'Sports invitation and approvals', 'Invitation plus applicable sports authority approvals.'),
-      afghanPdf('business_support', 'Organisation support letter', 'Signed support letter from the relevant organisation.'),
-    ];
-    if (purpose === 'business-dependant') return [afghanPdf('relationship_evidence', 'Relationship and principal-visa evidence', 'Evidence of relationship to the principal business applicant and their visa/application.')];
+  if (category === "business") {
+    if (purpose === "sports")
+      return [
+        afghanPdf(
+          "sports_invitation",
+          "Sports invitation and approvals",
+          "Invitation plus applicable sports authority approvals.",
+        ),
+        afghanPdf(
+          "business_support",
+          "Organisation support letter",
+          "Signed support letter from the relevant organisation.",
+        ),
+      ];
+    if (purpose === "business-dependant")
+      return [
+        afghanPdf(
+          "relationship_evidence",
+          "Relationship and principal-visa evidence",
+          "Evidence of relationship to the principal business applicant and their visa/application.",
+        ),
+      ];
     return [
-      afghanPdf('india_company_invitation', 'Indian company invitation', 'Invitation letter from the Indian company.'),
-      afghanPdf('resident_company_letter', 'Resident-country company letter', 'Original signed company letter from the country of residence.'),
-      afghanPdf('chamber_recommendation', 'Chamber recommendation', 'Recommendation from the Afghan or an Indian Chamber of Commerce.'),
+      afghanPdf(
+        "india_company_invitation",
+        "Indian company invitation",
+        "Invitation letter from the Indian company.",
+      ),
+      afghanPdf(
+        "resident_company_letter",
+        "Resident-country company letter",
+        "Original signed company letter from the country of residence.",
+      ),
+      afghanPdf(
+        "chamber_recommendation",
+        "Chamber recommendation",
+        "Recommendation from the Afghan or an Indian Chamber of Commerce.",
+      ),
     ];
   }
-  if (category === 'student') {
-    if (purpose === 'student-dependant') return [afghanPdf('relationship_evidence', 'Relationship and student evidence', 'Relationship evidence and the principal student’s admission/visa details.')];
+  if (category === "student") {
+    if (purpose === "student-dependant")
+      return [
+        afghanPdf(
+          "relationship_evidence",
+          "Relationship and student evidence",
+          "Relationship evidence and the principal student’s admission/visa details.",
+        ),
+      ];
     return [
-      afghanPdf('admission_letter', 'Admission / returning-student letter', 'Admission or continuing-enrolment evidence from the Indian institution.'),
-      afghanPdf('financial_support', 'Financial support evidence', 'Evidence of funds, sponsorship, or the applicable ICCR scholarship.'),
-      afghanPdf('student_undertaking', 'Student undertaking', 'Completed undertaking required for the selected student purpose.'),
+      afghanPdf(
+        "admission_letter",
+        "Admission / returning-student letter",
+        "Admission or continuing-enrolment evidence from the Indian institution.",
+      ),
+      afghanPdf(
+        "financial_support",
+        "Financial support evidence",
+        "Evidence of funds, sponsorship, or the applicable ICCR scholarship.",
+      ),
+      afghanPdf(
+        "student_undertaking",
+        "Student undertaking",
+        "Completed undertaking required for the selected student purpose.",
+      ),
     ];
   }
-  if (category === 'medical') return [afghanPdf('hospital_letter', 'System-generated hospital invitation', 'Invitation generated by the Indian hospital.'), ...(data.is_minor === 'yes' ? [afghanPdf('minor_consent', 'Parent or guardian consent', 'Consent for the minor patient.')] : [])];
-  if (category === 'medical-attendant') return [afghanPdf('hospital_letter', 'Patient hospital invitation', 'Hospital-generated invitation linking the attendant to the principal patient.')];
-  if (category === 'entry') return [afghanPdf('entry_purpose_evidence', 'Entry-purpose evidence', 'Evidence matching the selected Entry subtype, such as relationship, clearance, property, student, seaman, cultural, or itinerary records.')];
-  if (category === 'un-diplomat') return [afghanPdf('un_diplomat_note', 'UN / diplomatic assignment evidence', 'Official note, assignment, visit, or dependant documentation for the selected subtype.')];
+  if (category === "medical")
+    return [
+      afghanPdf(
+        "hospital_letter",
+        "System-generated hospital invitation",
+        "Invitation generated by the Indian hospital.",
+      ),
+      ...(data.is_minor === "yes"
+        ? [
+            afghanPdf(
+              "minor_consent",
+              "Parent or guardian consent",
+              "Consent for the minor patient.",
+            ),
+          ]
+        : []),
+    ];
+  if (category === "medical-attendant")
+    return [
+      afghanPdf(
+        "hospital_letter",
+        "Patient hospital invitation",
+        "Hospital-generated invitation linking the attendant to the principal patient.",
+      ),
+    ];
+  if (category === "entry")
+    return [
+      afghanPdf(
+        "entry_purpose_evidence",
+        "Entry-purpose evidence",
+        "Evidence matching the selected Entry subtype, such as relationship, clearance, property, student, seaman, cultural, or itinerary records.",
+      ),
+    ];
+  if (category === "un-diplomat")
+    return [
+      afghanPdf(
+        "un_diplomat_note",
+        "UN / diplomatic assignment evidence",
+        "Official note, assignment, visit, or dependant documentation for the selected subtype.",
+      ),
+    ];
   return [];
 };
 
 const ociPhoto = {
-  type: 'photograph',
-  title: 'Applicant Photograph',
-  desc: 'Recent color photograph, front-facing, white background, square (2x2 inch / 51x51 mm).',
-  accepted: '.jpg,.jpeg,image/jpeg',
-  extensions: ['jpg', 'jpeg'],
-  mimeTypes: ['image/jpeg'],
-  minBytes: 10 * KB,
-  maxBytes: 500 * KB,
+  type: "photograph",
+  title: "Applicant Photograph",
+  desc: "Recent color photograph, front-facing, plain light background (not white), square (2x2 inch / 51x51 mm).",
+  accepted: ".jpg,.jpeg,image/jpeg",
+  extensions: ["jpg", "jpeg"],
+  mimeTypes: ["image/jpeg"],
+  minBytes: null,
+  maxBytes: 200 * KB,
+  minDimension: 200,
+  maxDimension: 900,
   square: true,
-  rule: 'JPEG, 10 KB–500 KB, square.',
+  rule: "JPEG, up to 200 KB, square, 200–900 pixels.",
 };
 
 const ociSignature = {
-  type: 'signature',
-  title: 'Applicant Signature / Thumb Impression',
-  desc: 'Signature (or left thumb impression for minors/infants) in black or dark blue ink on plain white paper.',
-  accepted: '.jpg,.jpeg,image/jpeg',
-  extensions: ['jpg', 'jpeg'],
-  mimeTypes: ['image/jpeg'],
-  minBytes: 10 * KB,
+  type: "signature",
+  title: "Applicant Signature / Thumb Impression",
+  desc: "Signature (or left thumb impression for minors/infants) in black or dark blue ink on plain white paper.",
+  accepted: ".jpg,.jpeg,image/jpeg",
+  extensions: ["jpg", "jpeg"],
+  mimeTypes: ["image/jpeg"],
+  minBytes: null,
   maxBytes: 200 * KB,
   square: false,
-  rule: 'JPEG, 10 KB–200 KB.',
+  rule: "JPEG, up to 200 KB.",
 };
 
 const ociCategoryDocs = (data) => {
-  const category = data.oci_category || 'former-indian';
+  const category = data.oci_category || "former-indian";
   const docs = [
-    pdfDocument('passport', 'Current foreign passport', 'Clear copy of the foreign passport bio page with at least 6 months validity.'),
-    pdfDocument('address_proof', 'Proof of residence', 'Utility bill, driving licence, or state ID showing current residence.'),
+    pdfDocument(
+      "passport",
+      "Current foreign passport",
+      "Clear copy of the foreign passport bio page with at least 6 months validity.",
+    ),
+    pdfDocument(
+      "address_proof",
+      "Proof of residence",
+      "Utility bill, driving licence, or state ID showing current residence.",
+    ),
   ];
 
-  if (category === 'former-indian') {
+  if (category === "former-indian") {
     docs.push(
-      pdfDocument('surrender_certificate', 'Indian passport surrender certificate', 'Surrender / Renunciation certificate issued by Indian authorities.'),
-      pdfDocument('cancelled_indian_passport', 'Cancelled Indian passport', 'Copy of cancelled Indian passport showing foreign nationality endorsement.'),
-      pdfDocument('naturalization_certificate', 'Foreign naturalization certificate', 'Certificate of naturalization/registration of foreign citizenship.'),
+      pdfDocument(
+        "surrender_certificate",
+        "Indian passport surrender certificate",
+        "Surrender / Renunciation certificate issued by Indian authorities.",
+      ),
+      pdfDocument(
+        "cancelled_indian_passport",
+        "Cancelled Indian passport",
+        "Copy of cancelled Indian passport showing foreign nationality endorsement.",
+      ),
+      pdfDocument(
+        "naturalization_certificate",
+        "Foreign naturalization certificate",
+        "Certificate of naturalization/registration of foreign citizenship.",
+      ),
     );
-  } else if (category === 'foreign-spouse') {
+  } else if (category === "foreign-spouse") {
     docs.push(
-      pdfDocument('marriage_certificate', 'Registered marriage certificate', 'Registered marriage certificate subsisting for at least 2 years.'),
-      pdfDocument('spouse_indian_proof', 'Spouse Indian passport or OCI card', 'Copy of Indian spouse’s valid Indian passport or foreign spouse’s OCI card.'),
-      pdfDocument('joint_declaration', 'Joint marriage declaration', 'Signed joint declaration confirming subsisting marriage.'),
+      pdfDocument(
+        "marriage_certificate",
+        "Registered marriage certificate",
+        "Registered marriage certificate subsisting for at least 2 years.",
+      ),
+      pdfDocument(
+        "spouse_indian_proof",
+        "Spouse Indian passport or OCI card",
+        "Copy of Indian spouse’s valid Indian passport or foreign spouse’s OCI card.",
+      ),
+      pdfDocument(
+        "joint_declaration",
+        "Joint marriage declaration",
+        "Signed joint declaration confirming subsisting marriage.",
+      ),
     );
   } else {
     // descendant-child or descendant-grandchild
     docs.push(
-      pdfDocument('birth_certificate', 'Full birth certificate', 'Birth certificate showing applicant’s name and both parents’ names.'),
-      pdfDocument('ancestor_origin_proof', 'Parent / Grandparent Indian origin proof', 'Indian passport, Nativity Certificate, or OCI card of the parent or grandparent.'),
-      pdfDocument('parents_marriage_cert', 'Parents’ marriage certificate', 'Registered marriage certificate of the applicant’s parents.'),
+      pdfDocument(
+        "birth_certificate",
+        "Full birth certificate",
+        "Birth certificate showing applicant’s name and both parents’ names.",
+      ),
+      pdfDocument(
+        "ancestor_origin_proof",
+        "Parent / Grandparent Indian origin proof",
+        "Indian passport, Nativity Certificate, or OCI card of the parent or grandparent.",
+      ),
+      pdfDocument(
+        "parents_marriage_cert",
+        "Parents’ marriage certificate",
+        "Registered marriage certificate of the applicant’s parents.",
+      ),
     );
   }
 
-  if (data.is_minor === 'yes') {
+  if (data.is_minor === "yes") {
     docs.push(
-      pdfDocument('minor_consent', 'Parental authorization / consent', 'Signed consent from both parents authorizing the OCI application.'),
+      pdfDocument(
+        "minor_consent",
+        "Parental authorization / consent",
+        "Signed consent from both parents authorizing the OCI application.",
+      ),
     );
   }
 
@@ -163,36 +361,67 @@ const ociCategoryDocs = (data) => {
 
 export const getRequiredDocuments = (data = {}) => {
   const flow = data.application_type;
-  if (flow === 'voa') return [];
-  if (flow === 'oci') {
-    return [
-      ociPhoto,
-      ociSignature,
-      ...ociCategoryDocs(data),
-    ];
+  if (flow === "voa") return [];
+  if (flow === "oci") {
+    return [ociPhoto, ociSignature, ...ociCategoryDocs(data)];
   }
-  if (flow === 'afghan') {
+  if (flow === "afghan") {
     return [
       afghanPhoto,
-      afghanPdf('passport', 'Passport bio page', 'Clear copy of the passport page containing personal particulars.'),
-      afghanPdf('tazkira', 'National Identity Card (Tazkira)', 'Clear copy of the applicant’s Tazkira.'),
+      afghanPdf(
+        "passport",
+        "Passport bio page",
+        "Clear copy of the passport page containing personal particulars.",
+      ),
+      afghanPdf(
+        "tazkira",
+        "National Identity Card (Tazkira)",
+        "Clear copy of the applicant’s Tazkira.",
+      ),
       ...afghanPurposeDocs(data),
     ];
   }
-  if (flow === 'regular') {
+  if (flow === "regular") {
     return [
       regularPhoto,
-      { ...afghanPdf('passport', 'Passport bio page', 'A clear copy of the page showing your photograph and personal details.'), rule: 'PDF. Keep your original passport ready for your appointment.' },
-      { ...afghanPdf('purpose_support', 'Supporting documents', 'Documents for your visa category, following your Embassy or Consulate’s checklist.'), rule: 'PDF.' },
+      {
+        ...afghanPdf(
+          "passport",
+          "Passport bio page",
+          "A clear copy of the page showing your photograph and personal details.",
+        ),
+        rule: "PDF. Keep your original passport ready for your appointment.",
+      },
+      {
+        ...afghanPdf(
+          "purpose_support",
+          "Supporting documents",
+          "Documents for your visa category, following your Embassy or Consulate’s checklist.",
+        ),
+        rule: "PDF.",
+      },
     ];
   }
   const evisaDocuments = [
     jpegPhoto,
-    pdfDocument('passport', 'Passport bio page', 'PDF containing the passport page with personal particulars.'),
+    pdfDocument(
+      "passport",
+      "Passport bio page",
+      "PDF containing the passport page with personal particulars.",
+    ),
     ...(evisaPurposeDocs[data.visa_category] || []),
   ];
-  if (data.visa_category === 'student' && data.student_course_type === 'medical-paramedical') {
-    evisaDocuments.push(pdfDocument('medical_course_noc', 'Medical / paramedical course approval or NOC', 'Applicable Ministry of Health and Family Welfare approval or No Objection Certificate for the selected course.'));
+  if (
+    data.visa_category === "student" &&
+    data.student_course_type === "medical-paramedical"
+  ) {
+    evisaDocuments.push(
+      pdfDocument(
+        "medical_course_noc",
+        "Medical / paramedical course approval or NOC",
+        "Applicable Ministry of Health and Family Welfare approval or No Objection Certificate for the selected course.",
+      ),
+    );
   }
   return evisaDocuments;
 };

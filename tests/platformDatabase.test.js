@@ -12,7 +12,7 @@ before(async () => {
   await db.exec(
     `create role anon; create role authenticated; create role service_role bypassrls; create schema auth; create table auth.users(id uuid primary key,email text); create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$; grant usage on schema public,auth to authenticated,anon,service_role; grant execute on function auth.uid() to public; insert into auth.users values('${owner}','owner@example.com'),('${other}','other@example.com'),('${reviewer}','reviewer@example.com'),('${decider}','decider@example.com');`,
   );
-  for (const f of ["202609050001_platform.sql", "202609050003_oauth.sql"])
+  for (const f of ["202609050001_platform.sql", "202609050003_oauth.sql", "202609090001_application_flow.sql"])
     await db.exec(
       await readFile(
         new URL(`../supabase/migrations/${f}`, import.meta.url),
@@ -330,4 +330,22 @@ test("OAuth authorization codes bind client, redirect, PKCE and audience and are
   );
   await redeem("challenge");
   await assert.rejects(redeem("challenge"), /invalid_grant/);
+});
+
+test('direct submitted decisions retain decision role and one immutable email event', async()=>{
+  for(const status of ['accepted','rejected']) {
+    let a=await create(`direct-${status}`);
+    await db.query("update applications set status='submitted',payment_status='paid' where id=$1",[a.id]);
+    await assert.rejects(cmd(reviewer,'admin',a.id,'transition',{version:a.version,status,reason:'Reviewed documents'}),/Decision role/);
+    const decided=await cmd(decider,'admin',a.id,'transition',{version:a.version,status,reason:'Reviewed documents'});
+    assert.equal(decided.status,status);
+    await assert.rejects(cmd(decider,'admin',a.id,'transition',{version:a.version,status,reason:'Duplicate'}),/Version conflict/);
+    const emails=await db.query('select * from email_notifications where application_id=$1',[a.id]);
+    assert.equal(emails.rows.length,1);
+  }
+});
+test('cached email authentication links cannot be read by authenticated staff',async()=>{
+  await db.exec(`set role authenticated;select set_config('request.jwt.claim.sub','${decider}',false);`);
+  try { await assert.rejects(db.query('select delivery_payload from email_notifications'),/permission denied/);await db.query('select subject,status from email_notifications'); }
+  finally {await db.exec('reset role');}
 });

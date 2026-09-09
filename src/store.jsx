@@ -127,7 +127,7 @@ const deleteLegacyDatabase = () => new Promise((resolve, reject) => {
 
 export const applyDataUpdate = (previous, field, value) => {
   const changed = previous.data?.[field] !== value;
-  const invalidatesDocuments = changed && ['visa_category', 'afghan_purpose', 'student_course_type'].includes(field);
+  const invalidatesDocuments = changed && ['visa_category', 'afghan_purpose', 'student_course_type', 'oci_category', 'basis_of_origin'].includes(field);
   const data = { ...previous.data, [field]: value };
 
   if (changed && field === 'visa_category') {

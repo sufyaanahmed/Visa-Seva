@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "./client";
 import "./platform.css";
-import { completeEmailLink } from "./emailLink.js";
+import { completeEmailLink, safeEmailNext } from "./emailLink.js";
 let verification;
 export default function MagicLink() {
   const navigate = useNavigate();
@@ -11,13 +11,7 @@ export default function MagicLink() {
   useEffect(() => {
     const token = params.get("token_hash") || params.get("code") || "";
     if (!verification || verification.token !== token) {
-      const requested = params.get("next") || "/applications";
-      const next =
-        /^\/(applications(?:\/|$)|assistants(?:\?|$)|assistant-consent(?:\?|$))/.test(
-          requested,
-        ) && !requested.includes("\\")
-          ? requested
-          : "/applications";
+      const next = safeEmailNext(params.get("next"));
       window.history.replaceState(null, "", "/auth/confirm");
       verification = {
         token,
@@ -45,7 +39,10 @@ export default function MagicLink() {
       {error ? (
         <>
           <p role="alert">{error}</p>
-          <Link className="platform-primary mt-6" to="/applications">
+          <Link
+            className="platform-primary mt-6"
+            to={safeEmailNext(params.get("next"))}
+          >
             Email me a new link
           </Link>
         </>

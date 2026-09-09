@@ -20,3 +20,17 @@ export async function completeEmailLink(client, params) {
     );
   }
 }
+
+export function safeEmailNext(requested) {
+  if (typeof requested !== "string" || requested.includes("\\"))
+    return "/applications";
+  if (
+    /^\/applications(?:\/[a-f0-9-]{36}(?:\/checkout)?(?:\?[^#]*)?)?$/.test(
+      requested,
+    )
+  )
+    return requested;
+  if (/^\/(assistants|assistant-consent)(?:\?[^#]*)?$/.test(requested))
+    return requested;
+  return "/applications";
+}

@@ -33,6 +33,16 @@ export const validateFile = async (file, requirement) => {
     const dimensions = await readImageDimensions(file);
     if (requirement.square && dimensions.width !== dimensions.height)
       return `Photo must be square; selected image is ${dimensions.width} × ${dimensions.height}px.`;
+    if (
+      requirement.minDimension &&
+      Math.min(dimensions.width, dimensions.height) < requirement.minDimension
+    )
+      return `Image must be at least ${requirement.minDimension} pixels on each side.`;
+    if (
+      requirement.maxDimension &&
+      Math.max(dimensions.width, dimensions.height) > requirement.maxDimension
+    )
+      return `Image must be no more than ${requirement.maxDimension} pixels on each side.`;
     return { ...dimensions, extension };
   }
   return { extension };

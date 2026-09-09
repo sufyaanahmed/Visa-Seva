@@ -29,15 +29,15 @@ describe('OCI Application Form & Requirements', () => {
     assert.ok(photo, 'Photograph requirement must be present');
     assert.deepEqual(photo.extensions, ['jpg', 'jpeg']);
     assert.deepEqual(photo.mimeTypes, ['image/jpeg']);
-    assert.equal(photo.minBytes, 10 * 1024);
-    assert.equal(photo.maxBytes, 500 * 1024);
+    assert.equal(photo.minBytes, null);
+    assert.equal(photo.maxBytes, 200 * 1024);
     assert.equal(photo.square, true);
 
     const sig = byType.get('signature');
     assert.ok(sig, 'Signature requirement must be present');
     assert.deepEqual(sig.extensions, ['jpg', 'jpeg']);
     assert.deepEqual(sig.mimeTypes, ['image/jpeg']);
-    assert.equal(sig.minBytes, 10 * 1024);
+    assert.equal(sig.minBytes, null);
     assert.equal(sig.maxBytes, 200 * 1024);
   });
 
